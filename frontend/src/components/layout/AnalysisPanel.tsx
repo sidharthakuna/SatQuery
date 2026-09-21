@@ -133,7 +133,7 @@ export const AnalysisPanel: React.FC = () => {
       {/* ── Top Header (Claude Style) ──────────────── */}
       <div className="px-4 py-3 border-b border-[var(--border-subtle)] flex items-center justify-between bg-[var(--bg-panel)] shrink-0">
         <div className="flex items-center gap-2.5">
-          <div className="w-6 h-6 rounded-lg bg-[var(--bg-card)] border border-[var(--border-subtle)] flex items-center justify-center text-[#cc785c]">
+          <div className="w-6 h-6 rounded-lg bg-[var(--bg-card)] border border-[var(--border-subtle)] flex items-center justify-center text-[#0EA5E9]">
             <Activity className="w-3.5 h-3.5" />
           </div>
           <div>
@@ -151,7 +151,7 @@ export const AnalysisPanel: React.FC = () => {
             <button
               type="button"
               onClick={() => openPdfModal(result, targetImage)}
-              className="px-2.5 py-1 rounded-lg bg-[#cc785c] hover:bg-[#b8674d] text-white text-[11px] font-medium flex items-center gap-1 shadow-sm transition-colors cursor-pointer"
+              className="px-2.5 py-1 rounded-lg bg-[#0EA5E9] hover:bg-[#0284C7] text-white text-[11px] font-medium flex items-center gap-1 shadow-sm transition-colors cursor-pointer"
               title="Open Executive Mission Briefing Dossier (PDF)"
             >
               <FileText className="w-3 h-3 text-white" />
@@ -187,12 +187,12 @@ export const AnalysisPanel: React.FC = () => {
             onClick={() => setActiveTab('document')}
             className={`flex-1 py-1.5 px-2 rounded-lg font-medium text-[11px] transition-all cursor-pointer whitespace-nowrap flex items-center justify-center gap-1.5 ${
               activeTab === 'document'
-                ? 'bg-[var(--bg-card)] text-[#cc785c] font-semibold shadow-subtle'
+                ? 'bg-[var(--bg-card)] text-[#0EA5E9] font-semibold shadow-subtle'
                 : 'text-[var(--text-muted)] hover:text-[var(--text-main)]'
             }`}
             title="Official SAC-ISRO Satellite Rapid Surveillance Bulletin"
           >
-            <FileText className="w-3.5 h-3.5 text-[#cc785c]" />
+            <FileText className="w-3.5 h-3.5 text-[#0EA5E9]" />
             <span>Output Document</span>
           </button>
           <button
@@ -200,12 +200,12 @@ export const AnalysisPanel: React.FC = () => {
             onClick={() => setActiveTab('canvas')}
             className={`flex-1 py-1.5 px-2 rounded-lg font-medium text-[11px] transition-all cursor-pointer whitespace-nowrap flex items-center justify-center gap-1.5 ${
               activeTab === 'canvas'
-                ? 'bg-[var(--bg-card)] text-[#cc785c] font-semibold shadow-subtle'
+                ? 'bg-[var(--bg-card)] text-[#0EA5E9] font-semibold shadow-subtle'
                 : 'text-[var(--text-muted)] hover:text-[var(--text-main)]'
             }`}
             title="Cartographic Studio (1-2-3 Flow, Swipe Compare, Slippy Map)"
           >
-            <Satellite className="w-3.5 h-3.5 text-[#cc785c]" />
+            <Satellite className="w-3.5 h-3.5 text-[#0EA5E9]" />
             <span>Studio</span>
           </button>
           <button
@@ -213,7 +213,7 @@ export const AnalysisPanel: React.FC = () => {
             onClick={() => setActiveTab('telemetry')}
             className={`flex-1 py-1.5 px-2 rounded-lg font-medium text-[11px] transition-all cursor-pointer whitespace-nowrap ${
               activeTab === 'telemetry'
-                ? 'bg-[var(--bg-card)] text-[#cc785c] font-semibold shadow-subtle'
+                ? 'bg-[var(--bg-card)] text-[#0EA5E9] font-semibold shadow-subtle'
                 : 'text-[var(--text-muted)] hover:text-[var(--text-main)]'
             }`}
           >
@@ -224,7 +224,7 @@ export const AnalysisPanel: React.FC = () => {
             onClick={() => setActiveTab('audit')}
             className={`flex-1 py-1.5 px-2 rounded-lg font-medium text-[11px] transition-all cursor-pointer whitespace-nowrap ${
               activeTab === 'audit'
-                ? 'bg-[var(--bg-card)] text-[#cc785c] font-semibold shadow-subtle'
+                ? 'bg-[var(--bg-card)] text-[#0EA5E9] font-semibold shadow-subtle'
                 : 'text-[var(--text-muted)] hover:text-[var(--text-main)]'
             }`}
           >
@@ -235,7 +235,7 @@ export const AnalysisPanel: React.FC = () => {
             onClick={() => setActiveTab('json')}
             className={`flex-1 py-1.5 px-2 rounded-lg font-medium text-[11px] transition-all cursor-pointer whitespace-nowrap ${
               activeTab === 'json'
-                ? 'bg-[var(--bg-card)] text-[#cc785c] font-semibold shadow-subtle'
+                ? 'bg-[var(--bg-card)] text-[#0EA5E9] font-semibold shadow-subtle'
                 : 'text-[var(--text-muted)] hover:text-[var(--text-main)]'
             }`}
           >
@@ -254,7 +254,7 @@ export const AnalysisPanel: React.FC = () => {
                 {/* Document Sub-toolbar */}
                 <div className="px-3.5 py-2 bg-[var(--bg-panel)] border-b border-[var(--border-subtle)] flex items-center justify-between gap-2 shrink-0">
                   <div className="flex items-center gap-2 overflow-hidden">
-                    <span className="w-2 h-2 rounded-full bg-[#cc785c] animate-pulse shrink-0" />
+                    <span className="w-2 h-2 rounded-full bg-[#0EA5E9] animate-pulse shrink-0" />
                     <span className="font-semibold text-xs text-[var(--text-main)] truncate">
                       SAC-ISRO Rapid Surveillance Bulletin
                     </span>
@@ -270,7 +270,7 @@ export const AnalysisPanel: React.FC = () => {
                       className="px-2 py-1 text-[11px] font-medium text-[var(--text-muted)] hover:text-[var(--text-main)] hover:bg-[var(--bg-surface)] rounded-lg transition-colors flex items-center gap-1 cursor-pointer border border-[var(--border-subtle)]"
                       title="Open in new window"
                     >
-                      <ExternalLink className="w-3 h-3 text-[#cc785c]" />
+                      <ExternalLink className="w-3 h-3 text-[#0EA5E9]" />
                       <span className="hidden sm:inline">New Tab</span>
                     </a>
                     <button
@@ -283,7 +283,7 @@ export const AnalysisPanel: React.FC = () => {
                         link.click();
                         document.body.removeChild(link);
                       }}
-                      className="px-2 py-1 text-[11px] font-medium bg-[#cc785c] hover:bg-[#b8674d] text-white rounded-lg transition-colors flex items-center gap-1 cursor-pointer shadow-sm"
+                      className="px-2 py-1 text-[11px] font-medium bg-[#0EA5E9] hover:bg-[#0284C7] text-white rounded-lg transition-colors flex items-center gap-1 cursor-pointer shadow-sm"
                       title="Download Official PDF"
                     >
                       <FileDown className="w-3 h-3 text-white" />
@@ -311,8 +311,8 @@ export const AnalysisPanel: React.FC = () => {
               </div>
             ) : isGeneratingReport ? (
               <div className="p-10 rounded-2xl border border-[var(--border-subtle)] bg-[var(--bg-card)] text-center space-y-3">
-                <div className="w-12 h-12 rounded-full border-2 border-[#cc785c]/30 border-t-[#cc785c] animate-spin mx-auto flex items-center justify-center">
-                  <Satellite className="w-5 h-5 text-[#cc785c]" />
+                <div className="w-12 h-12 rounded-full border-2 border-[#0EA5E9]/30 border-t-[#0EA5E9] animate-spin mx-auto flex items-center justify-center">
+                  <Satellite className="w-5 h-5 text-[#0EA5E9]" />
                 </div>
                 <h4 className="font-semibold text-xs text-[var(--text-main)]">
                   Compiling SAC-ISRO Rapid Surveillance Bulletin...
@@ -323,7 +323,7 @@ export const AnalysisPanel: React.FC = () => {
               </div>
             ) : result ? (
               <div className="p-8 rounded-2xl border border-[var(--border-subtle)] bg-[var(--bg-card)] text-center space-y-3">
-                <FileText className="w-10 h-10 text-[#cc785c] mx-auto" />
+                <FileText className="w-10 h-10 text-[#0EA5E9] mx-auto" />
                 <h4 className="font-semibold text-xs text-[var(--text-main)]">
                   Official SAC-ISRO Intelligence Bulletin Ready
                 </h4>
@@ -333,7 +333,7 @@ export const AnalysisPanel: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => generateReportForCurrentResult(result, activeImages)}
-                  className="px-4 py-2 rounded-xl bg-[#cc785c] hover:bg-[#b8674d] text-white font-medium text-xs shadow-sm transition-colors cursor-pointer inline-flex items-center gap-2"
+                  className="px-4 py-2 rounded-xl bg-[#0EA5E9] hover:bg-[#0284C7] text-white font-medium text-xs shadow-sm transition-colors cursor-pointer inline-flex items-center gap-2"
                 >
                   <Sparkles className="w-3.5 h-3.5" />
                   <span>Generate Output Document</span>
@@ -375,14 +375,14 @@ export const AnalysisPanel: React.FC = () => {
                   result?.text_response ? (
                     <div className="space-y-2 font-sans">
                       <div className="flex items-center justify-between text-[11px] font-mono pb-1.5 border-b border-[var(--border-subtle)]">
-                        <span className="text-[#cc785c] font-semibold flex items-center gap-1.5">
-                          <Sparkles className="w-3.5 h-3.5 text-[#cc785c]" />
+                        <span className="text-[#0EA5E9] font-semibold flex items-center gap-1.5">
+                          <Sparkles className="w-3.5 h-3.5 text-[#0EA5E9]" />
                           {trace?.task_identified === 'SINGLE_VQA' || (result as any)?.task_type === 'SINGLE_VQA'
                             ? 'RS-VLM Biophysical Synthesis'
                             : 'AI Analytical Findings'}
                         </span>
                         {trace?.confidence_score && (
-                          <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-[#cc785c]/10 text-[#cc785c] border border-[#cc785c]/25 font-semibold">
+                          <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-[#0EA5E9]/10 text-[#0EA5E9] border border-[#0EA5E9]/25 font-semibold">
                             {(trace.confidence_score * 100).toFixed(0)}% Confidence
                           </span>
                         )}
@@ -480,7 +480,7 @@ export const AnalysisPanel: React.FC = () => {
             {targetImage?.bounds_latlon && (
               <div className="rounded-2xl p-4 bg-[var(--bg-card)] border border-[var(--border-subtle)] shadow-subtle space-y-2.5">
                 <div className="flex items-center gap-2 text-[var(--text-main)]">
-                  <MapPin className="w-4 h-4 text-[#cc785c]" />
+                  <MapPin className="w-4 h-4 text-[#0EA5E9]" />
                   <span className="text-xs font-semibold">Geographic Coverage (WGS84)</span>
                 </div>
 
@@ -518,7 +518,7 @@ export const AnalysisPanel: React.FC = () => {
                   </div>
                   <div className="py-1.5 flex justify-between">
                     <span className="text-[var(--text-muted)]">Model Match Confidence</span>
-                    <span className="text-[#cc785c] font-semibold">
+                    <span className="text-[#0EA5E9] font-semibold">
                       {(trace.confidence_score * 100).toFixed(0)}%
                     </span>
                   </div>
@@ -568,7 +568,7 @@ export const AnalysisPanel: React.FC = () => {
                     </div>
                     <div className="w-full bg-[var(--bg-surface)] h-1.5 rounded-full overflow-hidden">
                       <div
-                        className="h-1.5 bg-[#cc785c] rounded-full"
+                        className="h-1.5 bg-[#0EA5E9] rounded-full"
                         style={{ width: `${((result?.confidence_decomposition || trace?.confidence_decomposition)?.model_confidence || 0) * 100}%` }}
                       />
                     </div>
@@ -648,7 +648,7 @@ export const AnalysisPanel: React.FC = () => {
                   {trace.input_validation.input_quality_score !== undefined && (
                     <div className="py-1 flex justify-between">
                       <span className="text-[var(--text-muted)]">Quality Index</span>
-                      <span className="text-[#cc785c] font-semibold">{(trace.input_validation.input_quality_score * 100).toFixed(0)}%</span>
+                      <span className="text-[#0EA5E9] font-semibold">{(trace.input_validation.input_quality_score * 100).toFixed(0)}%</span>
                     </div>
                   )}
                 </div>
@@ -689,7 +689,7 @@ export const AnalysisPanel: React.FC = () => {
                     className="p-2.5 rounded-xl bg-[var(--bg-surface)] border border-[var(--border-subtle)] flex items-center justify-between text-[11px] font-mono"
                   >
                     <div className="flex items-center gap-2 truncate">
-                      <CheckCircle2 className="w-3.5 h-3.5 text-[#cc785c] shrink-0" />
+                      <CheckCircle2 className="w-3.5 h-3.5 text-[#0EA5E9] shrink-0" />
                       <span className="truncate text-[var(--text-main)] font-medium">
                         {step.step_name}
                       </span>
@@ -719,7 +719,7 @@ export const AnalysisPanel: React.FC = () => {
                 onClick={handleCopyJson}
                 className="px-3 py-1.5 rounded-lg text-[11px] font-mono bg-[var(--bg-surface)] hover:bg-[var(--bg-card)] text-[var(--text-main)] border border-[var(--border-subtle)] flex items-center gap-1.5 transition-colors cursor-pointer"
               >
-                {copiedJson ? <Check className="w-3 h-3 text-[#cc785c]" /> : <Copy className="w-3 h-3" />}
+                {copiedJson ? <Check className="w-3 h-3 text-[#0EA5E9]" /> : <Copy className="w-3 h-3" />}
                 <span>{copiedJson ? 'Copied' : 'Copy JSON'}</span>
               </button>
             </div>
@@ -737,7 +737,7 @@ export const AnalysisPanel: React.FC = () => {
           <button
             type="button"
             onClick={() => openPdfModal(result, targetImage)}
-            className="flex-1 py-2 px-3.5 rounded-xl bg-[#cc785c] hover:bg-[#b8674d] text-white font-medium text-xs transition-colors flex items-center justify-center gap-1.5 shadow-sm cursor-pointer"
+            className="flex-1 py-2 px-3.5 rounded-xl bg-[#0EA5E9] hover:bg-[#0284C7] text-white font-medium text-xs transition-colors flex items-center justify-center gap-1.5 shadow-sm cursor-pointer"
             title="Preview Executive Briefing Dossier"
           >
             <FileText className="w-3.5 h-3.5 text-white" />
@@ -750,7 +750,7 @@ export const AnalysisPanel: React.FC = () => {
             className="py-2 px-3.5 rounded-xl bg-[var(--bg-card)] hover:bg-[var(--bg-surface)] text-[var(--text-main)] font-medium text-xs transition-colors flex items-center justify-center gap-1.5 border border-[var(--border-subtle)] shadow-subtle disabled:opacity-50 cursor-pointer"
             title="Download PDF directly"
           >
-            <FileDown className="w-3.5 h-3.5 text-[#cc785c]" />
+            <FileDown className="w-3.5 h-3.5 text-[#0EA5E9]" />
             <span>{isGeneratingPdf ? 'Exporting...' : 'PDF'}</span>
           </button>
         </div>

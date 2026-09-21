@@ -1,0 +1,179 @@
+{
+  "type": "FeatureCollection",
+  "crs": {
+    "type": "name",
+    "properties": {
+      "name": "urn:ogc:def:crs:OGC:1.3:CRS84"
+    }
+  },
+  "features": [
+    {
+      "type": "Feature",
+      "id": "sector_a",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              72.50019,
+              23.078873
+            ],
+            [
+              72.576894,
+              23.078873
+            ],
+            [
+              72.576894,
+              23.002169
+            ],
+            [
+              72.50019,
+              23.002169
+            ],
+            [
+              72.50019,
+              23.078873
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "name": "Sector A",
+        "category": "Cloud-Penetrated Ground Surface (SAR Reconstructed)",
+        "area_hectares": 1707.8,
+        "area_km2": 17.078,
+        "centroid_geo": [
+          72.538542,
+          23.040521
+        ],
+        "pixel_count": 425859
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "sector_b",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              72.569297,
+              23.080495
+            ],
+            [
+              72.57612,
+              23.080495
+            ],
+            [
+              72.57612,
+              23.073672
+            ],
+            [
+              72.569297,
+              23.073672
+            ],
+            [
+              72.569297,
+              23.080495
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "name": "Sector B",
+        "category": "Cloud-Penetrated Ground Surface (SAR Reconstructed)",
+        "area_hectares": 13.5,
+        "area_km2": 0.135,
+        "centroid_geo": [
+          72.572708,
+          23.077083
+        ],
+        "pixel_count": 3369
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "sector_c",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              72.577266,
+              23.002525
+            ],
+            [
+              72.580025,
+              23.002525
+            ],
+            [
+              72.580025,
+              22.999766
+            ],
+            [
+              72.577266,
+              22.999766
+            ],
+            [
+              72.577266,
+              23.002525
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "name": "Sector C",
+        "category": "Cloud-Penetrated Ground Surface (SAR Reconstructed)",
+        "area_hectares": 2.2,
+        "area_km2": 0.022,
+        "centroid_geo": [
+          72.578646,
+          23.001146
+        ],
+        "pixel_count": 551
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "sector_d",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              72.499583,
+              23.051771
+            ],
+            [
+              72.502083,
+              23.051771
+            ],
+            [
+              72.502083,
+              23.049271
+            ],
+            [
+              72.499583,
+              23.049271
+            ],
+            [
+              72.499583,
+              23.051771
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "name": "Sector D",
+        "category": "Cloud-Penetrated Ground Surface (SAR Reconstructed)",
+        "area_hectares": 1.4,
+        "area_km2": 0.014,
+        "centroid_geo": [
+          72.500833,
+          23.050521
+        ],
+        "pixel_count": 338
+      }
+    }
+  ]
+}

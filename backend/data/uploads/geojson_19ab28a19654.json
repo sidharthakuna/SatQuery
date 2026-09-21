@@ -1,0 +1,1227 @@
+{
+  "type": "FeatureCollection",
+  "crs": {
+    "type": "name",
+    "properties": {
+      "name": "urn:ogc:def:crs:OGC:1.3:CRS84"
+    }
+  },
+  "features": [
+    {
+      "type": "Feature",
+      "id": "target_1",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              72.500104,
+              23.065729
+            ],
+            [
+              72.523021,
+              23.065729
+            ],
+            [
+              72.523021,
+              23.040208
+            ],
+            [
+              72.500104,
+              23.040208
+            ],
+            [
+              72.500104,
+              23.065729
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "name": "Target #1",
+        "type": "Visual Grounding Envelope",
+        "pixel_bbox": [
+          1.0,
+          137.0,
+          221.0,
+          382.0
+        ],
+        "centroid_geo": [
+          72.511562,
+          23.052969
+        ],
+        "width_px": 220.0,
+        "height_px": 245.0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "target_2",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              72.539479,
+              23.043542
+            ],
+            [
+              72.562396,
+              23.043542
+            ],
+            [
+              72.562396,
+              23.019479
+            ],
+            [
+              72.539479,
+              23.019479
+            ],
+            [
+              72.539479,
+              23.043542
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "name": "Target #2",
+        "type": "Visual Grounding Envelope",
+        "pixel_bbox": [
+          379.0,
+          350.0,
+          599.0,
+          581.0
+        ],
+        "centroid_geo": [
+          72.550938,
+          23.03151
+        ],
+        "width_px": 220.0,
+        "height_px": 231.0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "target_3",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              72.564271,
+              23.009271
+            ],
+            [
+              72.579896,
+              23.009271
+            ],
+            [
+              72.579896,
+              23.000104
+            ],
+            [
+              72.564271,
+              23.000104
+            ],
+            [
+              72.564271,
+              23.009271
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "name": "Target #3",
+        "type": "Visual Grounding Envelope",
+        "pixel_bbox": [
+          617.0,
+          679.0,
+          767.0,
+          767.0
+        ],
+        "centroid_geo": [
+          72.572083,
+          23.004687
+        ],
+        "width_px": 150.0,
+        "height_px": 88.0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "target_4",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              72.537813,
+              23.054063
+            ],
+            [
+              72.547812,
+              23.054063
+            ],
+            [
+              72.547812,
+              23.047396
+            ],
+            [
+              72.537813,
+              23.047396
+            ],
+            [
+              72.537813,
+              23.054063
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "name": "Target #4",
+        "type": "Visual Grounding Envelope",
+        "pixel_bbox": [
+          363.0,
+          249.0,
+          459.0,
+          313.0
+        ],
+        "centroid_geo": [
+          72.542812,
+          23.050729
+        ],
+        "width_px": 96.0,
+        "height_px": 64.0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "target_5",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              72.541146,
+              23.025625
+            ],
+            [
+              72.548229,
+              23.025625
+            ],
+            [
+              72.548229,
+              23.021354
+            ],
+            [
+              72.541146,
+              23.021354
+            ],
+            [
+              72.541146,
+              23.025625
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "name": "Target #5",
+        "type": "Visual Grounding Envelope",
+        "pixel_bbox": [
+          395.0,
+          522.0,
+          463.0,
+          563.0
+        ],
+        "centroid_geo": [
+          72.544687,
+          23.02349
+        ],
+        "width_px": 68.0,
+        "height_px": 41.0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "target_6",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              72.55,
+              23.052917
+            ],
+            [
+              72.555521,
+              23.052917
+            ],
+            [
+              72.555521,
+              23.05
+            ],
+            [
+              72.55,
+              23.05
+            ],
+            [
+              72.55,
+              23.052917
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "name": "Target #6",
+        "type": "Visual Grounding Envelope",
+        "pixel_bbox": [
+          480.0,
+          260.0,
+          533.0,
+          288.0
+        ],
+        "centroid_geo": [
+          72.55276,
+          23.051458
+        ],
+        "width_px": 53.0,
+        "height_px": 28.0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "target_7",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              72.501771,
+              23.044062
+            ],
+            [
+              72.506979,
+              23.044062
+            ],
+            [
+              72.506979,
+              23.041042
+            ],
+            [
+              72.501771,
+              23.041042
+            ],
+            [
+              72.501771,
+              23.044062
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "name": "Target #7",
+        "type": "Visual Grounding Envelope",
+        "pixel_bbox": [
+          17.0,
+          345.0,
+          67.0,
+          374.0
+        ],
+        "centroid_geo": [
+          72.504375,
+          23.042552
+        ],
+        "width_px": 50.0,
+        "height_px": 29.0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "target_8",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              72.524896,
+              23.060625
+            ],
+            [
+              72.527292,
+              23.060625
+            ],
+            [
+              72.527292,
+              23.055417
+            ],
+            [
+              72.524896,
+              23.055417
+            ],
+            [
+              72.524896,
+              23.060625
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "name": "Target #8",
+        "type": "Visual Grounding Envelope",
+        "pixel_bbox": [
+          239.0,
+          186.0,
+          262.0,
+          236.0
+        ],
+        "centroid_geo": [
+          72.526094,
+          23.058021
+        ],
+        "width_px": 23.0,
+        "height_px": 50.0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "flooded_sector_#1",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              72.540302,
+              23.058136
+            ],
+            [
+              72.550948,
+              23.058136
+            ],
+            [
+              72.550948,
+              23.047489
+            ],
+            [
+              72.540302,
+              23.047489
+            ],
+            [
+              72.540302,
+              23.058136
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "name": "Flooded Sector #1",
+        "category": "Sub-Cloud Flood Inundation (SAR Specular Reflection)",
+        "area_hectares": 32.9,
+        "area_km2": 0.329,
+        "centroid_geo": [
+          72.545625,
+          23.052812
+        ],
+        "pixel_count": 8204
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "flooded_sector_#2",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              72.524403,
+              23.080181
+            ],
+            [
+              72.533306,
+              23.080181
+            ],
+            [
+              72.533306,
+              23.071278
+            ],
+            [
+              72.524403,
+              23.071278
+            ],
+            [
+              72.524403,
+              23.080181
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "name": "Flooded Sector #2",
+        "category": "Sub-Cloud Flood Inundation (SAR Specular Reflection)",
+        "area_hectares": 23.0,
+        "area_km2": 0.23,
+        "centroid_geo": [
+          72.528854,
+          23.075729
+        ],
+        "pixel_count": 5737
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "flooded_sector_#3",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              72.511003,
+              23.008163
+            ],
+            [
+              72.51983,
+              23.008163
+            ],
+            [
+              72.51983,
+              22.999337
+            ],
+            [
+              72.511003,
+              22.999337
+            ],
+            [
+              72.511003,
+              23.008163
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "name": "Flooded Sector #3",
+        "category": "Sub-Cloud Flood Inundation (SAR Specular Reflection)",
+        "area_hectares": 22.6,
+        "area_km2": 0.226,
+        "centroid_geo": [
+          72.515417,
+          23.00375
+        ],
+        "pixel_count": 5639
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "flooded_sector_#4",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              72.502997,
+              23.024607
+            ],
+            [
+              72.510753,
+              23.024607
+            ],
+            [
+              72.510753,
+              23.016851
+            ],
+            [
+              72.502997,
+              23.016851
+            ],
+            [
+              72.502997,
+              23.024607
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "name": "Flooded Sector #4",
+        "category": "Sub-Cloud Flood Inundation (SAR Specular Reflection)",
+        "area_hectares": 17.5,
+        "area_km2": 0.175,
+        "centroid_geo": [
+          72.506875,
+          23.020729
+        ],
+        "pixel_count": 4354
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "sector_a",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              72.50019,
+              23.078873
+            ],
+            [
+              72.576894,
+              23.078873
+            ],
+            [
+              72.576894,
+              23.002169
+            ],
+            [
+              72.50019,
+              23.002169
+            ],
+            [
+              72.50019,
+              23.078873
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "name": "Sector A",
+        "category": "Cloud-Penetrated Ground Surface (SAR Reconstructed)",
+        "area_hectares": 1707.8,
+        "area_km2": 17.078,
+        "centroid_geo": [
+          72.538542,
+          23.040521
+        ],
+        "pixel_count": 425859
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "sector_b",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              72.569297,
+              23.080495
+            ],
+            [
+              72.57612,
+              23.080495
+            ],
+            [
+              72.57612,
+              23.073672
+            ],
+            [
+              72.569297,
+              23.073672
+            ],
+            [
+              72.569297,
+              23.080495
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "name": "Sector B",
+        "category": "Cloud-Penetrated Ground Surface (SAR Reconstructed)",
+        "area_hectares": 13.5,
+        "area_km2": 0.135,
+        "centroid_geo": [
+          72.572708,
+          23.077083
+        ],
+        "pixel_count": 3369
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "sector_c",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              72.577266,
+              23.002525
+            ],
+            [
+              72.580025,
+              23.002525
+            ],
+            [
+              72.580025,
+              22.999766
+            ],
+            [
+              72.577266,
+              22.999766
+            ],
+            [
+              72.577266,
+              23.002525
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "name": "Sector C",
+        "category": "Cloud-Penetrated Ground Surface (SAR Reconstructed)",
+        "area_hectares": 2.2,
+        "area_km2": 0.022,
+        "centroid_geo": [
+          72.578646,
+          23.001146
+        ],
+        "pixel_count": 551
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "sector_d",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              72.499583,
+              23.051771
+            ],
+            [
+              72.502083,
+              23.051771
+            ],
+            [
+              72.502083,
+              23.049271
+            ],
+            [
+              72.499583,
+              23.049271
+            ],
+            [
+              72.499583,
+              23.051771
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "name": "Sector D",
+        "category": "Cloud-Penetrated Ground Surface (SAR Reconstructed)",
+        "area_hectares": 1.4,
+        "area_km2": 0.014,
+        "centroid_geo": [
+          72.500833,
+          23.050521
+        ],
+        "pixel_count": 338
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "safe_zone_alpha",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              72.505487,
+              23.065868
+            ],
+            [
+              72.522638,
+              23.065868
+            ],
+            [
+              72.522638,
+              23.048716
+            ],
+            [
+              72.505487,
+              23.048716
+            ],
+            [
+              72.505487,
+              23.065868
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "name": "Safe Zone Alpha",
+        "category": "Primary Safe Zone: Aviation Staging & Air-Bridge Evacuation Hub (100% Dry Elevated Infrastructure)",
+        "area_hectares": 85.4,
+        "area_km2": 0.854,
+        "centroid_geo": [
+          72.514062,
+          23.057292
+        ],
+        "pixel_count": 21294
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "safe_zone_beta",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              72.495383,
+              23.088992
+            ],
+            [
+              72.529617,
+              23.088992
+            ],
+            [
+              72.529617,
+              23.054758
+            ],
+            [
+              72.495383,
+              23.054758
+            ],
+            [
+              72.495383,
+              23.088992
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "name": "Safe Zone Beta",
+        "category": "Next Fallback Safe Zone: High-Elevation Plateau & Community Shelter (Highest Topographic Relief)",
+        "area_hectares": 340.2,
+        "area_km2": 3.402,
+        "centroid_geo": [
+          72.5125,
+          23.071875
+        ],
+        "pixel_count": 84830
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "safe_zone_gamma",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              72.537663,
+              23.062545
+            ],
+            [
+              72.552337,
+              23.062545
+            ],
+            [
+              72.552337,
+              23.047872
+            ],
+            [
+              72.537663,
+              23.047872
+            ],
+            [
+              72.537663,
+              23.062545
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "name": "Safe Zone Gamma",
+        "category": "Secondary Safe Zone: Elevated Levee Settlement Buffer",
+        "area_hectares": 62.5,
+        "area_km2": 0.625,
+        "centroid_geo": [
+          72.545,
+          23.055208
+        ],
+        "pixel_count": 15584
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "safe_zone_delta",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              72.495654,
+              23.052575
+            ],
+            [
+              72.508513,
+              23.052575
+            ],
+            [
+              72.508513,
+              23.039716
+            ],
+            [
+              72.495654,
+              23.039716
+            ],
+            [
+              72.495654,
+              23.052575
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "name": "Safe Zone Delta",
+        "category": "Tertiary Safe Zone: Coastal Barrier Sand Ridge",
+        "area_hectares": 48.0,
+        "area_km2": 0.48,
+        "centroid_geo": [
+          72.502083,
+          23.046146
+        ],
+        "pixel_count": 11969
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "water_body_#1_(inner_harbor_basin_&_deep_water)",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              72.510312,
+              23.054219
+            ],
+            [
+              72.512812,
+              23.054219
+            ],
+            [
+              72.512812,
+              23.051719
+            ],
+            [
+              72.510312,
+              23.051719
+            ],
+            [
+              72.510312,
+              23.054219
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "name": "Water Body #1 (Inner Harbor Basin & Deep Water)",
+        "category": "Water Body / Marine Channel",
+        "area_hectares": 1.0,
+        "area_km2": 0.01,
+        "centroid_geo": [
+          72.511562,
+          23.052969
+        ],
+        "pixel_count": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "water_body_#2",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              72.549688,
+              23.03276
+            ],
+            [
+              72.552188,
+              23.03276
+            ],
+            [
+              72.552188,
+              23.03026
+            ],
+            [
+              72.549688,
+              23.03026
+            ],
+            [
+              72.549688,
+              23.03276
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "name": "Water Body #2",
+        "category": "Water Body / Marine Channel",
+        "area_hectares": 1.0,
+        "area_km2": 0.01,
+        "centroid_geo": [
+          72.550938,
+          23.03151
+        ],
+        "pixel_count": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "water_body_#3",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              72.570833,
+              23.005937
+            ],
+            [
+              72.573333,
+              23.005937
+            ],
+            [
+              72.573333,
+              23.003438
+            ],
+            [
+              72.570833,
+              23.003438
+            ],
+            [
+              72.570833,
+              23.005937
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "name": "Water Body #3",
+        "category": "Water Body / Marine Channel",
+        "area_hectares": 1.0,
+        "area_km2": 0.01,
+        "centroid_geo": [
+          72.572083,
+          23.004687
+        ],
+        "pixel_count": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "water_body_#4",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              72.541562,
+              23.051979
+            ],
+            [
+              72.544062,
+              23.051979
+            ],
+            [
+              72.544062,
+              23.049479
+            ],
+            [
+              72.541562,
+              23.049479
+            ],
+            [
+              72.541562,
+              23.051979
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "name": "Water Body #4",
+        "category": "Water Body / Marine Channel",
+        "area_hectares": 1.0,
+        "area_km2": 0.01,
+        "centroid_geo": [
+          72.542812,
+          23.050729
+        ],
+        "pixel_count": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "water_body_#5",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              72.543437,
+              23.02474
+            ],
+            [
+              72.545937,
+              23.02474
+            ],
+            [
+              72.545937,
+              23.02224
+            ],
+            [
+              72.543437,
+              23.02224
+            ],
+            [
+              72.543437,
+              23.02474
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "name": "Water Body #5",
+        "category": "Water Body / Marine Channel",
+        "area_hectares": 1.0,
+        "area_km2": 0.01,
+        "centroid_geo": [
+          72.544687,
+          23.02349
+        ],
+        "pixel_count": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "water_body_#6",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              72.55151,
+              23.052708
+            ],
+            [
+              72.55401,
+              23.052708
+            ],
+            [
+              72.55401,
+              23.050208
+            ],
+            [
+              72.55151,
+              23.050208
+            ],
+            [
+              72.55151,
+              23.052708
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "name": "Water Body #6",
+        "category": "Water Body / Marine Channel",
+        "area_hectares": 1.0,
+        "area_km2": 0.01,
+        "centroid_geo": [
+          72.55276,
+          23.051458
+        ],
+        "pixel_count": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "water_body_#7",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              72.503125,
+              23.043802
+            ],
+            [
+              72.505625,
+              23.043802
+            ],
+            [
+              72.505625,
+              23.041302
+            ],
+            [
+              72.503125,
+              23.041302
+            ],
+            [
+              72.503125,
+              23.043802
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "name": "Water Body #7",
+        "category": "Water Body / Marine Channel",
+        "area_hectares": 1.0,
+        "area_km2": 0.01,
+        "centroid_geo": [
+          72.504375,
+          23.042552
+        ],
+        "pixel_count": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "water_body_#8",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              72.524844,
+              23.059271
+            ],
+            [
+              72.527344,
+              23.059271
+            ],
+            [
+              72.527344,
+              23.056771
+            ],
+            [
+              72.524844,
+              23.056771
+            ],
+            [
+              72.524844,
+              23.059271
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "name": "Water Body #8",
+        "category": "Water Body / Marine Channel",
+        "area_hectares": 1.0,
+        "area_km2": 0.01,
+        "centroid_geo": [
+          72.526094,
+          23.058021
+        ],
+        "pixel_count": 0
+      }
+    }
+  ]
+}

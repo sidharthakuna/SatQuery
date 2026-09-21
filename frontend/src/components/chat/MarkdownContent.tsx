@@ -14,7 +14,7 @@ const CodeBlock: React.FC<{ code: string; lang?: string }> = ({ code, lang }) =>
   return (
     <div className="my-3 rounded-xl overflow-hidden border border-[var(--border-subtle)] bg-[var(--bg-card)] shadow-subtle">
       <div className="flex items-center justify-between px-3.5 py-1.5 bg-[var(--bg-surface)] text-[11px] font-mono text-[var(--text-muted)] border-b border-[var(--border-subtle)]">
-        <span className="uppercase tracking-wider font-semibold text-[10px] text-[#cc785c]">
+        <span className="uppercase tracking-wider font-semibold text-[10px] text-[#0EA5E9]">
           {lang || 'code'}
         </span>
         <button
@@ -25,8 +25,8 @@ const CodeBlock: React.FC<{ code: string; lang?: string }> = ({ code, lang }) =>
         >
           {copied ? (
             <>
-              <Check className="w-3 h-3 text-[#cc785c]" />
-              <span className="text-[#cc785c]">Copied</span>
+              <Check className="w-3 h-3 text-[#0EA5E9]" />
+              <span className="text-[#0EA5E9]">Copied</span>
             </>
           ) : (
             <>
@@ -61,7 +61,7 @@ const renderInline = (text: string): React.ReactNode[] => {
       parts.push(
         <code
           key={idx}
-          className="px-1.5 py-0.5 rounded bg-[var(--bg-surface)] border border-[var(--border-subtle)] text-[#cc785c] font-mono text-[12px]"
+          className="px-1.5 py-0.5 rounded bg-[var(--bg-surface)] border border-[var(--border-subtle)] text-[#0EA5E9] font-mono text-[12px]"
         >
           {seg.slice(1, -1)}
         </code>
@@ -160,7 +160,7 @@ export const MarkdownContent: React.FC<MarkdownContentProps> = ({
         elements.push(
           <div key={`table-${elements.length}`} className="overflow-x-auto my-2.5 rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-card)] shadow-subtle">
             <table className="w-full border-collapse text-left">
-              <thead className="bg-[var(--bg-surface)] border-b border-[var(--border-subtle)] text-[#cc785c] font-semibold text-[10.5px] uppercase tracking-wider font-mono">
+              <thead className="bg-[var(--bg-surface)] border-b border-[var(--border-subtle)] text-[#0EA5E9] font-semibold text-[10.5px] uppercase tracking-wider font-mono">
                 <tr>
                   {headerRow.map((h, hIdx) => (
                     <th key={hIdx} className={`${compact ? 'px-3 py-1.5' : 'px-3.5 py-2'} font-semibold border-r border-[var(--border-subtle)] last:border-r-0`}>
@@ -190,8 +190,8 @@ export const MarkdownContent: React.FC<MarkdownContentProps> = ({
     // 4. Headers
     if (trimmed.startsWith('### ')) {
       elements.push(
-        <h3 key={`h3-${elements.length}`} className={`${compact ? 'text-[12.5px] font-mono uppercase tracking-wider text-[#cc785c] font-semibold mt-3 mb-1.5' : 'text-[14.5px] font-semibold tracking-tight text-[var(--text-main)] mt-3.5 mb-1.5 font-sans'} flex items-center gap-1.5`}>
-          <span className="w-1.5 h-1.5 rounded-full bg-[#cc785c] inline-block shrink-0" />
+        <h3 key={`h3-${elements.length}`} className={`${compact ? 'text-[12.5px] font-mono uppercase tracking-wider text-[#0EA5E9] font-semibold mt-3 mb-1.5' : 'text-[14.5px] font-semibold tracking-tight text-[var(--text-main)] mt-3.5 mb-1.5 font-sans'} flex items-center gap-1.5`}>
+          <span className="w-1.5 h-1.5 rounded-full bg-[#0EA5E9] inline-block shrink-0" />
           <span>{renderInline(trimmed.slice(4))}</span>
         </h3>
       );
@@ -231,7 +231,7 @@ export const MarkdownContent: React.FC<MarkdownContentProps> = ({
       elements.push(
         <blockquote
           key={`quote-${elements.length}`}
-          className="border-l-2 border-[#cc785c] pl-3 py-1 my-2 bg-[#cc785c]/5 rounded-r-md text-[12px] italic text-[var(--text-muted)]"
+          className="border-l-2 border-[#0EA5E9] pl-3 py-1 my-2 bg-[#0EA5E9]/5 rounded-r-md text-[12px] italic text-[var(--text-muted)]"
         >
           {renderInline(trimmed.slice(2))}
         </blockquote>
@@ -251,7 +251,7 @@ export const MarkdownContent: React.FC<MarkdownContentProps> = ({
         <ul key={`ul-${elements.length}`} className={`list-none my-2 space-y-1.5 text-[var(--text-main)] ${compact ? 'text-[12px]' : 'text-[13.5px]'}`}>
           {listItems.map((item, itemIdx) => (
             <li key={itemIdx} className="leading-[1.6] flex items-start gap-2">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#cc785c] mt-1.5 shrink-0" />
+              <span className="w-1.5 h-1.5 rounded-full bg-[#0EA5E9] mt-1.5 shrink-0" />
               <span className="flex-1">{renderInline(item)}</span>
             </li>
           ))}
@@ -271,7 +271,7 @@ export const MarkdownContent: React.FC<MarkdownContentProps> = ({
         <ol key={`ol-${elements.length}`} className={`list-none my-2 space-y-1.5 text-[var(--text-main)] ${compact ? 'text-[12px]' : 'text-[13.5px]'}`}>
           {listItems.map((item, itemIdx) => (
             <li key={itemIdx} className="leading-[1.6] flex items-start gap-2 font-normal">
-              <span className="w-4 h-4 rounded-full bg-[#cc785c]/10 text-[#cc785c] border border-[#cc785c]/25 font-mono text-[9.5px] font-bold flex items-center justify-center shrink-0 mt-0.5">
+              <span className="w-4 h-4 rounded-full bg-[#0EA5E9]/10 text-[#0EA5E9] border border-[#0EA5E9]/25 font-mono text-[9.5px] font-bold flex items-center justify-center shrink-0 mt-0.5">
                 {itemIdx + 1}
               </span>
               <span className="flex-1">{renderInline(item)}</span>
@@ -290,7 +290,7 @@ export const MarkdownContent: React.FC<MarkdownContentProps> = ({
         {/* Blinking streaming cursor on the very last paragraph while still generating */}
         {isStreaming && isLastLine && (
           <span
-            className="inline-block w-[2px] h-[1em] bg-[#cc785c] ml-0.5 align-middle animate-pulse"
+            className="inline-block w-[2px] h-[1em] bg-[#0EA5E9] ml-0.5 align-middle animate-pulse"
             aria-hidden="true"
           />
         )}

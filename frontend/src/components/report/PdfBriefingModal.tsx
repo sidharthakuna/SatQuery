@@ -252,11 +252,11 @@ export const PdfBriefingModal: React.FC<PdfBriefingModalProps> = ({
       case 'SECRET':
         return 'bg-red-500/20 text-red-400 border-red-500/40';
       case 'CONFIDENTIAL':
-        return 'bg-[#cc785c]/20 text-[#cc785c] border-[#cc785c]/40';
+        return 'bg-[#0EA5E9]/20 text-[#0EA5E9] border-[#0EA5E9]/40';
       case 'OFFICIAL_USE_ONLY':
         return 'bg-[var(--bg-surface)] text-[var(--text-muted)] border-[var(--border-subtle)]';
       default:
-        return 'bg-[#cc785c]/15 text-[#cc785c] border-[#cc785c]/35';
+        return 'bg-[#0EA5E9]/15 text-[#0EA5E9] border-[#0EA5E9]/35';
     }
   };
 
@@ -282,7 +282,7 @@ export const PdfBriefingModal: React.FC<PdfBriefingModalProps> = ({
         <div className="px-3 sm:px-4 py-2.5 bg-[var(--bg-panel)] border-b border-[var(--border-subtle)] flex flex-wrap items-center justify-between gap-3 shrink-0 select-none">
           {/* Left: Branding & Status */}
           <div className="flex items-center gap-3 min-w-0">
-            <div className="w-9 h-9 rounded-xl bg-[var(--bg-card)] border border-[var(--border-subtle)] flex items-center justify-center text-[#cc785c] shrink-0 shadow-subtle">
+            <div className="w-9 h-9 rounded-xl bg-[var(--bg-card)] border border-[var(--border-subtle)] flex items-center justify-center text-[#0EA5E9] shrink-0 shadow-subtle">
               <Satellite className="w-5 h-5 animate-pulse" />
             </div>
             <div className="min-w-0">
@@ -298,7 +298,7 @@ export const PdfBriefingModal: React.FC<PdfBriefingModalProps> = ({
                 >
                   {classification.replace(/_/g, ' ')}
                 </span>
-                <span className="text-[10px] px-2 py-0.5 rounded font-mono text-[#cc785c] bg-[#cc785c]/10 border border-[#cc785c]/25 hidden md:inline-flex">
+                <span className="text-[10px] px-2 py-0.5 rounded font-mono text-[#0EA5E9] bg-[#0EA5E9]/10 border border-[#0EA5E9]/25 hidden md:inline-flex">
                   ISO 19115:2014
                 </span>
                 <span className="text-[10px] px-2 py-0.5 rounded font-mono text-[var(--text-muted)] bg-[var(--bg-surface)] border border-[var(--border-subtle)] hidden sm:inline-flex">
@@ -306,7 +306,7 @@ export const PdfBriefingModal: React.FC<PdfBriefingModalProps> = ({
                 </span>
               </div>
               <p className="text-[11px] font-mono text-[var(--text-muted)] truncate flex items-center gap-1.5 mt-0.5">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#cc785c]" />
+                <span className="w-1.5 h-1.5 rounded-full bg-[#0EA5E9]" />
                 <span>
                   {reportId
                     ? `Dossier Reference: #SATQUERY-AI-${reportId}`
@@ -323,7 +323,7 @@ export const PdfBriefingModal: React.FC<PdfBriefingModalProps> = ({
               type="button"
               onClick={handleDownload}
               disabled={!reportId || isGenerating}
-              className="px-2.5 sm:px-3 py-1.5 rounded-lg bg-[#cc785c] hover:bg-[#b8674d] disabled:opacity-50 text-white text-xs font-medium flex items-center gap-1.5 transition-all shadow-sm cursor-pointer"
+              className="px-2.5 sm:px-3 py-1.5 rounded-lg bg-[#0EA5E9] hover:bg-[#0284C7] disabled:opacity-50 text-white text-xs font-medium flex items-center gap-1.5 transition-all shadow-sm cursor-pointer"
               title="Download PDF Dossier"
             >
               <FileDown className="w-3.5 h-3.5" />
@@ -350,7 +350,7 @@ export const PdfBriefingModal: React.FC<PdfBriefingModalProps> = ({
               className="p-1.5 sm:px-2.5 sm:py-1.5 rounded-lg bg-[var(--bg-surface)] hover:bg-[var(--bg-card)] disabled:opacity-50 text-[var(--text-main)] text-xs font-medium flex items-center gap-1.5 border border-[var(--border-subtle)] transition-colors cursor-pointer"
               title="Print Dossier"
             >
-              <Printer className="w-3.5 h-3.5 text-[#cc785c]" />
+              <Printer className="w-3.5 h-3.5 text-[#0EA5E9]" />
               <span className="hidden md:inline">Print</span>
             </button>
 
@@ -362,7 +362,7 @@ export const PdfBriefingModal: React.FC<PdfBriefingModalProps> = ({
               className="p-1.5 sm:px-2.5 sm:py-1.5 rounded-lg bg-[var(--bg-surface)] hover:bg-[var(--bg-card)] disabled:opacity-50 text-[var(--text-main)] text-xs font-medium flex items-center gap-1.5 border border-[var(--border-subtle)] transition-colors cursor-pointer"
               title="Open in new browser tab"
             >
-              <ExternalLink className="w-3.5 h-3.5 text-[#cc785c]" />
+              <ExternalLink className="w-3.5 h-3.5 text-[#0EA5E9]" />
               <span className="hidden lg:inline">Popout</span>
             </button>
 
@@ -375,7 +375,7 @@ export const PdfBriefingModal: React.FC<PdfBriefingModalProps> = ({
               title="Copy Report Link"
             >
               {copiedLink ? (
-                <Check className="w-3.5 h-3.5 text-[#cc785c]" />
+                <Check className="w-3.5 h-3.5 text-[#0EA5E9]" />
               ) : (
                 <Copy className="w-3.5 h-3.5" />
               )}
@@ -420,7 +420,7 @@ export const PdfBriefingModal: React.FC<PdfBriefingModalProps> = ({
                 onClick={() => setLayoutMode('comprehensive')}
                 className={`px-2.5 py-1 rounded-md text-[11px] font-medium flex items-center gap-1.5 transition-all cursor-pointer ${
                   layoutMode === 'comprehensive'
-                    ? 'bg-[var(--bg-card)] text-[#cc785c] font-semibold shadow-subtle'
+                    ? 'bg-[var(--bg-card)] text-[#0EA5E9] font-semibold shadow-subtle'
                     : 'text-[var(--text-muted)] hover:text-[var(--text-main)]'
                 }`}
                 title="Full 3-Page Scientific Dossier with Methodologies & Confusion Matrix"
@@ -433,7 +433,7 @@ export const PdfBriefingModal: React.FC<PdfBriefingModalProps> = ({
                 onClick={() => setLayoutMode('rapid_assessment')}
                 className={`px-2.5 py-1 rounded-md text-[11px] font-medium flex items-center gap-1.5 transition-all cursor-pointer ${
                   layoutMode === 'rapid_assessment'
-                    ? 'bg-[var(--bg-card)] text-[#cc785c] font-semibold shadow-subtle'
+                    ? 'bg-[var(--bg-card)] text-[#0EA5E9] font-semibold shadow-subtle'
                     : 'text-[var(--text-muted)] hover:text-[var(--text-main)]'
                 }`}
                 title="2-Page Rapid Assessment Bulletin"
@@ -446,7 +446,7 @@ export const PdfBriefingModal: React.FC<PdfBriefingModalProps> = ({
                 onClick={() => setLayoutMode('executive_summary')}
                 className={`px-2.5 py-1 rounded-md text-[11px] font-medium flex items-center gap-1.5 transition-all cursor-pointer ${
                   layoutMode === 'executive_summary'
-                    ? 'bg-[var(--bg-card)] text-[#cc785c] font-semibold shadow-subtle'
+                    ? 'bg-[var(--bg-card)] text-[#0EA5E9] font-semibold shadow-subtle'
                     : 'text-[var(--text-muted)] hover:text-[var(--text-main)]'
                 }`}
                 title="Strictly Fitted 1-Page Executive Summary"
@@ -478,7 +478,7 @@ export const PdfBriefingModal: React.FC<PdfBriefingModalProps> = ({
                 onClick={() => setShowSettingsPopover(!showSettingsPopover)}
                 className={`px-2 py-1 rounded-lg border text-[11px] font-medium flex items-center gap-1.5 transition-colors cursor-pointer ${
                   showSettingsPopover
-                    ? 'bg-[#cc785c]/15 border-[#cc785c]/40 text-[#cc785c]'
+                    ? 'bg-[#0EA5E9]/15 border-[#0EA5E9]/40 text-[#0EA5E9]'
                     : 'bg-[var(--bg-surface)] border-[var(--border-subtle)] text-[var(--text-muted)] hover:text-[var(--text-main)]'
                 }`}
                 title="Telemetry Inclusions"
@@ -492,7 +492,7 @@ export const PdfBriefingModal: React.FC<PdfBriefingModalProps> = ({
                 <div className="absolute left-0 mt-2 w-64 p-3 rounded-xl bg-[var(--bg-card)] border border-[var(--border-subtle)] shadow-claude dark:shadow-claudeDark z-30 space-y-2.5 animate-fadeIn">
                   <div className="flex items-center justify-between border-b border-[var(--border-subtle)] pb-2">
                     <span className="text-xs font-semibold text-[var(--text-main)] flex items-center gap-1.5">
-                      <Sparkles className="w-3.5 h-3.5 text-[#cc785c]" />
+                      <Sparkles className="w-3.5 h-3.5 text-[#0EA5E9]" />
                       Dossier Sections
                     </span>
                     <button
@@ -510,7 +510,7 @@ export const PdfBriefingModal: React.FC<PdfBriefingModalProps> = ({
                       type="checkbox"
                       checked={includeSensorTelemetry}
                       onChange={(e) => setIncludeSensorTelemetry(e.target.checked)}
-                      className="rounded accent-[#cc785c] cursor-pointer"
+                      className="rounded accent-[#0EA5E9] cursor-pointer"
                     />
                   </label>
 
@@ -520,7 +520,7 @@ export const PdfBriefingModal: React.FC<PdfBriefingModalProps> = ({
                       type="checkbox"
                       checked={includeAuditTrail}
                       onChange={(e) => setIncludeAuditTrail(e.target.checked)}
-                      className="rounded accent-[#cc785c] cursor-pointer"
+                      className="rounded accent-[#0EA5E9] cursor-pointer"
                     />
                   </label>
                 </div>
@@ -532,11 +532,11 @@ export const PdfBriefingModal: React.FC<PdfBriefingModalProps> = ({
           <div className="flex items-center gap-2">
             <div className="hidden lg:flex items-center gap-3 text-[11px] font-mono text-[var(--text-muted)]">
               <span className="flex items-center gap-1">
-                <Activity className="w-3 h-3 text-[#cc785c]" />
+                <Activity className="w-3 h-3 text-[#0EA5E9]" />
                 <span className="text-[var(--text-main)] font-semibold">{taskLabel}</span>
               </span>
               <span>•</span>
-              <span className="flex items-center gap-1 text-[#cc785c]">
+              <span className="flex items-center gap-1 text-[#0EA5E9]">
                 <ShieldCheck className="w-3 h-3" />
                 <span>{confidence}% Conf.</span>
               </span>
@@ -553,7 +553,7 @@ export const PdfBriefingModal: React.FC<PdfBriefingModalProps> = ({
               onClick={() => setIsSidebarOpen(!isSidebarOpen)}
               className={`px-2 py-1 rounded-lg border text-[11px] font-medium flex items-center gap-1 transition-colors cursor-pointer ${
                 isSidebarOpen
-                  ? 'bg-[#cc785c]/15 border-[#cc785c]/40 text-[#cc785c]'
+                  ? 'bg-[#0EA5E9]/15 border-[#0EA5E9]/40 text-[#0EA5E9]'
                   : 'bg-[var(--bg-surface)] border-[var(--border-subtle)] text-[var(--text-muted)] hover:text-[var(--text-main)]'
               }`}
               title={isSidebarOpen ? 'Hide Evidence Drawer' : 'Show Evidence Drawer'}
@@ -576,7 +576,7 @@ export const PdfBriefingModal: React.FC<PdfBriefingModalProps> = ({
               {/* Mission Summary Card */}
               <div className="p-3 rounded-xl bg-[var(--bg-card)] border border-[var(--border-subtle)] shadow-subtle space-y-2">
                 <div className="flex items-center justify-between">
-                  <span className="text-[10px] font-mono uppercase tracking-wider text-[#cc785c] font-bold flex items-center gap-1">
+                  <span className="text-[10px] font-mono uppercase tracking-wider text-[#0EA5E9] font-bold flex items-center gap-1">
                     <Crosshair className="w-3 h-3" />
                     Mission Directive
                   </span>
@@ -592,7 +592,7 @@ export const PdfBriefingModal: React.FC<PdfBriefingModalProps> = ({
               {/* Synthesized Response Excerpt */}
               <div className="p-3 rounded-xl bg-[var(--bg-card)] border border-[var(--border-subtle)] shadow-subtle space-y-2">
                 <div className="flex items-center justify-between">
-                  <span className="text-[10px] font-mono uppercase tracking-wider text-[#cc785c] font-bold flex items-center gap-1">
+                  <span className="text-[10px] font-mono uppercase tracking-wider text-[#0EA5E9] font-bold flex items-center gap-1">
                     <Sparkles className="w-3 h-3" />
                     Intelligence Findings
                   </span>
@@ -607,7 +607,7 @@ export const PdfBriefingModal: React.FC<PdfBriefingModalProps> = ({
 
               {/* Spatial Target Delineation Stats */}
               <div className="p-3 rounded-xl bg-[var(--bg-card)] border border-[var(--border-subtle)] shadow-subtle space-y-2.5">
-                <span className="text-[10px] font-mono uppercase tracking-wider text-[#cc785c] font-bold flex items-center gap-1">
+                <span className="text-[10px] font-mono uppercase tracking-wider text-[#0EA5E9] font-bold flex items-center gap-1">
                   <Satellite className="w-3 h-3" />
                   Spatial Telemetry Grounding
                 </span>
@@ -619,7 +619,7 @@ export const PdfBriefingModal: React.FC<PdfBriefingModalProps> = ({
                     <div className="text-[10px] text-[var(--text-dim)] font-medium">Targets Detected</div>
                   </div>
                   <div className="p-2 rounded-lg bg-[var(--bg-surface)] border border-[var(--border-subtle)]">
-                    <div className="text-base font-bold text-[#cc785c] font-mono">
+                    <div className="text-base font-bold text-[#0EA5E9] font-mono">
                       {trace?.selected_tools?.length || 1}
                     </div>
                     <div className="text-[10px] text-[var(--text-dim)] font-medium">Active Pipeline Tools</div>
@@ -631,10 +631,10 @@ export const PdfBriefingModal: React.FC<PdfBriefingModalProps> = ({
               <div className="p-3 rounded-xl bg-[var(--bg-card)] border border-[var(--border-subtle)] shadow-subtle space-y-2">
                 <div className="flex items-center justify-between">
                   <span className="text-[10px] font-mono uppercase tracking-wider text-[var(--text-muted)] font-bold flex items-center gap-1">
-                    <Lock className="w-3 h-3 text-[#cc785c]" />
+                    <Lock className="w-3 h-3 text-[#0EA5E9]" />
                     Audit Certification
                   </span>
-                  <span className="text-[9px] text-[#cc785c] font-semibold bg-[#cc785c]/10 px-1.5 py-0.5 rounded border border-[#cc785c]/25">
+                  <span className="text-[9px] text-[#0EA5E9] font-semibold bg-[#0EA5E9]/10 px-1.5 py-0.5 rounded border border-[#0EA5E9]/25">
                     VALIDATED
                   </span>
                 </div>
@@ -645,11 +645,11 @@ export const PdfBriefingModal: React.FC<PdfBriefingModalProps> = ({
                   <button
                     type="button"
                     onClick={handleCopyTelemetryJson}
-                    className="text-[var(--text-dim)] hover:text-[#cc785c] p-1 shrink-0 cursor-pointer"
+                    className="text-[var(--text-dim)] hover:text-[#0EA5E9] p-1 shrink-0 cursor-pointer"
                     title="Copy Full Telemetry Audit JSON"
                   >
                     {copiedHash ? (
-                      <Check className="w-3 h-3 text-[#cc785c]" />
+                      <Check className="w-3 h-3 text-[#0EA5E9]" />
                     ) : (
                       <Copy className="w-3 h-3" />
                     )}
@@ -663,7 +663,7 @@ export const PdfBriefingModal: React.FC<PdfBriefingModalProps> = ({
                   type="button"
                   onClick={handleDownload}
                   disabled={!reportId || isGenerating}
-                  className="w-full py-2 px-3 rounded-xl bg-[#cc785c] hover:bg-[#b8674d] disabled:opacity-50 text-white text-xs font-semibold flex items-center justify-center gap-2 shadow-sm transition-colors cursor-pointer"
+                  className="w-full py-2 px-3 rounded-xl bg-[#0EA5E9] hover:bg-[#0284C7] disabled:opacity-50 text-white text-xs font-semibold flex items-center justify-center gap-2 shadow-sm transition-colors cursor-pointer"
                 >
                   <FileDown className="w-4 h-4" />
                   <span>Download Dossier PDF</span>
@@ -673,7 +673,7 @@ export const PdfBriefingModal: React.FC<PdfBriefingModalProps> = ({
                   onClick={handleCopyTelemetryJson}
                   className="w-full py-1.5 px-3 rounded-xl bg-[var(--bg-surface)] hover:bg-[var(--bg-card)] text-[var(--text-main)] text-xs font-medium flex items-center justify-center gap-2 border border-[var(--border-subtle)] transition-colors cursor-pointer"
                 >
-                  <Code className="w-3.5 h-3.5 text-[#cc785c]" />
+                  <Code className="w-3.5 h-3.5 text-[#0EA5E9]" />
                   <span>{copiedHash ? 'Telemetry Copied!' : 'Export JSON Telemetry'}</span>
                 </button>
               </div>
@@ -686,8 +686,8 @@ export const PdfBriefingModal: React.FC<PdfBriefingModalProps> = ({
             {isGenerating && (
               <div className="absolute inset-0 z-20 flex flex-col items-center justify-center p-8 bg-[var(--bg-card)]/90 backdrop-blur-sm space-y-4 animate-fadeIn">
                 <div className="relative w-16 h-16 flex items-center justify-center">
-                  <div className="absolute inset-0 rounded-full border-2 border-[#cc785c]/20 border-t-[#cc785c] animate-spin" />
-                  <Satellite className="w-7 h-7 text-[#cc785c]" />
+                  <div className="absolute inset-0 rounded-full border-2 border-[#0EA5E9]/20 border-t-[#0EA5E9] animate-spin" />
+                  <Satellite className="w-7 h-7 text-[#0EA5E9]" />
                 </div>
                 <div className="text-center space-y-1.5 max-w-sm">
                   <h3 className="text-sm font-semibold text-[var(--text-main)] tracking-wide">
@@ -703,13 +703,13 @@ export const PdfBriefingModal: React.FC<PdfBriefingModalProps> = ({
             {/* Error State */}
             {error && !isGenerating && (
               <div className="flex flex-col items-center justify-center p-8 text-center space-y-3 max-w-md animate-fadeIn">
-                <div className="w-12 h-12 rounded-full bg-rose-500/10 border border-rose-500/25 flex items-center justify-center text-[#cc785c]">
+                <div className="w-12 h-12 rounded-full bg-rose-500/10 border border-rose-500/25 flex items-center justify-center text-[#0EA5E9]">
                   <AlertCircle className="w-6 h-6" />
                 </div>
                 <h3 className="text-sm font-semibold text-[var(--text-main)]">
                   Failed to Render Dossier
                 </h3>
-                <p className="text-xs text-[#cc785c] font-mono bg-rose-500/10 p-2.5 rounded-lg border border-rose-500/20">
+                <p className="text-xs text-[#0EA5E9] font-mono bg-rose-500/10 p-2.5 rounded-lg border border-rose-500/20">
                   {error}
                 </p>
                 <button
@@ -720,7 +720,7 @@ export const PdfBriefingModal: React.FC<PdfBriefingModalProps> = ({
                   }}
                   className="mt-2 px-3 py-1.5 rounded-lg bg-[var(--bg-surface)] hover:bg-[var(--bg-card)] text-[var(--text-main)] text-xs font-medium flex items-center gap-1.5 border border-[var(--border-subtle)] transition-colors cursor-pointer"
                 >
-                  <RefreshCw className="w-3 h-3 text-[#cc785c]" />
+                  <RefreshCw className="w-3 h-3 text-[#0EA5E9]" />
                   <span>Retry Compilation</span>
                 </button>
               </div>
@@ -745,7 +745,7 @@ export const PdfBriefingModal: React.FC<PdfBriefingModalProps> = ({
                         iframeRef.current.src = `${viewUrl}#view=FitH&toolbar=1`;
                       }
                     }}
-                    className="px-2 py-0.5 rounded hover:bg-[var(--bg-surface)] text-[11px] font-medium text-[#cc785c] cursor-pointer"
+                    className="px-2 py-0.5 rounded hover:bg-[var(--bg-surface)] text-[11px] font-medium text-[#0EA5E9] cursor-pointer"
                     title="Fit to Width"
                   >
                     Fit Width

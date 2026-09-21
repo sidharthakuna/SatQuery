@@ -99,7 +99,7 @@ export const ChatMessageItem: React.FC<ChatMessageItemProps> = ({ message }) => 
                   <span className="font-mono text-[var(--text-main)] font-medium truncate max-w-[150px]">
                     {img.filename}
                   </span>
-                  <span className="font-mono text-[10px] text-[#cc785c] bg-[#cc785c]/10 px-1.5 py-0.2 rounded border border-[#cc785c]/20">
+                  <span className="font-mono text-[10px] text-[#0EA5E9] bg-[#0EA5E9]/10 px-1.5 py-0.2 rounded border border-[#0EA5E9]/20">
                     {img.modality}
                   </span>
                 </div>
@@ -193,7 +193,7 @@ export const ChatMessageItem: React.FC<ChatMessageItemProps> = ({ message }) => 
               className="p-1.5 hover:text-[var(--text-main)] hover:bg-[var(--bg-surface)] rounded-md transition-colors text-xs cursor-pointer"
               title="Copy response"
             >
-              {copied ? <Check className="w-3.5 h-3.5 text-[#cc785c]" /> : <Copy className="w-3.5 h-3.5" />}
+              {copied ? <Check className="w-3.5 h-3.5 text-[#0EA5E9]" /> : <Copy className="w-3.5 h-3.5" />}
             </button>
 
             {!isConversational && evidenceGraph && (
@@ -203,7 +203,7 @@ export const ChatMessageItem: React.FC<ChatMessageItemProps> = ({ message }) => 
                 className="px-2.5 py-1 text-[var(--text-muted)] hover:text-[var(--text-main)] hover:bg-[var(--bg-surface)] rounded-md transition-colors text-xs font-mono flex items-center gap-1.5 cursor-pointer"
                 title="View Verifiable Evidence Graph DAG"
               >
-                <Share2 className="w-3.5 h-3.5 text-[#cc785c]" />
+                <Share2 className="w-3.5 h-3.5 text-[#0EA5E9]" />
                 <span className="hidden sm:inline">Evidence Graph</span>
               </button>
             )}
@@ -227,7 +227,7 @@ export const ChatMessageItem: React.FC<ChatMessageItemProps> = ({ message }) => 
                 className="px-2.5 py-1 text-[var(--text-muted)] hover:text-[var(--text-main)] hover:bg-[var(--bg-surface)] rounded-md transition-colors text-xs font-mono flex items-center gap-1.5 cursor-pointer"
                 title="View Executive Mission Briefing Dossier"
               >
-                <FileText className="w-3.5 h-3.5 text-[#cc785c]" />
+                <FileText className="w-3.5 h-3.5 text-[#0EA5E9]" />
                 <span className="hidden sm:inline">Briefing</span>
               </button>
             )}
@@ -239,7 +239,7 @@ export const ChatMessageItem: React.FC<ChatMessageItemProps> = ({ message }) => 
                 className="px-2.5 py-1 text-[var(--text-muted)] hover:text-[var(--text-main)] hover:bg-[var(--bg-surface)] rounded-md transition-colors text-xs font-mono flex items-center gap-1.5 cursor-pointer"
                 title="View Telemetry Panel"
               >
-                <Activity className="w-3.5 h-3.5 text-[#cc785c]" />
+                <Activity className="w-3.5 h-3.5 text-[#0EA5E9]" />
                 <span className="hidden sm:inline">Telemetry</span>
               </button>
             )}
@@ -259,7 +259,7 @@ export const ChatMessageItem: React.FC<ChatMessageItemProps> = ({ message }) => 
           <div className="flex items-center gap-2.5 py-3 text-xs text-[var(--text-muted)] font-mono">
             {isConversational ? (
               <>
-                <span className="w-2 h-2 rounded-full bg-[#cc785c] animate-ping" />
+                <span className="w-2 h-2 rounded-full bg-[#0EA5E9] animate-ping" />
                 <span className="text-[var(--text-main)]">SatQuery AI is thinking...</span>
               </>
             ) : (
@@ -277,7 +277,7 @@ export const ChatMessageItem: React.FC<ChatMessageItemProps> = ({ message }) => 
         {!isConversational && interpreted && (
           <div className="px-3.5 py-2.5 rounded-xl bg-[var(--bg-user-bubble)]/70 border border-[var(--border-subtle)] text-xs space-y-1 animate-fadeIn">
             <div className="flex items-center justify-between text-[11px] font-mono text-[var(--text-muted)]">
-              <span className="flex items-center gap-1.5 text-[#cc785c] font-semibold">
+              <span className="flex items-center gap-1.5 text-[#0EA5E9] font-semibold">
                 <Compass className="w-3.5 h-3.5" />
                 Query Decomposed & Verified
               </span>
@@ -421,7 +421,7 @@ export const ChatMessageItem: React.FC<ChatMessageItemProps> = ({ message }) => 
                 </div>
                 <div className="w-full bg-[var(--bg-app)] h-1.5 rounded-full overflow-hidden">
                   <div
-                    className="h-1.5 bg-[#cc785c] rounded-full transition-all"
+                    className="h-1.5 bg-[#0EA5E9] rounded-full transition-all"
                     style={{ width: `${Math.min(Math.max(confDecomp.model_confidence * 100, 0), 100)}%` }}
                   />
                 </div>
@@ -560,14 +560,14 @@ export const ChatMessageItem: React.FC<ChatMessageItemProps> = ({ message }) => 
               result?.text_response ? (
                 <div className="space-y-2 font-sans">
                   <div className="flex items-center justify-between text-[11px] font-mono pb-1.5 border-b border-[var(--border-subtle)]">
-                    <span className="text-[#cc785c] font-semibold flex items-center gap-1.5">
-                      <Sparkles className="w-3.5 h-3.5 text-[#cc785c]" />
+                    <span className="text-[#0EA5E9] font-semibold flex items-center gap-1.5">
+                      <Sparkles className="w-3.5 h-3.5 text-[#0EA5E9]" />
                       {trace?.task_identified === 'SINGLE_VQA' || (result as any)?.task_type === 'SINGLE_VQA'
                         ? 'RS-VLM Biophysical Synthesis'
                         : 'AI Analytical Findings'}
                     </span>
                     {trace?.confidence_score && (
-                      <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-[#cc785c]/10 text-[#cc785c] border border-[#cc785c]/25 font-semibold">
+                      <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-[#0EA5E9]/10 text-[#0EA5E9] border border-[#0EA5E9]/25 font-semibold">
                         {(trace.confidence_score * 100).toFixed(0)}% Confidence
                       </span>
                     )}
@@ -592,9 +592,9 @@ export const ChatMessageItem: React.FC<ChatMessageItemProps> = ({ message }) => 
                 key={action}
                 type="button"
                 onClick={() => submitQuery(action, message.images && message.images.length > 0 ? message.images : undefined)}
-                className="px-3 py-1.5 rounded-full text-xs bg-[var(--bg-user-bubble)]/70 hover:bg-[var(--bg-user-bubble)] text-[var(--text-main)] border border-[var(--border-subtle)] hover:border-[#cc785c]/40 hover:text-[#cc785c] transition-all flex items-center gap-1.5 group text-left cursor-pointer shadow-subtle hover:shadow-md"
+                className="px-3 py-1.5 rounded-full text-xs bg-[var(--bg-user-bubble)]/70 hover:bg-[var(--bg-user-bubble)] text-[var(--text-main)] border border-[var(--border-subtle)] hover:border-[#0EA5E9]/40 hover:text-[#0EA5E9] transition-all flex items-center gap-1.5 group text-left cursor-pointer shadow-subtle hover:shadow-md"
               >
-                <span className="text-[#cc785c] opacity-70 group-hover:opacity-100 font-mono text-[10px]">✦</span>
+                <span className="text-[#0EA5E9] opacity-70 group-hover:opacity-100 font-mono text-[10px]">✦</span>
                 <span>{action}</span>
               </button>
             ))}

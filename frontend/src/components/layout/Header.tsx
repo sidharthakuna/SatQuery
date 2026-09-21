@@ -86,7 +86,7 @@ export const Header: React.FC = () => {
       {/* ── Center Section: Active Session Title with Inline Rename ── */}
       <div className="hidden md:flex items-center gap-2 max-w-sm lg:max-w-md">
         {isEditingTitle ? (
-          <div className="flex items-center gap-1.5 bg-[var(--bg-panel)] border border-[#cc785c]/40 rounded-lg px-2 py-0.5 shadow-sm">
+          <div className="flex items-center gap-1.5 bg-[var(--bg-panel)] border border-[#0EA5E9]/40 rounded-lg px-2 py-0.5 shadow-sm">
             <input
               ref={titleInputRef}
               type="text"
@@ -103,7 +103,7 @@ export const Header: React.FC = () => {
             <button
               type="button"
               onClick={handleTitleSubmit}
-              className="p-0.5 text-[#cc785c] hover:bg-[#cc785c]/10 rounded"
+              className="p-0.5 text-[#0EA5E9] hover:bg-[#0EA5E9]/10 rounded"
             >
               <Check className="w-3 h-3" />
             </button>
@@ -117,7 +117,7 @@ export const Header: React.FC = () => {
             <span className="text-xs text-[var(--text-muted)] group-hover:text-[var(--text-main)] truncate font-normal transition-colors max-w-[220px]">
               {currentSession?.title || 'New Analysis'}
             </span>
-            <Edit2 className="w-2.5 h-2.5 text-[var(--text-dim)] group-hover:text-[#cc785c] opacity-0 group-hover:opacity-100 transition-opacity" />
+            <Edit2 className="w-2.5 h-2.5 text-[var(--text-dim)] group-hover:text-[#0EA5E9] opacity-0 group-hover:opacity-100 transition-opacity" />
           </div>
         )}
       </div>
@@ -131,7 +131,7 @@ export const Header: React.FC = () => {
         >
           <span
             className={`w-1.5 h-1.5 rounded-full ${
-              isHealthy ? 'bg-[#cc785c] animate-pulse' : 'bg-[var(--text-dim)]'
+              isHealthy ? 'bg-[#0EA5E9] animate-pulse' : 'bg-[var(--text-dim)]'
             }`}
           />
           <span className="text-[var(--text-muted)] text-[10.5px]">
@@ -149,7 +149,7 @@ export const Header: React.FC = () => {
           <button
             type="button"
             onClick={() => openPdfModal(activeAnalysisResult, activeImageForAnalysis || activeImages[0])}
-            className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[#cc785c] hover:bg-[#b8674d] text-white text-[11px] font-medium transition-colors shadow-sm cursor-pointer"
+            className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[#0EA5E9] hover:bg-[#0284C7] text-white text-[11px] font-medium transition-colors shadow-sm cursor-pointer"
             title="Open Executive Mission Briefing Dossier (PDF)"
           >
             <FileText className="w-3.5 h-3.5 text-white" />
@@ -165,7 +165,7 @@ export const Header: React.FC = () => {
           title={`Switch to ${theme === 'dark' ? 'Light' : 'Dark'} mode`}
         >
           {theme === 'dark' ? (
-            <Sun className="w-4 h-4 text-[#cc785c]" />
+            <Sun className="w-4 h-4 text-[#0EA5E9]" />
           ) : (
             <Moon className="w-4 h-4 text-[var(--text-main)]" />
           )}
@@ -184,7 +184,7 @@ export const Header: React.FC = () => {
         >
           <PanelRight className="w-4 h-4" />
           {hasTelemetry && !isAnalysisPanelOpen && (
-            <span className="absolute top-1 right-1 w-1.5 h-1.5 rounded-full bg-[#cc785c] ring-2 ring-[var(--bg-app)]" />
+            <span className="absolute top-1 right-1 w-1.5 h-1.5 rounded-full bg-[#0EA5E9] ring-2 ring-[var(--bg-app)]" />
           )}
         </button>
       </div>

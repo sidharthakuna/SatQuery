@@ -109,7 +109,7 @@ export const SwipeCompare: React.FC<SwipeCompareProps> = ({
       <div className="flex flex-wrap items-center justify-between px-3.5 py-2.5 bg-[var(--bg-panel)] border-b border-[var(--border-subtle)] text-xs gap-2">
         <div className="flex items-center gap-2 flex-wrap">
           <span className="font-semibold text-[var(--text-main)] text-[11px] flex items-center gap-1.5">
-            <Layers className="w-3.5 h-3.5 text-[#cc785c]" />
+            <Layers className="w-3.5 h-3.5 text-[#0EA5E9]" />
             Satellite Inspection Studio
           </span>
           <div className="flex items-center gap-1.5 font-mono">
@@ -118,7 +118,7 @@ export const SwipeCompare: React.FC<SwipeCompareProps> = ({
             <Badge variant="neutral">{modality2}</Badge>
           </div>
           {safeClusters.length > 0 && (
-            <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-[#cc785c]/10 text-[#cc785c] border border-[#cc785c]/25 font-medium">
+            <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-[#0EA5E9]/10 text-[#0EA5E9] border border-[#0EA5E9]/25 font-medium">
               {safeClusters.length} Marked Place{safeClusters.length === 1 ? '' : 's'}
             </span>
           )}
@@ -132,12 +132,12 @@ export const SwipeCompare: React.FC<SwipeCompareProps> = ({
               onClick={() => setMode('overlay')}
               className={`flex items-center gap-1 px-2.5 py-1 rounded-md text-[10.5px] font-mono transition-all cursor-pointer ${
                 mode === 'overlay'
-                  ? 'bg-[var(--bg-card)] text-[#cc785c] font-semibold shadow-subtle border border-[var(--border-subtle)]'
+                  ? 'bg-[var(--bg-card)] text-[#0EA5E9] font-semibold shadow-subtle border border-[var(--border-subtle)]'
                   : 'text-[var(--text-muted)] hover:text-[var(--text-main)]'
               }`}
               title="View marked places with neural detection mask overlay"
             >
-              <Crosshair className="w-3 h-3 text-[#cc785c]" />
+              <Crosshair className="w-3 h-3 text-[#0EA5E9]" />
               <span>Marked Places</span>
             </button>
           )}
@@ -147,12 +147,12 @@ export const SwipeCompare: React.FC<SwipeCompareProps> = ({
             onClick={() => setMode('slider')}
             className={`flex items-center gap-1 px-2.5 py-1 rounded-md text-[10.5px] font-mono transition-all cursor-pointer ${
               mode === 'slider'
-                ? 'bg-[var(--bg-card)] text-[#cc785c] font-semibold shadow-subtle border border-[var(--border-subtle)]'
+                ? 'bg-[var(--bg-card)] text-[#0EA5E9] font-semibold shadow-subtle border border-[var(--border-subtle)]'
                 : 'text-[var(--text-muted)] hover:text-[var(--text-main)]'
             }`}
             title="Draggable dual-image comparator swipe"
           >
-            <ArrowLeftRight className="w-3 h-3 text-[#cc785c]" />
+            <ArrowLeftRight className="w-3 h-3 text-[#0EA5E9]" />
             <span>Swipe</span>
           </button>
 
@@ -161,12 +161,12 @@ export const SwipeCompare: React.FC<SwipeCompareProps> = ({
             onClick={() => setMode('side-by-side')}
             className={`flex items-center gap-1 px-2.5 py-1 rounded-md text-[10.5px] font-mono transition-all cursor-pointer ${
               mode === 'side-by-side'
-                ? 'bg-[var(--bg-card)] text-[#cc785c] font-semibold shadow-subtle border border-[var(--border-subtle)]'
+                ? 'bg-[var(--bg-card)] text-[#0EA5E9] font-semibold shadow-subtle border border-[var(--border-subtle)]'
                 : 'text-[var(--text-muted)] hover:text-[var(--text-main)]'
             }`}
             title="View both scenes side-by-side"
           >
-            <Columns className="w-3 h-3 text-[#cc785c]" />
+            <Columns className="w-3 h-3 text-[#0EA5E9]" />
             <span>Side by Side</span>
           </button>
         </div>
@@ -182,12 +182,12 @@ export const SwipeCompare: React.FC<SwipeCompareProps> = ({
               onClick={() => setShowPins(!showPins)}
               className={`px-2 py-0.5 rounded text-[10px] font-mono border transition-colors flex items-center gap-1 cursor-pointer ${
                 showPins
-                  ? 'bg-[var(--bg-surface)] text-[var(--text-main)] border-[#cc785c]/40 font-medium'
+                  ? 'bg-[var(--bg-surface)] text-[var(--text-main)] border-[#0EA5E9]/40 font-medium'
                   : 'bg-[var(--bg-card)] text-[var(--text-dim)] border-[var(--border-subtle)] opacity-60'
               }`}
               title="Toggle interactive pins marking each detected place on the satellite image"
             >
-              <MapPin className="w-2.5 h-2.5 text-[#cc785c]" />
+              <MapPin className="w-2.5 h-2.5 text-[#0EA5E9]" />
               <span>Pins: {showPins ? 'ON' : 'OFF'}</span>
             </button>
           )}
@@ -199,12 +199,12 @@ export const SwipeCompare: React.FC<SwipeCompareProps> = ({
               onClick={() => setShowMaskInSlider(!showMaskInSlider)}
               className={`px-2 py-0.5 rounded text-[10px] font-mono border transition-colors flex items-center gap-1 cursor-pointer ${
                 showMaskInSlider
-                  ? 'bg-[var(--bg-surface)] text-[var(--text-main)] border-[#cc785c]/40 font-medium'
+                  ? 'bg-[var(--bg-surface)] text-[var(--text-main)] border-[#0EA5E9]/40 font-medium'
                   : 'bg-[var(--bg-card)] text-[var(--text-dim)] border-[var(--border-subtle)] opacity-60'
               }`}
               title="Show or hide marked places overlay on Scene 1 while swiping"
             >
-              <Layers className="w-2.5 h-2.5 text-[#cc785c]" />
+              <Layers className="w-2.5 h-2.5 text-[#0EA5E9]" />
               <span>Marked Overlay: {showMaskInSlider ? 'ON' : 'OFF'}</span>
             </button>
           )}
@@ -220,7 +220,7 @@ export const SwipeCompare: React.FC<SwipeCompareProps> = ({
                 step={0.05}
                 value={opacity}
                 onChange={(e) => setOpacity(parseFloat(e.target.value))}
-                className="w-14 h-1 bg-[var(--border-subtle)] rounded-lg appearance-none cursor-pointer accent-[#cc785c]"
+                className="w-14 h-1 bg-[var(--border-subtle)] rounded-lg appearance-none cursor-pointer accent-[#0EA5E9]"
                 title="Mask Opacity"
               />
               <span className="text-[10px] font-mono text-[var(--text-main)] w-7">
@@ -241,7 +241,7 @@ export const SwipeCompare: React.FC<SwipeCompareProps> = ({
               className="px-2 py-0.5 rounded text-[10px] font-mono border border-[var(--border-subtle)] bg-[var(--bg-surface)] text-[var(--text-muted)] hover:text-[var(--text-main)] flex items-center gap-1 cursor-pointer transition-colors"
               title="Toggle blend mode"
             >
-              <Sparkles className="w-2.5 h-2.5 text-[#cc785c]" />
+              <Sparkles className="w-2.5 h-2.5 text-[#0EA5E9]" />
               <span>Blend: {blendMode.toUpperCase()}</span>
             </button>
           )}
@@ -257,7 +257,7 @@ export const SwipeCompare: React.FC<SwipeCompareProps> = ({
               onTouchEnd={() => setIsPeeking(false)}
               className={`px-2 py-0.5 rounded text-[10px] font-mono border transition-colors flex items-center gap-1 cursor-pointer ${
                 isPeeking
-                  ? 'bg-[#cc785c]/20 text-[#cc785c] border-[#cc785c]/40 font-semibold'
+                  ? 'bg-[#0EA5E9]/20 text-[#0EA5E9] border-[#0EA5E9]/40 font-semibold'
                   : 'bg-[var(--bg-surface)] text-[var(--text-muted)] hover:text-[var(--text-main)] border-[var(--border-subtle)]'
               }`}
               title="Hold to temporarily hide the overlay and see the raw satellite pixels"
@@ -324,15 +324,15 @@ export const SwipeCompare: React.FC<SwipeCompareProps> = ({
                     {/* Pulsing Pin Marker */}
                     <div className="relative flex items-center justify-center">
                       <span
-                        className={`absolute w-7 h-7 rounded-full bg-[#cc785c] opacity-75 animate-ping ${
+                        className={`absolute w-7 h-7 rounded-full bg-[#0EA5E9] opacity-75 animate-ping ${
                           isHovered ? 'scale-150' : ''
                         }`}
                       />
                       <div
                         className={`w-5 h-5 rounded-full flex items-center justify-center shadow-lg border-2 border-white transition-transform ${
                           isHovered
-                            ? 'bg-[#cc785c] scale-125 ring-4 ring-[#cc785c]/40'
-                            : 'bg-[#cc785c]'
+                            ? 'bg-[#0EA5E9] scale-125 ring-4 ring-[#0EA5E9]/40'
+                            : 'bg-[#0EA5E9]'
                         }`}
                       >
                         <MapPin className="w-2.5 h-2.5 text-white" />
@@ -343,7 +343,7 @@ export const SwipeCompare: React.FC<SwipeCompareProps> = ({
                     <div
                       className={`mt-1.5 px-2 py-0.5 rounded-md text-[9.5px] font-mono font-bold whitespace-nowrap shadow-md border transition-all text-center ${
                         isHovered
-                          ? 'bg-[var(--bg-card)] text-[#cc785c] border-[#cc785c] scale-105'
+                          ? 'bg-[var(--bg-card)] text-[#0EA5E9] border-[#0EA5E9] scale-105'
                           : 'bg-black/85 text-white border-white/30 backdrop-blur-sm'
                       }`}
                     >
@@ -380,7 +380,7 @@ export const SwipeCompare: React.FC<SwipeCompareProps> = ({
           {/* Floating Scene Label */}
           <div className="absolute top-3 left-3 z-20 pointer-events-none">
             <span className="px-2.5 py-1 rounded-lg bg-[var(--bg-panel)]/90 backdrop-blur-sm border border-[var(--border-subtle)] text-[var(--text-main)] text-[10.5px] font-mono shadow-subtle flex items-center gap-1.5">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#cc785c] animate-pulse" />
+              <span className="w-1.5 h-1.5 rounded-full bg-[#0EA5E9] animate-pulse" />
               {label1} • Marked Places Overlay
             </span>
           </div>
@@ -455,7 +455,7 @@ export const SwipeCompare: React.FC<SwipeCompareProps> = ({
                   >
                     <div
                       className={`w-4 h-4 rounded-full flex items-center justify-center shadow-md border-2 border-white transition-transform ${
-                        isHovered ? 'bg-[#cc785c] scale-125 ring-2 ring-[#cc785c]' : 'bg-[#cc785c]'
+                        isHovered ? 'bg-[#0EA5E9] scale-125 ring-2 ring-[#0EA5E9]' : 'bg-[#0EA5E9]'
                       }`}
                     >
                       <MapPin className="w-2 h-2 text-white" />
@@ -472,11 +472,11 @@ export const SwipeCompare: React.FC<SwipeCompareProps> = ({
             style={{
               left: `${sliderPos}%`,
               width: '2px',
-              backgroundColor: '#cc785c',
+              backgroundColor: '#0EA5E9',
               boxShadow: '0 0 10px rgba(0, 0, 0, 0.6)',
             }}
           >
-            <div className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-7 h-7 rounded-full bg-[var(--bg-card)] border-2 border-[#cc785c] shadow-lg flex items-center justify-center font-mono font-bold text-[11px] text-[#cc785c]">
+            <div className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-7 h-7 rounded-full bg-[var(--bg-card)] border-2 border-[#0EA5E9] shadow-lg flex items-center justify-center font-mono font-bold text-[11px] text-[#0EA5E9]">
               ⇄
             </div>
           </div>
@@ -530,7 +530,7 @@ export const SwipeCompare: React.FC<SwipeCompareProps> = ({
         <div className="p-3 bg-[var(--bg-panel)] border-t border-[var(--border-subtle)]">
           <div className="flex items-center justify-between mb-2.5">
             <div className="flex items-center gap-1.5">
-              <MapPin className="w-3.5 h-3.5 text-[#cc785c]" />
+              <MapPin className="w-3.5 h-3.5 text-[#0EA5E9]" />
               <span className="font-semibold text-xs text-[var(--text-main)]">
                 Marked Places & Delineated Sectors
               </span>
@@ -559,17 +559,17 @@ export const SwipeCompare: React.FC<SwipeCompareProps> = ({
                   onMouseLeave={() => setHoveredClusterIndex(null)}
                   className={`p-2.5 rounded-xl border transition-all cursor-pointer ${
                     isHovered
-                      ? 'bg-[#cc785c]/10 border-[#cc785c] shadow-sm'
-                      : 'bg-[var(--bg-surface)] border-[var(--border-subtle)] hover:border-[#cc785c]/40'
+                      ? 'bg-[#0EA5E9]/10 border-[#0EA5E9] shadow-sm'
+                      : 'bg-[var(--bg-surface)] border-[var(--border-subtle)] hover:border-[#0EA5E9]/40'
                   }`}
                 >
                   <div className="flex items-center justify-between mb-1">
                     <span className="font-bold text-xs text-[var(--text-main)] flex items-center gap-1.5">
-                      <span className="w-2 h-2 rounded-full bg-[#cc785c]" />
+                      <span className="w-2 h-2 rounded-full bg-[#0EA5E9]" />
                       {cluster.zone}
                     </span>
                     {cluster.area_ha !== undefined && cluster.area_ha !== null && (
-                      <span className="text-[10.5px] font-mono font-semibold px-1.5 py-0.2 rounded bg-[var(--bg-card)] border border-[var(--border-subtle)] text-[#cc785c]">
+                      <span className="text-[10.5px] font-mono font-semibold px-1.5 py-0.2 rounded bg-[var(--bg-card)] border border-[var(--border-subtle)] text-[#0EA5E9]">
                         {cluster.area_ha} ha
                       </span>
                     )}
@@ -598,13 +598,13 @@ export const SwipeCompare: React.FC<SwipeCompareProps> = ({
             {changedAreaHectares !== undefined && changedAreaHectares !== null && (
               <span>
                 <strong className="text-[var(--text-main)] font-semibold">Changed Extent:</strong>{' '}
-                <span className="text-[#cc785c]">{changedAreaHectares.toFixed(1)} ha</span>
+                <span className="text-[#0EA5E9]">{changedAreaHectares.toFixed(1)} ha</span>
               </span>
             )}
             {changedAreaPercent !== undefined && changedAreaPercent !== null && (
               <span>
                 <strong className="text-[var(--text-main)] font-semibold">Scene Delta:</strong>{' '}
-                <span className="text-[#cc785c]">{changedAreaPercent.toFixed(1)}%</span>
+                <span className="text-[#0EA5E9]">{changedAreaPercent.toFixed(1)}%</span>
               </span>
             )}
           </div>

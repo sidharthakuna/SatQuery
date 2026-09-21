@@ -38,7 +38,7 @@ const COLOR_PALETTES: Record<string, ColorOption> = {
   terracotta: {
     id: 'terracotta',
     name: 'Terracotta',
-    stroke: '#cc785c',
+    stroke: '#0EA5E9',
     fill: 'rgba(204, 120, 92, 0.14)',
     glow: 'rgba(204, 120, 92, 0.45)',
   },
@@ -118,7 +118,7 @@ export const GroundingViewer: React.FC<GroundingViewerProps> = ({
       {/* ── Top Header Toolbar ─────────────────────────────────────────── */}
       <div className="flex flex-wrap items-center justify-between px-3.5 py-2 bg-[var(--bg-panel)] border-b border-[var(--border-subtle)] text-xs gap-2">
         <div className="flex items-center gap-2">
-          <Crosshair className="w-3.5 h-3.5 text-[#cc785c]" />
+          <Crosshair className="w-3.5 h-3.5 text-[#0EA5E9]" />
           <span className="font-medium text-[var(--text-main)] font-mono text-[11px]">
             Grounding: {safeBoxes.length} Object{safeBoxes.length === 1 ? '' : 's'}
           </span>
@@ -136,7 +136,7 @@ export const GroundingViewer: React.FC<GroundingViewerProps> = ({
               onClick={() => setRenderStyle('reticle')}
               className={`px-2 py-0.5 rounded text-[10px] font-mono flex items-center gap-1 transition-all cursor-pointer ${
                 renderStyle === 'reticle'
-                  ? 'bg-[var(--bg-card)] text-[#cc785c] border border-[var(--border-subtle)] shadow-subtle font-semibold'
+                  ? 'bg-[var(--bg-card)] text-[#0EA5E9] border border-[var(--border-subtle)] shadow-subtle font-semibold'
                   : 'text-[var(--text-muted)] hover:text-[var(--text-main)]'
               }`}
               title="Corner Reticles: Unobtrusive L-brackets that leave the satellite imagery 100% visible"
@@ -197,7 +197,7 @@ export const GroundingViewer: React.FC<GroundingViewerProps> = ({
             onTouchEnd={() => setIsPeeking(false)}
             className={`px-2 py-0.5 rounded text-[10px] font-mono border transition-colors flex items-center gap-1 cursor-pointer ${
               isPeeking
-                ? 'bg-[#cc785c]/20 text-[#cc785c] border-[#cc785c]/40 font-semibold'
+                ? 'bg-[#0EA5E9]/20 text-[#0EA5E9] border-[#0EA5E9]/40 font-semibold'
                 : 'bg-[var(--bg-surface)] text-[var(--text-muted)] hover:text-[var(--text-main)] border-[var(--border-subtle)]'
             }`}
             title="Hold to Peek: Temporarily hides all boxes to inspect the raw satellite pixels"
@@ -212,7 +212,7 @@ export const GroundingViewer: React.FC<GroundingViewerProps> = ({
             onClick={() => setShowSettings(!showSettings)}
             className={`p-1 rounded text-[var(--text-muted)] hover:text-[var(--text-main)] border transition-colors cursor-pointer ${
               showSettings
-                ? 'bg-[#cc785c]/15 border-[#cc785c]/40 text-[#cc785c]'
+                ? 'bg-[#0EA5E9]/15 border-[#0EA5E9]/40 text-[#0EA5E9]'
                 : 'bg-[var(--bg-surface)] border-[var(--border-subtle)]'
             }`}
             title="Adjust box opacity and colors"
@@ -259,7 +259,7 @@ export const GroundingViewer: React.FC<GroundingViewerProps> = ({
               step={0.02}
               value={fillOpacity}
               onChange={(e) => setFillOpacity(parseFloat(e.target.value))}
-              className="w-20 h-1 bg-[var(--border-subtle)] rounded-lg appearance-none cursor-pointer accent-[#cc785c]"
+              className="w-20 h-1 bg-[var(--border-subtle)] rounded-lg appearance-none cursor-pointer accent-[#0EA5E9]"
               title="Box Interior Fill Opacity (0% leaves satellite imagery 100% crystal clear)"
             />
             <span className="text-[10px] font-mono text-[var(--text-main)] w-8">
@@ -277,7 +277,7 @@ export const GroundingViewer: React.FC<GroundingViewerProps> = ({
               step={0.05}
               value={strokeOpacity}
               onChange={(e) => setStrokeOpacity(parseFloat(e.target.value))}
-              className="w-20 h-1 bg-[var(--border-subtle)] rounded-lg appearance-none cursor-pointer accent-[#cc785c]"
+              className="w-20 h-1 bg-[var(--border-subtle)] rounded-lg appearance-none cursor-pointer accent-[#0EA5E9]"
               title="Box Border Opacity"
             />
             <span className="text-[10px] font-mono text-[var(--text-main)] w-8">
@@ -294,7 +294,7 @@ export const GroundingViewer: React.FC<GroundingViewerProps> = ({
                 type="button"
                 onClick={() => setActiveColor(key)}
                 className={`w-4 h-4 rounded-full border transition-transform cursor-pointer ${
-                  activeColor === key ? 'scale-125 ring-2 ring-[#cc785c]/60' : 'opacity-70 hover:opacity-100'
+                  activeColor === key ? 'scale-125 ring-2 ring-[#0EA5E9]/60' : 'opacity-70 hover:opacity-100'
                 }`}
                 style={{ backgroundColor: opt.stroke, borderColor: 'var(--border-subtle)' }}
                 title={`${opt.name} Tactical Overlay`}
@@ -467,7 +467,7 @@ export const GroundingViewer: React.FC<GroundingViewerProps> = ({
         <div className="p-3 bg-[var(--bg-panel)] border-t border-[var(--border-subtle)]">
           <div className="flex items-center justify-between mb-2">
             <span className="font-semibold text-xs text-[var(--text-main)] flex items-center gap-1.5">
-              <Crosshair className="w-3 h-3 text-[#cc785c]" />
+              <Crosshair className="w-3 h-3 text-[#0EA5E9]" />
               Marked Places & Detected Objects ({safeBoxes.length})
             </span>
             <span className="text-[10px] font-mono text-[var(--text-dim)]">
@@ -491,13 +491,13 @@ export const GroundingViewer: React.FC<GroundingViewerProps> = ({
                   onMouseLeave={() => setHoveredIndex(null)}
                   className={`p-2 rounded-xl border transition-all cursor-pointer ${
                     isHovered
-                      ? 'bg-[#cc785c]/10 border-[#cc785c] shadow-sm'
-                      : 'bg-[var(--bg-surface)] border-[var(--border-subtle)] hover:border-[#cc785c]/40'
+                      ? 'bg-[#0EA5E9]/10 border-[#0EA5E9] shadow-sm'
+                      : 'bg-[var(--bg-surface)] border-[var(--border-subtle)] hover:border-[#0EA5E9]/40'
                   }`}
                 >
                   <div className="flex items-center justify-between mb-1">
                     <span className="font-bold text-xs text-[var(--text-main)] flex items-center gap-1">
-                      <span className="w-1.5 h-1.5 rounded-full bg-[#cc785c]" />
+                      <span className="w-1.5 h-1.5 rounded-full bg-[#0EA5E9]" />
                       {label} #{idx + 1}
                     </span>
                     <span className="text-[9.5px] font-mono px-1 py-0.2 rounded bg-[var(--bg-card)] border border-[var(--border-subtle)] text-[var(--text-muted)]">
@@ -519,7 +519,7 @@ export const GroundingViewer: React.FC<GroundingViewerProps> = ({
       {/* ── Dynamic Target Telemetry Footer ─────────────────────────────── */}
       <div className="px-3.5 py-1.5 bg-[var(--bg-panel)] border-t border-[var(--border-subtle)] text-[10px] font-mono text-[var(--text-muted)] flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <span className="w-1.5 h-1.5 rounded-full bg-[#cc785c] animate-pulse" />
+          <span className="w-1.5 h-1.5 rounded-full bg-[#0EA5E9] animate-pulse" />
           <span>
             {hoveredIndex !== null && safeBoxes[hoveredIndex]
               ? `Target #${hoveredIndex + 1} Selected: [${safeBoxes[hoveredIndex].map((n) => Math.round(n)).join(', ')}] • Size: ${Math.round(safeBoxes[hoveredIndex][2] - safeBoxes[hoveredIndex][0])}×${Math.round(safeBoxes[hoveredIndex][3] - safeBoxes[hoveredIndex][1])}px`

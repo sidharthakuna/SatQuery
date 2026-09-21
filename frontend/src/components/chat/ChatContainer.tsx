@@ -45,7 +45,7 @@ export const ChatContainer: React.FC = () => {
     <div
       ref={containerRef}
       onScroll={handleScroll}
-      className="flex-1 overflow-y-auto px-2 sm:px-4 py-6 scroll-smooth relative"
+      className="h-full w-full overflow-y-auto px-2 sm:px-4 py-6 scroll-smooth relative"
     >
       <div className="max-w-4xl mx-auto space-y-4">
         {messages.map((msg) => (
@@ -60,12 +60,12 @@ export const ChatContainer: React.FC = () => {
           <button
             type="button"
             onClick={scrollToBottom}
-            className="pointer-events-auto p-2.5 rounded-full bg-[var(--bg-card)] border border-[var(--border-subtle)] text-[var(--text-main)] hover:text-[#cc785c] shadow-claude dark:shadow-claudeDark transition-all duration-200 hover:scale-105 flex items-center justify-center cursor-pointer group relative"
+            className="pointer-events-auto p-2.5 rounded-full bg-[var(--bg-card)] border border-[var(--border-subtle)] text-[var(--text-main)] hover:text-[#0EA5E9] shadow-claude dark:shadow-claudeDark transition-all duration-200 hover:scale-105 flex items-center justify-center cursor-pointer group relative"
             title="Scroll to latest response"
           >
-            <ArrowDown className="w-4 h-4 text-[var(--text-muted)] group-hover:text-[#cc785c] transition-colors" />
+            <ArrowDown className="w-4 h-4 text-[var(--text-muted)] group-hover:text-[#0EA5E9] transition-colors" />
             {isProcessing && (
-              <span className="absolute top-0 right-0 w-2.5 h-2.5 bg-[#cc785c] rounded-full ring-2 ring-[var(--bg-card)] animate-ping" />
+              <span className="absolute top-0 right-0 w-2.5 h-2.5 bg-[#0EA5E9] rounded-full ring-2 ring-[var(--bg-card)] animate-ping" />
             )}
           </button>
         </div>

@@ -25,7 +25,7 @@ export const SatQueryLogo: React.FC<SatQueryLogoProps> = ({
   const rawId = useId();
   const id = rawId.replace(/[^a-zA-Z0-9]/g, '');
 
-  const strokeColor = color || '#CC785C';
+  const strokeColor = color || '#0EA5E9';
   const glowId = `sq-sat-glow-${id}`;
   const gradId = `sq-sat-grad-${id}`;
 
@@ -44,11 +44,11 @@ export const SatQueryLogo: React.FC<SatQueryLogoProps> = ({
       <defs>
         <linearGradient id={gradId} x1="3" y1="3" x2="21" y2="21" gradientUnits="userSpaceOnUse">
           <stop offset="0%" stopColor={color || "#E5987D"} />
-          <stop offset="50%" stopColor={color || "#CC785C"} />
+          <stop offset="50%" stopColor={color || "#0EA5E9"} />
           <stop offset="100%" stopColor={color || "#A85338"} />
         </linearGradient>
         <filter id={glowId} x="-20%" y="-20%" width="140%" height="140%">
-          <feDropShadow dx="0" dy="0" stdDeviation="1.5" floodColor={color || "#CC785C"} floodOpacity="0.4" />
+          <feDropShadow dx="0" dy="0" stdDeviation="1.5" floodColor={color || "#0EA5E9"} floodOpacity="0.4" />
         </filter>
       </defs>
 
@@ -114,7 +114,7 @@ export const SatQueryLogo: React.FC<SatQueryLogoProps> = ({
   if (showSquircle) {
     return (
       <div
-        className={`inline-flex items-center justify-center shrink-0 select-none rounded-xl bg-black/40 border border-[#CC785C]/30 p-1.5 transition-all duration-300 hover:border-[#CC785C]/60 hover:shadow-[0_0_12px_rgba(204,120,92,0.25)] ${
+        className={`inline-flex items-center justify-center shrink-0 select-none rounded-xl bg-black/40 border border-[#0EA5E9]/30 p-1.5 transition-all duration-300 hover:border-[#0EA5E9]/60 hover:shadow-[0_0_12px_rgba(204,120,92,0.25)] ${
           isLoading ? 'animate-satquery-breathe' : 'hover:scale-105'
         } ${className}`}
         style={{ width: size, height: size }}

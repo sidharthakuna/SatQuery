@@ -60,7 +60,7 @@ export const Sidebar: React.FC = () => {
             onClick={createNewSession}
             className="w-full py-2 px-3 mb-3 rounded-xl border border-[var(--border-subtle)] hover:border-[var(--border-hover)] bg-[var(--bg-card)] hover:bg-[var(--bg-surface)] text-[var(--text-main)] font-medium text-xs transition-colors flex items-center gap-2 shadow-subtle"
           >
-            <Plus className="w-4 h-4 text-[#cc785c]" />
+            <Plus className="w-4 h-4 text-[#0EA5E9]" />
             New Analysis
           </button>
 
@@ -95,7 +95,7 @@ export const Sidebar: React.FC = () => {
                           }}
                         />
                       ) : (
-                        <MessageSquare className="w-3.5 h-3.5 shrink-0 opacity-60 text-[#cc785c]" />
+                        <MessageSquare className="w-3.5 h-3.5 shrink-0 opacity-60 text-[#0EA5E9]" />
                       )}
                       <span className="truncate">{s.title || 'Untitled Query'}</span>
                     </div>
@@ -106,7 +106,7 @@ export const Sidebar: React.FC = () => {
                         e.stopPropagation();
                         deleteSession(s.id);
                       }}
-                      className="opacity-0 group-hover:opacity-100 p-1 text-[var(--text-dim)] hover:text-[#cc785c] transition-opacity"
+                      className="opacity-0 group-hover:opacity-100 p-1 text-[var(--text-dim)] hover:text-[#0EA5E9] transition-opacity"
                       title="Delete"
                     >
                       <Trash2 className="w-3 h-3" />
@@ -152,7 +152,7 @@ export const Sidebar: React.FC = () => {
               Inference Mode
             </h4>
             <p className="text-[var(--text-muted)] mb-2">
-              Set via <code className="text-[#cc785c] font-mono">INFERENCE_MODE</code> in backend configuration.
+              Set via <code className="text-[#0EA5E9] font-mono">INFERENCE_MODE</code> in backend configuration.
             </p>
             <span className="inline-block px-2 py-0.5 rounded bg-[var(--bg-card)] border border-[var(--border-subtle)] text-[var(--text-main)] font-mono text-[11px]">
               Active: {systemHealth?.inference_mode || 'NEURAL'}
