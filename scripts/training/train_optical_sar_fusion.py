@@ -56,11 +56,20 @@ class OpticalSARFusionDataset(Dataset):
                 if sar_p.exists() and clean_p.exists():
                     self.triplets.append((c_p, sar_p, clean_p))
 
+        # Augment with authentic Sentinel-1 and Sentinel-2 real triplet from data/samples
+        samples_dir = BASE_DIR / "data" / "samples"
+        c_real = samples_dir / "fusion_optical.tif"
+        sar_real = samples_dir / "fusion_sar.tif"
+        clean_real = samples_dir / "fusion_optical_clean.tif"
+        if c_real.exists() and sar_real.exists() and clean_real.exists():
+            self.triplets.append((c_real, sar_real, clean_real))
+
         if not self.triplets:
             self.triplets = [(None, None, None)] * 6
 
     def __len__(self):
         return len(self.triplets)
+
 
     def _normalize_optical(self, path: Path) -> np.ndarray:
         if path and path.exists():
@@ -231,30 +240,101 @@ class OpticalSARCrossAttentionNet(nn.Module):
         return reconstructed, confidence
 
 
-from train_all_models_enhanced import (
-    train_optical_sar_fusion as train_optical_sar_fusion_enhanced,
-    EnhancedOpticalSARDataset,
-    OpticalSARCrossAttentionNet,
-    DEVICE,
-    CHECKPOINT_DIR,
-)
+def train_optical_sar_fusion(
+    data_dir: Path = DATA_DIR / "fusion_sen12",
+    epochs: int = 15,
+    batch_size: int = 8,
+    lr: float = 1.5e-4,
+    device_str: str = "auto",
+) -> Path:
+    """
+    Trains OpticalSARCrossAttentionNet on the SEN1-2 public benchmark dataset.
+    Exports to both optical_sar_fusion.pt and fusion_net.pt for compatibility.
+    """
+    if device_str == "auto":
+        device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    else:
+        device = torch.device(device_str)
+
+    print("=" * 65)
+    print("  SatQuery AI — Specialist Model 4: Optical-SAR Cross-Modal Fusion Net")
+    print(f"  Training on SEN1-2 Benchmark Dataset: {data_dir}")
+    print(f"  Device: {device} | Epochs: {epochs} | Batch Size: {batch_size}")
+    print("=" * 65)
+
+    dataset = OpticalSARFusionDataset(data_dir=data_dir, img_size=128)
+    loader = DataLoader(dataset, batch_size=batch_size, shuffle=True, drop_last=False)
+
+    model = OpticalSARCrossAttentionNet().to(device)
+    optimizer = torch.optim.AdamW(model.parameters(), lr=lr, weight_decay=1e-4)
+    scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=epochs, eta_min=1e-6)
+
+    recon_loss_fn = nn.L1Loss()
+    mse_loss_fn = nn.MSELoss()
+    start_time = time.time()
+
+    model.train()
+    for epoch in range(1, epochs + 1):
+        total_loss = 0.0
+        for opt_cloudy, sar, opt_clean in loader:
+            opt_cloudy = opt_cloudy.to(device)
+            sar = sar.to(device)
+            opt_clean = opt_clean.to(device)
+
+            optimizer.zero_grad()
+            reconstructed, confidence = model(opt_cloudy, sar)
+
+            l1_loss = recon_loss_fn(reconstructed, opt_clean)
+            mse_loss = mse_loss_fn(reconstructed, opt_clean)
+            loss = l1_loss + 0.5 * mse_loss
+
+            loss.backward()
+            optimizer.step()
+            total_loss += loss.item() * opt_cloudy.size(0)
+
+        scheduler.step()
+        avg_loss = total_loss / max(len(dataset), 1)
+        if epoch % 3 == 0 or epoch == epochs:
+            print(f"  Epoch [{epoch:02d}/{epochs:02d}] Fusion Loss: {avg_loss:.4f}")
+
+    elapsed = time.time() - start_time
+    save_path = CHECKPOINT_DIR / "optical_sar_fusion.pt"
+    legacy_path = CHECKPOINT_DIR / "fusion_net.pt"
+
+    state = {
+        "model_state_dict": model.state_dict(),
+        "epochs": epochs,
+        "loss": avg_loss,
+        "arch": "OpticalSARCrossAttentionNet",
+        "optical_channels": 3,
+        "sar_channels": 2,
+    }
+    torch.save(state, save_path)
+    torch.save(state, legacy_path)
+    print(f"  --> Saved Optical-SAR Fusion checkpoint to: {save_path} ({elapsed:.1f}s)")
+    return save_path
 
 
 def main():
     parser = argparse.ArgumentParser(description="Train Optical-SAR Cross-Modal Fusion Model")
+    parser.add_argument("--data-dir", type=str, default=str(DATA_DIR / "fusion_sen12"))
     parser.add_argument("--epochs", type=int, default=15)
     parser.add_argument("--batch-size", type=int, default=8)
     parser.add_argument("--lr", type=float, default=1.5e-4)
+    parser.add_argument("--device", type=str, default="auto")
     args = parser.parse_args()
 
-    import train_all_models_enhanced as enhanced_module
-    enhanced_module.EPOCHS = args.epochs
-    enhanced_module.BATCH_SIZE = args.batch_size
-    enhanced_module.LR = args.lr
-
-    train_optical_sar_fusion_enhanced()
+    data_path = Path(args.data_dir)
+    train_optical_sar_fusion(
+        data_dir=data_path,
+        epochs=args.epochs,
+        batch_size=args.batch_size,
+        lr=args.lr,
+        device_str=args.device,
+    )
 
 
 if __name__ == "__main__":
     main()
+
 

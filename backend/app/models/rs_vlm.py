@@ -452,7 +452,7 @@ RS_VLM_VOCAB: Dict[str, int] = {w: i for i, w in enumerate(RS_VLM_WORDS)}
 RS_VLM_ID2WORD: Dict[int, str] = {i: w for i, w in enumerate(RS_VLM_WORDS)}
 
 
-def tokenize_query(text: str, max_len: int = 24, vocab: Optional[Dict[str, int]] = None) -> List[int]:
+def tokenize_query(text: str, max_len: int = 20, vocab: Optional[Dict[str, int]] = None) -> List[int]:
     v = vocab or RS_VLM_VOCAB
     unk_id = v.get("<unk>", 1)
     pad_id = v.get("<pad>", 0)
@@ -460,6 +460,7 @@ def tokenize_query(text: str, max_len: int = 24, vocab: Optional[Dict[str, int]]
     tokens = [v.get(w, unk_id) for w in cleaned_words if w][:max_len]
     tokens += [pad_id] * (max_len - len(tokens))
     return tokens
+
 
 
 class LoRALinear(nn.Module):
@@ -520,8 +521,8 @@ class RSVisionLanguageModel(nn.Module):
         return self.lm_head(decoded)
 
     @torch.no_grad()
-    def generate(self, images: torch.Tensor, q_ids: torch.Tensor, max_len: int = 20) -> List[str]:
-        """Greedy autoregressive decoding for natural language answers."""
+    def generate(self, images: torch.Tensor, q_ids: torch.Tensor, max_len: int = 40, temperature: float = 0.0, top_k: int = 20) -> List[str]:
+        """Autoregressive decoding with repetition penalty and optional sampling."""
         b = images.size(0)
         vis = self.vision_backbone(images)
         vis_tokens = self.vision_proj(vis.view(b, -1)).unsqueeze(1)
@@ -535,17 +536,28 @@ class RSVisionLanguageModel(nn.Module):
         common_exempt = {self.vocab.get(w) for w in ["a", "an", "the", "and", "of", "in", "with", "to", "is", "are", "present", "visible", "scene"] if w in self.vocab}
 
         for _ in range(max_len):
-            tgt = self.embedding(cur_ids) + self.pos_encoder[:, :cur_ids.size(1), :]
-            decoded = self.decoder(tgt=tgt, memory=memory)
+            seq_len = cur_ids.size(1)
+            tgt = self.embedding(cur_ids) + self.pos_encoder[:, :seq_len, :]
+            tgt_mask = nn.Transformer.generate_square_subsequent_mask(seq_len, device=images.device)
+            decoded = self.decoder(tgt=tgt, memory=memory, tgt_mask=tgt_mask)
             step_logits = self.lm_head(decoded[:, -1, :]).clone()
 
             for i in range(b):
                 seen_tokens = set(cur_ids[i].tolist())
                 for tid in seen_tokens:
                     if tid > 3 and tid not in common_exempt:
-                        step_logits[i, tid] -= 1.2
+                        step_logits[i, tid] -= 1.4
 
-            next_id = step_logits.argmax(dim=-1, keepdim=True)
+            if temperature > 0.0:
+                step_logits = step_logits / max(temperature, 0.1)
+                # Top-k filtering
+                vals, idxs = torch.topk(step_logits, min(top_k, step_logits.size(-1)), dim=-1)
+                probs = torch.softmax(vals, dim=-1)
+                choice = torch.multinomial(probs, num_samples=1)
+                next_id = torch.gather(idxs, -1, choice)
+            else:
+                next_id = step_logits.argmax(dim=-1, keepdim=True)
+
             cur_ids = torch.cat([cur_ids, next_id], dim=1)
             if (next_id == eos_id).all():
                 break
@@ -562,6 +574,7 @@ class RSVisionLanguageModel(nn.Module):
                     words.append(w)
             results.append(" ".join(words))
         return results
+
 
 
 # Aliases for compatibility

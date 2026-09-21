@@ -65,8 +65,8 @@ class GroundingTool(BaseTool):
             boxes = [[64.0, 64.0, 180.0, 180.0], [220.0, 140.0, 310.0, 240.0]]
 
         count = len(boxes)
-        text = GroundedRSAnalyzer.format_grounding_narrative(tool_input.query, boxes, 512, 512)
-        clusters = GroundedRSAnalyzer.build_grounding_clusters(tool_input.query, boxes)
+        text = GroundedRSAnalyzer.format_grounding_narrative(tool_input.query, boxes, 512, 512, meta)
+        clusters = GroundedRSAnalyzer.build_grounding_clusters(tool_input.query, boxes, meta)
         grounding_card = GroundedRSAnalyzer.generate_grounding_card_assets(
             image=img,
             image_meta=meta,
@@ -177,11 +177,15 @@ class GroundingTool(BaseTool):
         words = tool_input.query.lower().split()
         text_vec = np.zeros(text_dim, dtype=np.float32)
         for i, w in enumerate(words):
-            h_val = int(hashlib.md5(w.encode("utf-8")).hexdigest()[:8], 16)
+            w_clean = w.strip("?.,!;:\"'()[]{}!/")
+            if not w_clean:
+                continue
+            h_val = int(hashlib.md5(w_clean.encode("utf-8")).hexdigest()[:8], 16)
             text_vec[(h_val + i * 7) % text_dim] += 1.0
             text_vec[h_val % text_dim] += 0.5
         text_vec = text_vec / (np.linalg.norm(text_vec) + 1e-6)
         text_t = torch.from_numpy(text_vec).unsqueeze(0).to(device)
+
 
         sam_mask = None
         with torch.no_grad():
@@ -235,8 +239,8 @@ class GroundingTool(BaseTool):
 
         count = len(boxes)
         elapsed_ms = int((time.time() - start_time) * 1000)
-        text = GroundedRSAnalyzer.format_grounding_narrative(tool_input.query, boxes, img_w, img_h)
-        clusters = GroundedRSAnalyzer.build_grounding_clusters(tool_input.query, boxes)
+        text = GroundedRSAnalyzer.format_grounding_narrative(tool_input.query, boxes, img_w, img_h, meta)
+        clusters = GroundedRSAnalyzer.build_grounding_clusters(tool_input.query, boxes, meta)
 
         grounding_card = GroundedRSAnalyzer.generate_grounding_card_assets(
             image=tool_input.images[0] if tool_input.images else None,

@@ -45,7 +45,7 @@ class BiTemporalDataset(Dataset):
         self.pairs = []
 
         if data_dir.exists():
-            # Find all T1 files
+            # Find all T1 files from benchmark
             t1_files = sorted(list(data_dir.glob("*_t1.tif")))
             for t1_p in t1_files:
                 prefix = t1_p.name.replace("_t1.tif", "")
@@ -54,12 +54,20 @@ class BiTemporalDataset(Dataset):
                 if t2_p.exists() and mask_p.exists():
                     self.pairs.append((t1_p, t2_p, mask_p))
 
+        # Augment with authentic Brahmaputra flood and Bengaluru urban pairs
+        samples_dir = BASE_DIR / "data" / "samples"
+        if (samples_dir / "flood_t1.tif").exists() and (samples_dir / "flood_t2.tif").exists():
+            self.pairs.append((samples_dir / "flood_t1.tif", samples_dir / "flood_t2.tif", None))
+        if (samples_dir / "urban_t1.tif").exists() and (samples_dir / "urban_t2.tif").exists():
+            self.pairs.append((samples_dir / "urban_t1.tif", samples_dir / "urban_t2.tif", None))
+
         if not self.pairs:
             # Fallback
             self.pairs = [(None, None, None)] * 6
 
     def __len__(self):
         return len(self.pairs)
+
 
     def _read_raster(self, path: Path) -> np.ndarray:
         if path and path.exists():
@@ -82,7 +90,12 @@ class BiTemporalDataset(Dataset):
         t1_p, t2_p, mask_p = self.pairs[idx]
         t1 = self._read_raster(t1_p)
         t2 = self._read_raster(t2_p)
-        mask = self._read_mask(mask_p)
+        if mask_p is not None and mask_p.exists():
+            mask = self._read_mask(mask_p)
+        else:
+            diff = np.abs(t2 - t1).mean(axis=0, keepdims=True)
+            mask = (diff > 0.12).astype(np.float32)
+
 
         t1_t = torch.from_numpy(t1)
         t2_t = torch.from_numpy(t2)
@@ -102,7 +115,7 @@ class ChangeFormerBlock(nn.Module):
     def __init__(self, channels: int):
         super().__init__()
         self.conv1 = nn.Conv2d(channels * 4, channels, kernel_size=1, bias=False)
-        self.bn = nn.BatchNorm2d(channels)
+        self.bn1 = nn.BatchNorm2d(channels)
         self.act = nn.LeakyReLU(0.1, inplace=True)
         self.conv2 = nn.Conv2d(channels, channels, kernel_size=3, padding=1, bias=False)
         self.bn2 = nn.BatchNorm2d(channels)
@@ -111,7 +124,7 @@ class ChangeFormerBlock(nn.Module):
         diff = torch.abs(f1 - f2)
         prod = f1 * f2
         cat = torch.cat([f1, f2, diff, prod], dim=1)
-        out = self.act(self.bn(self.conv1(cat)))
+        out = self.act(self.bn1(self.conv1(cat)))
         return self.act(self.bn2(self.conv2(out)))
 
 

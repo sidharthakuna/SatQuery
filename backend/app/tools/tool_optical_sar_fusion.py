@@ -214,21 +214,20 @@ class OpticalSARFusionTool(BaseTool):
         opt_t = torch.from_numpy(opt_arr).unsqueeze(0).to(device)
         sar_t = torch.from_numpy(sar_arr).unsqueeze(0).to(device)
 
-        if opt_t.shape[2] != 512 or opt_t.shape[3] != 512:
-            opt_t = torch.nn.functional.interpolate(opt_t, size=(512, 512), mode="bilinear")
-        if sar_t.shape[2] != 512 or sar_t.shape[3] != 512:
-            sar_t = torch.nn.functional.interpolate(sar_t, size=(512, 512), mode="bilinear")
+        # Pass at trained feature resolution (128, 128) to prevent OOM
+        opt_in = torch.nn.functional.interpolate(opt_t, size=(128, 128), mode="bilinear", align_corners=False) if (opt_t.shape[2] != 128 or opt_t.shape[3] != 128) else opt_t
+        sar_in = torch.nn.functional.interpolate(sar_t, size=(128, 128), mode="bilinear", align_corners=False) if (sar_t.shape[2] != 128 or sar_t.shape[3] != 128) else sar_t
 
         with torch.no_grad():
-            reconstructed, conf = model(opt_t, sar_t)
+            reconstructed_128, conf = model(opt_in, sar_in)
             conf_val = float(conf.mean().item()) if conf is not None else 0.88
+            # Rescale reconstructed output back to full target resolution (h, w)
+            reconstructed = torch.nn.functional.interpolate(reconstructed_128, size=(h, w), mode="bilinear", align_corners=False)
             # Compute neural reconstruction difference (cloud-penetrated / restored areas)
-            neural_diff = torch.abs(reconstructed - opt_t).mean(dim=1, keepdim=True)
+            neural_diff = torch.abs(reconstructed - torch.nn.functional.interpolate(opt_t, size=(h, w), mode="bilinear", align_corners=False)).mean(dim=1, keepdim=True)
             neural_mask_t = (neural_diff > 0.12).float()
-            if neural_mask_t.shape[2] != h or neural_mask_t.shape[3] != w:
-                neural_mask_t = torch.nn.functional.interpolate(neural_mask_t, size=(h, w), mode="nearest")
             neural_mask = neural_mask_t.squeeze().cpu().numpy().astype(np.uint8)
-            l1_delta = round(float(torch.abs(reconstructed - opt_t).mean().item()), 4)
+            l1_delta = round(float(torch.abs(reconstructed - torch.nn.functional.interpolate(opt_t, size=(h, w), mode="bilinear", align_corners=False)).mean().item()), 4)
 
         from app.core.geospatial.grounded_analyzer import GroundedRSAnalyzer
         fusion_res = GroundedRSAnalyzer.fuse_optical_sar(opt_arr, sar_arr, query=tool_input.query)

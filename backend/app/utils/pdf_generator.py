@@ -1431,7 +1431,7 @@ class MissionBriefingGenerator:
         es = card.get("executive_summary", {})
         sit_txt = es.get("situation", "Multispectral surveillance confirms active flood inundation across monitored lowlands with river levee breaches.")
         dang_txt = es.get("danger_zones", "CRITICAL RED ZONES identified in residential parcels and agricultural tracts. Immediate evacuation mandatory.")
-        safe_txt = es.get("safe_zones", "Airfield Safe Zone Alpha remains 100% dry and operational for medevac. Safe Zone Beta on northern plateau provides fallback shelter.")
+        safe_txt = es.get("safe_zones", "Designated Safe Zone Alpha remains 100% dry and operational for relief staging. Safe Zone Beta provides fallback shelter.")
 
         sum_content = [
             Paragraph(f"<b>&bull; Situation Overview:</b> {sit_txt}", self.styles["CardMeta"]),

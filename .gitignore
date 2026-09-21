@@ -1,4 +1,31 @@
+# ============================================================
+# Large binary files - store in cloud storage (HuggingFace/GDrive)
+# ============================================================
+
+# Model checkpoints & weights
+*.pt
+*.pth
+*.ckpt
+*.safetensors
+backend/data/checkpoints/
+backend/models/weights/
+
+# Satellite imagery & GeoTIFF files (large binary)
+*.tif
+*.tiff
+*.geotiff
+
+# PDF reports (generated at runtime)
+*.pdf
+backend/data/reports/
+
+# Large data directories
+backend/data/
+data/
+
+# ============================================================
 # Python
+# ============================================================
 __pycache__/
 *.py[cod]
 *.pyo

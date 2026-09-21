@@ -41,7 +41,7 @@ class Settings(BaseSettings):
     port: int = 8000
 
     # ── Inference ────────────────────────────────────────────
-    inference_mode: InferenceMode = InferenceMode.MOCK
+    inference_mode: InferenceMode = InferenceMode.NEURAL
     max_vram_gb: float = 12.0
 
     # ── LLM Synthesis Engine ─────────────────────────────────

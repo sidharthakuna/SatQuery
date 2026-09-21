@@ -155,7 +155,7 @@ class RSVQATool(BaseTool):
                     img_t = torch.nn.functional.interpolate(img_t, size=(128, 128), mode="bilinear", align_corners=False)
 
                 q_tokens = torch.tensor([tokenize_query(tool_input.query, vocab=ckpt_vocab)], dtype=torch.long, device=device)
-                gen_answers = model.generate(img_t, q_tokens, max_len=20)
+                gen_answers = model.generate(img_t, q_tokens, max_len=40)
                 if gen_answers and gen_answers[0].strip():
                     neural_pred = gen_answers[0].strip()
             except Exception as e:

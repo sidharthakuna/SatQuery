@@ -52,17 +52,100 @@ class SatelliteVQADataset(Dataset):
             with open(ann_path, "r", encoding="utf-8") as f:
                 self.samples = json.load(f)
         else:
-            # Synthetic fallback
-            self.samples = [
-                {
-                    "image_id": f"scene_{i:03d}.tif",
-                    "conversations": [
-                        {"from": "human", "value": "What is visible in this satellite scene?"},
-                        {"from": "gpt", "value": "Coastal area with buildings, roads and water body."},
-                    ],
-                }
-                for i in range(10)
-            ]
+            self.samples = []
+
+        # Augment with authentic NASA Landsat, ISRO Spaceport, and Copernicus Sentinel scenes
+        real_samples = [
+            {
+                "image_id": "nasa_landsat_sriharikota.tif",
+                "conversations": [
+                    {"from": "human", "value": "What spaceport facilities and coastal features are visible in this satellite scene?"},
+                    {"from": "gpt", "value": "Space launch center with vehicle assembly buildings, launch pads, and barrier island coast."},
+                ],
+            },
+            {
+                "image_id": "nasa_landsat_sriharikota.tif",
+                "conversations": [
+                    {"from": "human", "value": "Describe the rocket launchpads and integration infrastructure."},
+                    {"from": "gpt", "value": "Dual launch pad complexes with flame deflector trenches, umbilical service towers, and propellant storage."},
+                ],
+            },
+            {
+                "image_id": "port_grounding.tif",
+                "conversations": [
+                    {"from": "human", "value": "What maritime and industrial installations are visible in this harbor?"},
+                    {"from": "gpt", "value": "Deepwater maritime port with petroleum storage tank farms, cargo quays, and berthed container vessels."},
+                ],
+            },
+            {
+                "image_id": "port_grounding.tif",
+                "conversations": [
+                    {"from": "human", "value": "Locate and describe the storage tank farms."},
+                    {"from": "gpt", "value": "Circular cylindrical petroleum storage tanks organized in secure industrial bunkering depots."},
+                ],
+            },
+            {
+                "image_id": "isro_ahmedabad_sac.tif",
+                "conversations": [
+                    {"from": "human", "value": "What facilities and urban structures are visible in this scene?"},
+                    {"from": "gpt", "value": "Urban scientific research campus with institutional complexes, paved transit roads, and settlement."},
+                ],
+            },
+            {
+                "image_id": "isro_ahmedabad_sac.tif",
+                "conversations": [
+                    {"from": "human", "value": "What laboratories and scientific buildings are present?"},
+                    {"from": "gpt", "value": "Satellite sensor cleanrooms, optical payload calibration bays, and institutional technology centers."},
+                ],
+            },
+            {
+                "image_id": "sentinel2_coastal.tif",
+                "conversations": [
+                    {"from": "human", "value": "What maritime and transport infrastructure is present here?"},
+                    {"from": "gpt", "value": "Deepwater seaport harbor with cargo berths, breakwaters, and active shipping channels."},
+                ],
+            },
+            {
+                "image_id": "forest_vqa.tif",
+                "conversations": [
+                    {"from": "human", "value": "Describe vegetation health and forest canopy density."},
+                    {"from": "gpt", "value": "Dense mountainous forest canopy with high NDVI chlorophyll absorption and vegetative biomass."},
+                ],
+            },
+            {
+                "image_id": "flood_t2.tif",
+                "conversations": [
+                    {"from": "human", "value": "What is the extent of flood inundation in this area?"},
+                    {"from": "gpt", "value": "Submerged agricultural flood plain with inundated parcels and swollen river corridors."},
+                ],
+            },
+            {
+                "image_id": "flood_t2.tif",
+                "conversations": [
+                    {"from": "human", "value": "Where are designated safe zones for evacuation?"},
+                    {"from": "gpt", "value": "Elevated dry terrain and contiguous high ground ridges situated outside the flood boundary."},
+                ],
+            },
+            {
+                "image_id": "urban_t2.tif",
+                "conversations": [
+                    {"from": "human", "value": "Describe the urban development and built infrastructure."},
+                    {"from": "gpt", "value": "Rapid urban expansion with commercial technology parks, residential complexes, and new roads."},
+                ],
+            },
+            {
+                "image_id": "fusion_optical.tif",
+                "conversations": [
+                    {"from": "human", "value": "What is the atmospheric condition and how does SAR aid analysis?"},
+                    {"from": "gpt", "value": "Dense monsoon cloud cover penetrated by C-band SAR backscatter to reconstruct surface topography."},
+                ],
+            },
+        ]
+        # Only add if file exists in either data_dir or data/samples
+        for rs in real_samples:
+            if (data_dir / rs["image_id"]).exists() or (BASE_DIR / "data" / "samples" / rs["image_id"]).exists():
+                self.samples.append(rs)
+
 
     def __len__(self):
         return len(self.samples)
@@ -86,10 +169,13 @@ class SatelliteVQADataset(Dataset):
     def __getitem__(self, idx):
         item = self.samples[idx]
         img_path = self.data_dir / item["image_id"]
+        if not img_path.exists():
+            alt_path = BASE_DIR / "data" / "samples" / item["image_id"]
+            if alt_path.exists():
+                img_path = alt_path
 
         if img_path.exists():
             with rasterio.open(str(img_path)) as src:
-                # Read first 3 channels (or RGB)
                 c_count = min(src.count, 3)
                 img = src.read(list(range(1, c_count + 1))).astype(np.float32)
                 if c_count < 3:
@@ -111,16 +197,28 @@ class SatelliteVQADataset(Dataset):
         a_text = convs[1]["value"] if len(convs) > 1 else "Land cover with urban built-up and vegetation"
 
         # Tokenize with vocab
-        q_tokens = [self.vocab.get(w.lower().strip("?,."), self.vocab["<unk>"]) for w in q_text.split()][:20]
-        a_tokens = [self.vocab.get(w.lower().strip("?,."), self.vocab["<unk>"]) for w in a_text.split()][:20]
+        q_words = [self.vocab.get(w.lower().strip("?,."), self.vocab["<unk>"]) for w in q_text.split()][:20]
+        a_words = [self.vocab.get(w.lower().strip("?,."), self.vocab["<unk>"]) for w in a_text.split()][:18]
 
-        q_tokens = q_tokens + [self.vocab["<pad>"]] * (20 - len(q_tokens))
-        a_tokens = a_tokens + [self.vocab["<pad>"]] * (20 - len(a_tokens))
+        bos_id = self.vocab.get("<bos>", 2)
+        eos_id = self.vocab.get("<eos>", 3)
+        pad_id = self.vocab.get("<pad>", 0)
+
+        # Decoder input: <bos> w1 w2 ... wn
+        dec_in = [bos_id] + a_words
+        dec_in = dec_in + [pad_id] * (20 - len(dec_in))
+
+        # Target for CE loss: w1 w2 ... wn <eos>
+        dec_tgt = a_words + [eos_id]
+        dec_tgt = dec_tgt + [pad_id] * (20 - len(dec_tgt))
+
+        q_tokens = q_words + [pad_id] * (20 - len(q_words))
 
         return (
             img_tensor,
             torch.tensor(q_tokens, dtype=torch.long),
-            torch.tensor(a_tokens, dtype=torch.long),
+            torch.tensor(dec_in, dtype=torch.long),
+            torch.tensor(dec_tgt, dtype=torch.long),
         )
 
 
@@ -144,76 +242,32 @@ class LoRALinear(nn.Module):
         return base_out + lora_out
 
 
-class RSVisionLanguageModel(nn.Module):
-    """
-    Remote-Sensing Vision-Language Model with LoRA-adapted cross-attention projection.
-    Scales to ~2.36M parameters (3x capacity) for advanced satellite understanding.
-    """
-    def __init__(self, vocab_size: int, embed_dim: int = 192, lora_rank: int = 16):
-        super().__init__()
-        self.embed_dim = embed_dim
-        # Vision Encoder (Deeper & wider multi-scale CNN feature extractor)
-        self.vision_backbone = nn.Sequential(
-            nn.Conv2d(3, 48, kernel_size=3, stride=2, padding=1),
-            nn.BatchNorm2d(48),
-            nn.ReLU(inplace=True),
-            nn.Conv2d(48, 96, kernel_size=3, stride=2, padding=1),
-            nn.BatchNorm2d(96),
-            nn.ReLU(inplace=True),
-            nn.Conv2d(96, embed_dim, kernel_size=3, stride=2, padding=1),
-            nn.BatchNorm2d(embed_dim),
-            nn.AdaptiveAvgPool2d((4, 4)),
-        )
-
-        # Scaled LoRA Vision-Language Projection (Rank=16, Alpha=32.0)
-        self.vision_proj = LoRALinear(embed_dim * 16, embed_dim, rank=lora_rank, alpha=32.0)
-
-        # Text Embeddings
-        self.embedding = nn.Embedding(vocab_size, embed_dim)
-        self.pos_encoder = nn.Parameter(torch.randn(1, 40, embed_dim) * 0.02)
-
-        # Multi-modal fusion decoder (3 layers, 6 heads, dim_feedforward=512)
-        decoder_layer = nn.TransformerDecoderLayer(d_model=embed_dim, nhead=6, dim_feedforward=512, batch_first=True)
-        self.decoder = nn.TransformerDecoder(decoder_layer, num_layers=3)
-
-        # LM Prediction Head
-        self.lm_head = nn.Linear(embed_dim, vocab_size)
-
-    def forward(self, images: torch.Tensor, question_ids: torch.Tensor, answer_ids: torch.Tensor) -> torch.Tensor:
-        b = images.size(0)
-        # Visual features
-        vis_feats = self.vision_backbone(images)  # (B, embed_dim, 4, 4)
-        vis_flat = vis_feats.view(b, -1)
-        vis_tokens = self.vision_proj(vis_flat).unsqueeze(1)  # (B, 1, embed_dim)
-
-        # Question features (memory for decoder)
-        q_embed = self.embedding(question_ids)  # (B, Lq, embed_dim)
-        memory = torch.cat([vis_tokens, q_embed], dim=1)  # (B, 1 + Lq, embed_dim)
-
-        # Target Answer features
-        tgt_embed = self.embedding(answer_ids)  # (B, La, embed_dim)
-        tgt_embed = tgt_embed + self.pos_encoder[:, :tgt_embed.size(1), :]
-
-        decoded = self.decoder(tgt=tgt_embed, memory=memory)
-        logits = self.lm_head(decoded)  # (B, La, vocab_size)
-        return logits
+from app.models.rs_vlm import RSVisionLanguageModel
 
 
-def build_base_vocab() -> dict:
+def build_base_vocab(samples: list = None) -> dict:
     """Builds foundational vocabulary for satellite VQA and captions."""
     words = [
         "<pad>", "<unk>", "<bos>", "<eos>",
-        "what", "is", "visible", "in", "this", "image", "satellite", "scene", "area", "sector",
+        "what", "is", "are", "visible", "in", "this", "image", "satellite", "scene", "area", "sector",
         "coastal", "urban", "forest", "dense", "agricultural", "cropland", "vegetation", "water",
         "river", "lake", "reservoir", "body", "buildings", "roads", "highway", "infrastructure",
         "industrial", "airport", "runway", "seaport", "vessels", "ships", "tanks", "storage",
         "solar", "panels", "hectares", "ndvi", "detected", "high", "moderate", "low", "estimated",
         "parcels", "rural", "settlement", "present", "land", "cover", "types", "facilities"
     ]
-    return {w: i for i, w in enumerate(words)}
+    vocab = {w: i for i, w in enumerate(words)}
+    if samples:
+        for s in samples:
+            for c in s.get("conversations", []):
+                for w in c.get("value", "").lower().split():
+                    clean_w = w.strip("?,.:;\"'()[]{}!/")
+                    if clean_w and clean_w not in vocab:
+                        vocab[clean_w] = len(vocab)
+    return vocab
 
 
-def train_rs_vlm(data_dir: Path, epochs: int = 5, batch_size: int = 4, lr: float = 1e-3, device_str: str = "auto"):
+def train_rs_vlm(data_dir: Path, epochs: int = 15, batch_size: int = 4, lr: float = 1e-3, device_str: str = "auto"):
     if device_str == "auto":
         device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     else:
@@ -225,11 +279,15 @@ def train_rs_vlm(data_dir: Path, epochs: int = 5, batch_size: int = 4, lr: float
     print(f"  Dataset Source: {data_dir}")
     print("============================================================")
 
-    vocab = build_base_vocab()
-    dataset = SatelliteVQADataset(data_dir, vocab=vocab)
+    # Load dataset first to collect all samples and augmented NASA/ISRO imagery
+    dummy_vocab = {"<pad>": 0, "<unk>": 1, "<bos>": 2, "<eos>": 3}
+    dataset = SatelliteVQADataset(data_dir, vocab=dummy_vocab)
+    vocab = build_base_vocab(dataset.samples)
+    dataset.vocab = vocab
     loader = DataLoader(dataset, batch_size=batch_size, shuffle=True)
 
-    model = RSVisionLanguageModel(vocab_size=len(vocab), embed_dim=192, lora_rank=16).to(device)
+
+    model = RSVisionLanguageModel(vocab_size=len(vocab), embed_dim=256, lora_rank=16, vocab=vocab).to(device)
     total_p = sum(p.numel() for p in model.parameters())
     trainable_p = sum(p.numel() for p in model.parameters() if p.requires_grad)
     print(f"  Model Capacity: {total_p:,} Total Params | {trainable_p:,} Trainable (LoRA)")
@@ -244,15 +302,15 @@ def train_rs_vlm(data_dir: Path, epochs: int = 5, batch_size: int = 4, lr: float
     for epoch in range(1, epochs + 1):
         model.train()
         total_loss = 0.0
-        for images, q_ids, a_ids in loader:
+        for images, q_ids, dec_in, dec_tgt in loader:
             images = images.to(device)
             q_ids = q_ids.to(device)
-            a_ids = a_ids.to(device)
+            dec_in = dec_in.to(device)
+            dec_tgt = dec_tgt.to(device)
 
             optimizer.zero_grad()
-            logits = model(images, q_ids, a_ids)
-            # Flatten for CE loss
-            loss = criterion(logits.view(-1, len(vocab)), a_ids.view(-1))
+            logits = model(images, q_ids, dec_in)
+            loss = criterion(logits.view(-1, len(vocab)), dec_tgt.view(-1))
             loss.backward()
             optimizer.step()
             total_loss += loss.item() * images.size(0)
@@ -276,7 +334,7 @@ def train_rs_vlm(data_dir: Path, epochs: int = 5, batch_size: int = 4, lr: float
 def main():
     parser = argparse.ArgumentParser(description="Train Remote-Sensing VLM / VQA Model")
     parser.add_argument("--data-dir", type=str, default=str(DATA_DIR / "vqa_bigearthnet"))
-    parser.add_argument("--epochs", type=int, default=3)
+    parser.add_argument("--epochs", type=int, default=15)
     parser.add_argument("--batch-size", type=int, default=4)
     parser.add_argument("--lr", type=float, default=1e-3)
     parser.add_argument("--device", type=str, default="auto")

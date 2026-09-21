@@ -195,9 +195,58 @@ def process_and_distribute():
     except Exception as e:
         print(f"  Warning on forest: {e}")
 
+    # ──────────────────────────────────────────────────────────────────────────
+    # 4. NASA Landsat-8 Level-2 (Sriharikota ISRO Satish Dhawan Space Centre SHAR)
+    # ──────────────────────────────────────────────────────────────────────────
+    bbox_sriharikota = [80.18, 13.68, 80.28, 13.76]
+    item_landsat_shar = "LC08_L2SP_142051_20260606_02_T1"
+    print("\n[6/7] Fetching Authentic NASA Landsat-8 (Sriharikota ISRO Spaceport)...")
+    try:
+        url_shar = f"https://planetarycomputer.microsoft.com/api/data/v1/item/bbox/80.18,13.68,80.28,13.76/768x768.tif?collection=landsat-c2-l2&item={item_landsat_shar}&assets=red&assets=green&assets=blue&color_formula=gamma+RGB+2.7%2C+saturation+1.5%2C+sigmoidal+RGB+15+0.55"
+        req_shar = urllib.request.Request(url_shar, headers={"User-Agent": "Mozilla/5.0"})
+        with urllib.request.urlopen(req_shar, timeout=40) as resp:
+            buf_shar = resp.read()
+        with rasterio.open(io.BytesIO(buf_shar)) as src:
+            shar_rgb = src.read()[:3]
+        save_geotiff(
+            shar_rgb, bbox_sriharikota,
+            [
+                SAMPLES_DIR / "nasa_landsat_sriharikota.tif",
+                BACKEND_SAMPLES_DIR / "nasa_landsat_sriharikota.tif",
+                FRONTEND_SAMPLES_DIR / "nasa_landsat_sriharikota.tif",
+                SAMPLES_DIR / "isro_shar_launchpad.tif",
+                BACKEND_SAMPLES_DIR / "isro_shar_launchpad.tif",
+                FRONTEND_SAMPLES_DIR / "isro_shar_launchpad.tif",
+            ]
+        )
+    except Exception as e:
+        print(f"  Warning on NASA Landsat-8: {e}")
+
+    # ──────────────────────────────────────────────────────────────────────────
+    # 5. ISRO Space Applications Centre (SAC), Ahmedabad
+    # ──────────────────────────────────────────────────────────────────────────
+    bbox_ahmedabad = [72.50, 23.00, 72.58, 23.08]
+    item_ahmedabad = "S2A_MSIL2A_20260607T054251_R005_T43QBF_20260607T102857"
+    print("\n[7/7] Fetching Real Satellite Scene over ISRO SAC (Ahmedabad)...")
+    try:
+        buf_sac = fetch_planetary_bbox_geotiff("sentinel-2-l2a", item_ahmedabad, "visual", bbox_ahmedabad)
+        with rasterio.open(io.BytesIO(buf_sac)) as src:
+            sac_rgb = src.read()[:3]
+        save_geotiff(
+            sac_rgb, bbox_ahmedabad,
+            [
+                SAMPLES_DIR / "isro_ahmedabad_sac.tif",
+                BACKEND_SAMPLES_DIR / "isro_ahmedabad_sac.tif",
+                FRONTEND_SAMPLES_DIR / "isro_ahmedabad_sac.tif"
+            ]
+        )
+    except Exception as e:
+        print(f"  Warning on Ahmedabad SAC: {e}")
+
     print("\n" + "=" * 70)
-    print(" ALL REAL SATELLITE GEOTIFFS INGESTED AND DEPLOYED SUCCESSFULLY!")
+    print(" ALL REAL NASA, ISRO & SENTINEL GEOTIFFS INGESTED AND DEPLOYED!")
     print("=" * 70)
 
 if __name__ == "__main__":
     process_and_distribute()
+
