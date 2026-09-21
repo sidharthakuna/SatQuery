@@ -12,6 +12,9 @@ import {
   Maximize2,
   X,
   Info,
+  ArrowRight,
+  Satellite,
+  Layers,
 } from 'lucide-react';
 import { MarkdownContent } from './MarkdownContent';
 import type { ChatMessage } from '../../types/chat';
@@ -291,297 +294,138 @@ export const ChatMessageItem: React.FC<ChatMessageItemProps> = ({ message }) => 
           </div>
         )}
 
-        {/* 🎯 Grounded Remote Sensing VQA Card (Screenshot Matching) */}
-        {vqaGrounding ? (
-          <div className="rounded-2xl border border-[var(--border-subtle)] bg-[var(--bg-card)]/95 shadow-md p-4 sm:p-5 space-y-4 my-2">
-            {/* Question Header with Green circular 'Q' in styled box */}
-            <div className="flex items-center gap-3 px-3.5 py-2.5 rounded-xl bg-slate-900/90 border border-slate-700/60 shadow-inner">
-              <div className="w-6 h-6 rounded-full bg-emerald-600 text-white flex items-center justify-center font-bold text-xs shrink-0 shadow-xs">
-                Q
-              </div>
-              <div className="font-medium text-sm sm:text-[14.5px] text-slate-100 leading-snug">
-                {result?.query || message.content}
-              </div>
-            </div>
-
-            {/* Answer Section with Split Text + Visual Overlay */}
-            <div className="space-y-2.5">
-              <div className="flex items-center gap-1.5 text-sky-400 font-semibold text-xs tracking-wide">
-                <FileText className="w-4 h-4 text-sky-400" />
-                <span>Answer</span>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-12 gap-5 items-start">
-                {/* Left: Text Answer */}
-                <div className="md:col-span-7 space-y-2 leading-relaxed text-[var(--text-main)] font-normal">
-                  <MarkdownContent content={result?.text_response || message.content} />
-                </div>
-
-                {/* Right: Visual Overlay Preview with Legend */}
-                <div className="md:col-span-5 flex flex-col items-center">
-                  <div
-                    onClick={() => setVqaZoomOpen(true)}
-                    className="w-full relative group cursor-pointer rounded-xl overflow-hidden border border-slate-700/60 bg-slate-950 shadow-sm transition-transform hover:scale-[1.01]"
-                    title="Click to expand high-resolution overlay"
-                  >
-                    <img
-                      src={SatQueryAPI.getRasterPreviewUrl(vqaGrounding.overlay_url)}
-                      alt={vqaGrounding.legend_label}
-                      className="w-full h-40 sm:h-44 object-cover"
-                      onError={(e) => {
-                        const target = e.currentTarget;
-                        if (!target.dataset.fallbackApplied) {
-                          target.dataset.fallbackApplied = 'true';
-                          target.src = primaryThumb || SatQueryAPI.getRasterPreviewUrl('cartosat_t1.tif');
-                        }
-                      }}
-                    />
-                    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white text-xs font-medium gap-1.5 backdrop-blur-[1px]">
-                      <Maximize2 className="w-4 h-4" />
-                      <span>Expand</span>
-                    </div>
-                  </div>
-
-                  {/* Legend Badge below overlay */}
-                  <div className="mt-2.5 inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-[var(--bg-panel)] border border-[var(--border-subtle)] text-[11px] font-mono text-[var(--text-main)]">
-                    <span
-                      className="w-2.5 h-2.5 rounded-sm shrink-0"
-                      style={{ backgroundColor: vqaGrounding.legend_color || '#ef4444' }}
-                    />
-                    <span>{vqaGrounding.legend_label}</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Additional Information Card (Dark Slate Container matching screenshot) */}
-            <div className="p-3.5 rounded-xl bg-slate-900/90 border border-slate-700/60 space-y-2 text-xs font-mono">
-              <div className="flex items-center gap-1.5 text-sky-400 font-semibold text-xs">
-                <Info className="w-3.5 h-3.5 text-sky-400" />
-                <span>Additional Information</span>
-              </div>
-              <div className="space-y-1 text-[11px] sm:text-[11.5px]">
-                <div className="grid grid-cols-12 gap-2 text-slate-200">
-                  <span className="col-span-3 text-slate-400">Method</span>
-                  <span className="col-span-9 font-medium">: {vqaGrounding.method}</span>
-                </div>
-                <div className="grid grid-cols-12 gap-2 text-slate-200">
-                  <span className="col-span-3 text-slate-400">Confidence</span>
-                  <span className="col-span-9 font-medium text-emerald-400">
-                    : {(vqaGrounding.confidence * 100).toFixed(0)}%
-                  </span>
-                </div>
-                <div className="grid grid-cols-12 gap-2 text-slate-200">
-                  <span className="col-span-3 text-slate-400">Note</span>
-                  <span className="col-span-9 text-slate-300 font-normal">
-                    : {vqaGrounding.note}
-                  </span>
-                </div>
-              </div>
-            </div>
-          </div>
-        ) : (
-          message.content && (
-            <div className="text-[14px] text-[var(--text-main)] leading-[1.7] font-normal">
-              <MarkdownContent content={message.content} isStreaming={message.isStreaming} />
-              {message.isStreaming && (
-                <span className="inline-flex items-center ml-2 align-baseline">
-                  <SatQueryLogo size={14} isLoading={true} />
-                </span>
-              )}
-            </div>
-          )
-        )}
-
-        {/* ⚖️ Multi-Dimensional Calibrated Confidence Decomposition (spatial imagery analysis only) */}
-        {!isConversational && confDecomp && (
-          <div className="p-3 rounded-xl bg-[var(--bg-app)]/60 border border-[var(--border-subtle)] space-y-2">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <span className="text-[11px] font-mono uppercase tracking-wider text-[var(--text-dim)] font-semibold">
-                  Calibrated Confidence Decomposition
-                </span>
-                <span className="text-[10px] font-mono px-1.5 py-0.2 rounded bg-emerald-500/10 text-emerald-600 border border-emerald-500/20 font-bold">
-                  {(confDecomp.overall_confidence * 100).toFixed(0)}% OVERALL
-                </span>
-              </div>
-              <span className="text-[10px] font-mono text-[var(--text-dim)]">
-                {confDecomp.calibration_method || 'Bayesian Prior + Spatial Agreement'}
+        {/* ── Conversational AI Response Stream (Claude / ChatGPT Style) ── */}
+        {message.content ? (
+          <div className="text-[14.5px] text-[var(--text-main)] leading-[1.75] font-normal space-y-3.5">
+            <MarkdownContent content={message.content} isStreaming={message.isStreaming} />
+            {message.isStreaming && (
+              <span className="inline-flex items-center ml-2 align-baseline">
+                <SatQueryLogo size={14} isLoading={true} />
               </span>
-            </div>
-
-            {/* 4 Dimension mini-bars */}
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-1 text-[10.5px] font-mono">
-              <div className="p-2 rounded-lg bg-[var(--bg-surface)] border border-[var(--border-subtle)] space-y-1">
-                <div className="flex justify-between text-[var(--text-muted)]">
-                  <span>Model (40%)</span>
-                  <span className="font-bold text-[var(--text-main)]">
-                    {(confDecomp.model_confidence * 100).toFixed(0)}%
-                  </span>
-                </div>
-                <div className="w-full bg-[var(--bg-app)] h-1.5 rounded-full overflow-hidden">
-                  <div
-                    className="h-1.5 bg-[#0EA5E9] rounded-full transition-all"
-                    style={{ width: `${Math.min(Math.max(confDecomp.model_confidence * 100, 0), 100)}%` }}
-                  />
-                </div>
-              </div>
-
-              <div className="p-2 rounded-lg bg-[var(--bg-surface)] border border-[var(--border-subtle)] space-y-1">
-                <div className="flex justify-between text-[var(--text-muted)]">
-                  <span>Spatial (25%)</span>
-                  <span className="font-bold text-[var(--text-main)]">
-                    {(confDecomp.spatial_agreement * 100).toFixed(0)}%
-                  </span>
-                </div>
-                <div className="w-full bg-[var(--bg-app)] h-1.5 rounded-full overflow-hidden">
-                  <div
-                    className="h-1.5 bg-emerald-500 rounded-full transition-all"
-                    style={{ width: `${Math.min(Math.max(confDecomp.spatial_agreement * 100, 0), 100)}%` }}
-                  />
-                </div>
-              </div>
-
-              <div className="p-2 rounded-lg bg-[var(--bg-surface)] border border-[var(--border-subtle)] space-y-1">
-                <div className="flex justify-between text-[var(--text-muted)]">
-                  <span>Quality (20%)</span>
-                  <span className="font-bold text-[var(--text-main)]">
-                    {(confDecomp.input_quality * 100).toFixed(0)}%
-                  </span>
-                </div>
-                <div className="w-full bg-[var(--bg-app)] h-1.5 rounded-full overflow-hidden">
-                  <div
-                    className="h-1.5 bg-sky-500 rounded-full transition-all"
-                    style={{ width: `${Math.min(Math.max(confDecomp.input_quality * 100, 0), 100)}%` }}
-                  />
-                </div>
-              </div>
-
-              <div className="p-2 rounded-lg bg-[var(--bg-surface)] border border-[var(--border-subtle)] space-y-1">
-                <div className="flex justify-between text-[var(--text-muted)]">
-                  <span>Cross-Modal (15%)</span>
-                  <span className="font-bold text-[var(--text-main)]">
-                    {(confDecomp.cross_modal_agreement * 100).toFixed(0)}%
-                  </span>
-                </div>
-                <div className="w-full bg-[var(--bg-app)] h-1.5 rounded-full overflow-hidden">
-                  <div
-                    className="h-1.5 bg-purple-500 rounded-full transition-all"
-                    style={{ width: `${Math.min(Math.max(confDecomp.cross_modal_agreement * 100, 0), 100)}%` }}
-                  />
-                </div>
-              </div>
-            </div>
+            )}
           </div>
-        )}
+        ) : null}
 
-        {/* ⚠️ Counter-Evidence & Cross-Model Verification Caveats */}
-        {!isConversational &&
-          evidenceVerif &&
-          ((evidenceVerif.counter_evidence && evidenceVerif.counter_evidence.length > 0) ||
-            evidenceVerif.insufficient_evidence) && (
-            <div className="p-3.5 rounded-xl bg-amber-500/10 border border-amber-500/20 text-xs space-y-1.5 animate-fadeIn">
-              <div className="flex items-center gap-1.5 text-amber-700 dark:text-amber-400 font-semibold text-xs">
-                <AlertTriangle className="w-4 h-4 text-amber-600" />
-                <span>Verification Caveats & Counter-Evidence Detected</span>
+        {/* ── Sleek Satellite Intelligence & Evidence Banner (Links to Right Workspace) ── */}
+        {!isConversational && result && !message.isStreaming && (
+          <div className="mt-4 rounded-2xl border border-[var(--border-subtle)] bg-[var(--bg-card)]/90 hover:bg-[var(--bg-card)] p-4 shadow-sm transition-all space-y-3.5">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-[var(--border-subtle)]/70">
+              <div className="flex items-center gap-2.5">
+                <div className="w-8 h-8 rounded-xl bg-sky-500/10 border border-sky-500/20 flex items-center justify-center text-sky-400 shrink-0">
+                  <Satellite className="w-4 h-4" />
+                </div>
+                <div>
+                  <h4 className="font-semibold text-xs text-[var(--text-main)] flex items-center gap-1.5">
+                    <span>Satellite Evidence & Geospatial Briefing</span>
+                    <Badge variant="success" className="text-[9px]">READY</Badge>
+                  </h4>
+                  <span className="text-[11px] font-mono text-[var(--text-dim)]">
+                    {trace?.task_identified || 'Earth Observation'} • {spatial?.changed_area_hectares ? `${spatial.changed_area_hectares.toFixed(1)} ha detected` : `${boxes.length} targets isolated`}
+                  </span>
+                </div>
               </div>
-              <ul className="list-disc list-inside space-y-0.5 text-[12px] text-[var(--text-muted)]">
-                {evidenceVerif.counter_evidence?.map((item, idx) => (
-                  <li key={`${idx}-${item.slice(0, 20)}`}>{item}</li>
-                ))}
-                {evidenceVerif.refusal_reason && (
-                  <li className="text-rose-600 dark:text-rose-400 font-medium">
-                    {evidenceVerif.refusal_reason}
-                  </li>
-                )}
-              </ul>
-              {evidenceVerif.supporting_sources && (
-                <div className="pt-1 text-[11px] font-mono text-[var(--text-dim)]">
-                  Corroborated by: {evidenceVerif.supporting_sources.join(', ')}
+
+              <button
+                type="button"
+                onClick={handleOpenTelemetry}
+                className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-[#0EA5E9] hover:bg-[#0284C7] text-white text-xs font-medium shadow-xs hover:shadow-sm transition-all cursor-pointer whitespace-nowrap self-start sm:self-auto"
+              >
+                <span>Open Briefing & Images in Workspace</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </button>
+            </div>
+
+            {/* Visual Thumbnail Gallery */}
+            <div className="flex items-center gap-3 overflow-x-auto py-1">
+              {primaryThumb && (
+                <div
+                  onClick={handleOpenTelemetry}
+                  className="flex items-center gap-2.5 p-2 rounded-xl bg-[var(--bg-surface)] border border-[var(--border-subtle)] hover:border-sky-500/40 cursor-pointer transition-all shrink-0 group"
+                  title="Click to inspect primary satellite scene"
+                >
+                  <img
+                    src={primaryThumb}
+                    alt="Baseline Scene"
+                    className="w-10 h-10 rounded-lg object-cover border border-slate-700/50 bg-black"
+                    onError={(e) => {
+                      (e.currentTarget as HTMLImageElement).src = SatQueryAPI.getRasterPreviewUrl('cartosat_t1.tif');
+                    }}
+                  />
+                  <div className="text-[10.5px] font-mono pr-1">
+                    <span className="block text-[var(--text-main)] font-semibold truncate max-w-[120px] group-hover:text-sky-400 transition-colors">
+                      {primaryImage?.filename || 'baseline_t1.tif'}
+                    </span>
+                    <span className="text-sky-400 font-semibold">{primaryImage?.modality || 'OPTICAL'}</span>
+                  </div>
+                </div>
+              )}
+
+              {secondaryThumb && (
+                <div
+                  onClick={handleOpenTelemetry}
+                  className="flex items-center gap-2.5 p-2 rounded-xl bg-[var(--bg-surface)] border border-[var(--border-subtle)] hover:border-purple-500/40 cursor-pointer transition-all shrink-0 group"
+                  title="Click to inspect secondary surveillance scene"
+                >
+                  <img
+                    src={secondaryThumb}
+                    alt="Surveillance Scene"
+                    className="w-10 h-10 rounded-lg object-cover border border-slate-700/50 bg-black"
+                    onError={(e) => {
+                      (e.currentTarget as HTMLImageElement).src = SatQueryAPI.getRasterPreviewUrl('cartosat_t2.tif');
+                    }}
+                  />
+                  <div className="text-[10.5px] font-mono pr-1">
+                    <span className="block text-[var(--text-main)] font-semibold truncate max-w-[120px] group-hover:text-purple-400 transition-colors">
+                      {secondaryImage?.filename || 'surveillance_t2.tif'}
+                    </span>
+                    <span className="text-purple-400 font-semibold">{secondaryImage?.modality || 'SAR'}</span>
+                  </div>
+                </div>
+              )}
+
+              {(spatial?.mask_url || vqaGrounding?.overlay_url) && (
+                <div
+                  onClick={handleOpenTelemetry}
+                  className="flex items-center gap-2.5 p-2 rounded-xl bg-[var(--bg-surface)] border border-[var(--border-subtle)] hover:border-emerald-500/40 cursor-pointer transition-all shrink-0 group"
+                  title="Click to inspect delineated output raster"
+                >
+                  <img
+                    src={SatQueryAPI.getRasterPreviewUrl(vqaGrounding?.overlay_url || spatial?.mask_url || '')}
+                    alt="Output Evidence"
+                    className="w-10 h-10 rounded-lg object-cover border border-slate-700/50 bg-black"
+                    onError={(e) => {
+                      (e.currentTarget as HTMLImageElement).src = primaryThumb || SatQueryAPI.getRasterPreviewUrl('cartosat_t1.tif');
+                    }}
+                  />
+                  <div className="text-[10.5px] font-mono pr-1">
+                    <span className="block text-emerald-400 font-semibold truncate max-w-[120px] group-hover:text-emerald-300 transition-colors">
+                      Output Analysis
+                    </span>
+                    <span className="text-[var(--text-dim)]">GeoTIFF Mask / Overlay</span>
+                  </div>
                 </div>
               )}
             </div>
-          )}
 
-        {/* ── Cartographic Satellite Intelligence Displays ── */}
-        {!isConversational && disasterCard && (
-          <DisasterAssessmentCard
-            data={disasterCard}
-            onOpenPdf={result ? () => handleOpenPdf() : undefined}
-            onDownloadGeoJson={hasGeoJsonFeatures ? handleDownloadGeoJson : undefined}
-          />
-        )}
-
-        {!isConversational && !disasterCard && bitemporalCard && (
-          <BitemporalChangeCard
-            data={bitemporalCard}
-            onOpenPdf={result ? () => handleOpenPdf() : undefined}
-          />
-        )}
-
-        {!isConversational && !disasterCard && !bitemporalCard && opticalSarCard && (
-          <OpticalSarFusionCard
-            data={opticalSarCard}
-            onOpenPdf={result ? () => handleOpenPdf() : undefined}
-          />
-        )}
-
-        {!isConversational && !disasterCard && !bitemporalCard && !opticalSarCard && groundingCard && (
-          <GroundingDinoCard
-            data={groundingCard}
-            onOpenPdf={result ? () => handleOpenPdf() : undefined}
-          />
-        )}
-
-        {!isConversational && !disasterCard && !bitemporalCard && !opticalSarCard && !groundingCard && multiModelCard && (
-          <MultiModelAnalysisCard
-            data={multiModelCard}
-            onOpenPdf={result ? () => handleOpenPdf() : undefined}
-            onQueryClick={(q) => submitQuery(q, message.images && message.images.length > 0 ? message.images : undefined)}
-          />
-        )}
-
-        {!isConversational && !multiModelCard && !opticalSarCard && !groundingCard && !bitemporalCard && !disasterCard && !vqaGrounding && (primaryThumb || spatial?.mask_url || boxes.length > 0) && (
-          <CartographicIntelligenceViewer
-            image1Url={primaryThumb || spatial?.mask_url || ''}
-            image2Url={secondaryThumb || undefined}
-            maskUrl={spatial?.mask_url}
-            boxes={boxes}
-            label1={primaryImage?.filename || (primaryThumb ? 'pre_event_t1.tif' : 'spatial_evidence.tif')}
-            label2={secondaryImage?.filename || 'surveillance_t2.tif'}
-            modality1={primaryImage?.modality || 'OPTICAL'}
-            modality2={secondaryImage?.modality || 'SAR'}
-            taskType={trace?.task_identified}
-            clusters={clusters}
-            changedAreaHectares={spatial?.changed_area_hectares}
-            changedAreaPercent={spatial?.changed_area_percent}
-            confidence={trace?.confidence_score}
-            descriptionNode={
-              result?.text_response ? (
-                <div className="space-y-2 font-sans">
-                  <div className="flex items-center justify-between text-[11px] font-mono pb-1.5 border-b border-[var(--border-subtle)]">
-                    <span className="text-[#0EA5E9] font-semibold flex items-center gap-1.5">
-                      <Sparkles className="w-3.5 h-3.5 text-[#0EA5E9]" />
-                      {trace?.task_identified === 'SINGLE_VQA' || (result as any)?.task_type === 'SINGLE_VQA'
-                        ? 'RS-VLM Biophysical Synthesis'
-                        : 'AI Analytical Findings'}
-                    </span>
-                    {trace?.confidence_score && (
-                      <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-[#0EA5E9]/10 text-[#0EA5E9] border border-[#0EA5E9]/25 font-semibold">
-                        {(trace.confidence_score * 100).toFixed(0)}% Confidence
-                      </span>
-                    )}
-                  </div>
-                  <div className="text-xs text-[var(--text-main)] leading-relaxed pt-0.5">
-                    <MarkdownContent content={result.text_response} compact={true} />
-                  </div>
-                </div>
-              ) : undefined
-            }
-            bounds={primaryImage?.bounds_latlon || null}
-            fileId={primaryImage?.file_id || null}
-            onOpenPdf={result ? () => handleOpenPdf() : undefined}
-          />
+            {/* Quick Metrics Bar */}
+            <div className="flex flex-wrap items-center gap-2 pt-1 text-[11px] font-mono text-[var(--text-muted)]">
+              {spatial?.changed_area_hectares !== undefined && spatial.changed_area_hectares !== null && (
+                <span className="px-2 py-0.5 rounded-md bg-sky-500/10 text-sky-400 border border-sky-500/20">
+                  Delineated Area: {spatial.changed_area_hectares.toFixed(1)} ha
+                </span>
+              )}
+              {clusters && clusters.length > 0 && (
+                <span className="px-2 py-0.5 rounded-md bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                  {clusters.length} Safe / Grounded Sectors
+                </span>
+              )}
+              {trace?.confidence_score !== undefined && (
+                <span className="px-2 py-0.5 rounded-md bg-[var(--bg-surface)] text-[var(--text-main)] border border-[var(--border-subtle)]">
+                  Confidence: {(trace.confidence_score * 100).toFixed(0)}%
+                </span>
+              )}
+            </div>
+          </div>
         )}
 
         {/* Interactive Follow-Up Suggestion Chips (ChatGPT/Claude Style) */}

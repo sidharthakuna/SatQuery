@@ -266,7 +266,7 @@ const SERVER_SAMPLES: SamplePresetInfo[] = [
 ];
 
 export const SamplePickerModal: React.FC<SamplePickerModalProps> = ({ isOpen, onClose }) => {
-  const { attachImage, activeImages, setPendingQueryText } = useChat();
+  const { attachImage, activeImages, clearAttachedImages, submitQuery, setPendingQueryText } = useChat();
   const [activeTab, setActiveTab] = useState<'pairs' | 'optical' | 'sar' | 'disaster'>('pairs');
   const [loadingId, setLoadingId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -302,18 +302,21 @@ export const SamplePickerModal: React.FC<SamplePickerModalProps> = ({ isOpen, on
     setError(null);
 
     try {
+      clearAttachedImages();
+      const uploadedImages: any[] = [];
       for (const item of pair.files) {
         const resp = await fetch(`${item.url}?t=${Date.now()}`, { cache: 'no-store' });
         if (!resp.ok) throw new Error(`Failed to load: ${item.name}`);
         const blob = await resp.blob();
         const file = new File([blob], item.name, { type: 'image/tiff' });
         const uploaded = await SatQueryAPI.uploadImage(file);
+        uploadedImages.push(uploaded);
         attachImage(uploaded);
       }
 
-      // Pre-fill the query text so the user can review and send manually
-      setPendingQueryText(pair.query);
       onClose();
+      // Immediately run the mission query in the chat
+      await submitQuery(pair.query, uploadedImages);
     } catch (err: any) {
       console.error('Error loading mission pair:', err);
       setError(err.message || 'Failed to ingest mission pair');

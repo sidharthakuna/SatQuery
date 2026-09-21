@@ -59,7 +59,7 @@ const QUICK_PROMPTS: QuickPrompt[] = [
 ];
 
 export const ChatEmptyState: React.FC = () => {
-  const { activeImages, submitQuery, setPendingQueryText } = useChat();
+  const { activeImages, submitQuery, loadPresetAnalysis, isProcessing } = useChat();
   const [loadingId, setLoadingId] = useState<number | null>(null);
   const isMountedRef = useRef(true);
 
@@ -71,21 +71,20 @@ export const ChatEmptyState: React.FC = () => {
   }, []);
 
   const handlePromptClick = async (prompt: QuickPrompt) => {
-    if (loadingId !== null) return;
+    if (loadingId !== null || isProcessing) return;
+    setLoadingId(prompt.id);
 
-    // If images are already attached, run the query directly
-    if (activeImages.length > 0) {
-      setLoadingId(prompt.id);
-      try {
+    try {
+      if (activeImages.length > 0) {
         await submitQuery(prompt.query);
-      } finally {
-        if (isMountedRef.current) setLoadingId(null);
+      } else {
+        await loadPresetAnalysis(prompt.presetType || 'flood');
       }
-      return;
+    } catch (err) {
+      console.error('Failed to run quick prompt:', err);
+    } finally {
+      if (isMountedRef.current) setLoadingId(null);
     }
-
-    // No images: pre-fill the textarea so the user can attach an image first or edit & send
-    setPendingQueryText(prompt.query);
   };
 
   return (

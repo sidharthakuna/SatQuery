@@ -19,6 +19,11 @@ import { useChat } from '../../context/ChatContext';
 import { Badge } from '../ui/Badge';
 import { CartographicIntelligenceViewer } from '../visualization/CartographicIntelligenceViewer';
 import { MarkdownContent } from '../chat/MarkdownContent';
+import { DisasterAssessmentCard } from '../chat/DisasterAssessmentCard';
+import { BitemporalChangeCard } from '../chat/BitemporalChangeCard';
+import { OpticalSarFusionCard } from '../chat/OpticalSarFusionCard';
+import { GroundingDinoCard } from '../chat/GroundingDinoCard';
+import { MultiModelAnalysisCard } from '../chat/MultiModelAnalysisCard';
 import { SatQueryAPI } from '../../services/api';
 
 export const AnalysisPanel: React.FC = () => {
@@ -32,9 +37,10 @@ export const AnalysisPanel: React.FC = () => {
     activeReportId,
     isGeneratingReport,
     generateReportForCurrentResult,
+    submitQuery,
   } = useChat();
 
-  const [activeTab, setActiveTab] = useState<'document' | 'canvas' | 'telemetry' | 'audit' | 'json'>('canvas');
+  const [activeTab, setActiveTab] = useState<'briefing' | 'canvas' | 'telemetry' | 'document' | 'audit' | 'json'>('briefing');
   const [isGeneratingPdf, setIsGeneratingPdf] = useState(false);
   const [copiedJson, setCopiedJson] = useState(false);
   const [isPanelExpanded, setIsPanelExpanded] = useState(false);
@@ -44,11 +50,7 @@ export const AnalysisPanel: React.FC = () => {
     const currentTraceId = activeAnalysisResult?.audit_trace?.trace_id;
     if (currentTraceId && currentTraceId !== lastTraceIdRef.current) {
       lastTraceIdRef.current = currentTraceId;
-      if (activeReportId) {
-        setActiveTab('document');
-      } else {
-        setActiveTab('canvas');
-      }
+      setActiveTab('briefing');
     }
   }, [activeAnalysisResult, activeReportId]);
 
@@ -64,6 +66,12 @@ export const AnalysisPanel: React.FC = () => {
   const secondaryThumb = secondaryImage?.thumbnail_url || result?.thumbnail_urls?.[1] || '';
   const boxes = spatial?.bounding_boxes || (spatial as any)?.boxes || [];
   const clusters = spatial?.clusters || (spatial?.extra?.clusters as any) || [];
+
+  const bitemporalCard = (spatial?.extra?.bitemporal_card as any) || (result?.spatial_evidence?.extra?.bitemporal_card as any);
+  const disasterCard = (spatial?.extra?.disaster_card as any) || (result?.spatial_evidence?.extra?.disaster_card as any);
+  const opticalSarCard = (spatial?.extra?.optical_sar_card as any) || (result?.spatial_evidence?.extra?.optical_sar_card as any);
+  const groundingCard = (spatial?.extra?.grounding_card as any) || (result?.spatial_evidence?.extra?.grounding_card as any);
+  const multiModelCard = (spatial?.extra?.multi_model_card as any) || (result?.spatial_evidence?.extra?.multi_model_card as any);
 
   const handleDownloadPdf = async () => {
     if (!result) return;
@@ -184,16 +192,16 @@ export const AnalysisPanel: React.FC = () => {
         <div className="flex items-center p-0.5 bg-[var(--bg-surface)] border border-[var(--border-subtle)] rounded-xl text-xs overflow-x-auto">
           <button
             type="button"
-            onClick={() => setActiveTab('document')}
+            onClick={() => setActiveTab('briefing')}
             className={`flex-1 py-1.5 px-2 rounded-lg font-medium text-[11px] transition-all cursor-pointer whitespace-nowrap flex items-center justify-center gap-1.5 ${
-              activeTab === 'document'
+              activeTab === 'briefing'
                 ? 'bg-[var(--bg-card)] text-[#0EA5E9] font-semibold shadow-subtle'
                 : 'text-[var(--text-muted)] hover:text-[var(--text-main)]'
             }`}
-            title="Official SAC-ISRO Satellite Rapid Surveillance Bulletin"
+            title="Executive Mission Briefing & Satellite Imagery"
           >
-            <FileText className="w-3.5 h-3.5 text-[#0EA5E9]" />
-            <span>Output Document</span>
+            <Sparkles className="w-3.5 h-3.5 text-[#0EA5E9]" />
+            <span>Briefing & Images</span>
           </button>
           <button
             type="button"
@@ -203,7 +211,7 @@ export const AnalysisPanel: React.FC = () => {
                 ? 'bg-[var(--bg-card)] text-[#0EA5E9] font-semibold shadow-subtle'
                 : 'text-[var(--text-muted)] hover:text-[var(--text-main)]'
             }`}
-            title="Cartographic Studio (1-2-3 Flow, Swipe Compare, Slippy Map)"
+            title="Cartographic Studio (Interactive Map & Swipe Compare)"
           >
             <Satellite className="w-3.5 h-3.5 text-[#0EA5E9]" />
             <span>Studio</span>
@@ -218,6 +226,19 @@ export const AnalysisPanel: React.FC = () => {
             }`}
           >
             Telemetry
+          </button>
+          <button
+            type="button"
+            onClick={() => setActiveTab('document')}
+            className={`flex-1 py-1.5 px-2 rounded-lg font-medium text-[11px] transition-all cursor-pointer whitespace-nowrap flex items-center justify-center gap-1.5 ${
+              activeTab === 'document'
+                ? 'bg-[var(--bg-card)] text-[#0EA5E9] font-semibold shadow-subtle'
+                : 'text-[var(--text-muted)] hover:text-[var(--text-main)]'
+            }`}
+            title="Official SAC-ISRO Satellite Rapid Surveillance Bulletin"
+          >
+            <FileText className="w-3.5 h-3.5 text-[#0EA5E9]" />
+            <span>PDF Bulletin</span>
           </button>
           <button
             type="button"
@@ -246,7 +267,204 @@ export const AnalysisPanel: React.FC = () => {
 
       {/* ── Scrollable Tab Body ──────────────────────────────── */}
       <div className="flex-1 min-h-0 overflow-y-auto p-4 space-y-3.5 text-xs">
-        {/* TAB 0: OFFICIAL SAC-ISRO OUTPUT DOCUMENT BULLETIN */}
+        {/* TAB 0: EXECUTIVE BRIEFING & SATELLITE IMAGES */}
+        {activeTab === 'briefing' && (
+          <div className="space-y-4">
+            {disasterCard ? (
+              <DisasterAssessmentCard
+                data={disasterCard}
+                onOpenPdf={result ? () => handleDownloadPdf() : undefined}
+                onDownloadGeoJson={result?.geojson_data ? () => {
+                  const blob = new Blob([JSON.stringify(result.geojson_data, null, 2)], { type: 'application/geo+json' });
+                  const url = URL.createObjectURL(blob);
+                  const a = document.createElement('a');
+                  a.href = url;
+                  a.download = `satquery_features_${trace?.trace_id || 'export'}.geojson`;
+                  a.click();
+                  setTimeout(() => URL.revokeObjectURL(url), 200);
+                } : undefined}
+              />
+            ) : opticalSarCard ? (
+              <OpticalSarFusionCard
+                data={opticalSarCard}
+                onOpenPdf={result ? () => handleDownloadPdf() : undefined}
+              />
+            ) : bitemporalCard ? (
+              <BitemporalChangeCard
+                data={bitemporalCard}
+                onOpenPdf={result ? () => handleDownloadPdf() : undefined}
+              />
+            ) : groundingCard ? (
+              <GroundingDinoCard
+                data={groundingCard}
+                onOpenPdf={result ? () => handleDownloadPdf() : undefined}
+              />
+            ) : multiModelCard ? (
+              <MultiModelAnalysisCard
+                data={multiModelCard}
+                onOpenPdf={result ? () => handleDownloadPdf() : undefined}
+                onQueryClick={(q) => submitQuery(q, activeImages)}
+              />
+            ) : result ? (
+              <div className="space-y-4">
+                {/* Visual Satellite Images Gallery */}
+                <div className="rounded-2xl p-4 bg-[var(--bg-card)] border border-[var(--border-subtle)] shadow-subtle space-y-3">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <Satellite className="w-4 h-4 text-[#0EA5E9]" />
+                      <span className="font-semibold text-xs text-[var(--text-main)]">
+                        Multi-Sensor Satellite Imagery
+                      </span>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => setActiveTab('canvas')}
+                      className="text-[11px] font-mono text-[#0EA5E9] hover:underline flex items-center gap-1 cursor-pointer"
+                    >
+                      <span>Open in Studio</span>
+                      <ExternalLink className="w-3 h-3" />
+                    </button>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+                    {primaryThumb && (
+                      <div className="rounded-xl border border-[var(--border-subtle)] bg-slate-950 overflow-hidden">
+                        <div className="p-2 border-b border-slate-800 text-[10.5px] font-mono text-slate-300 flex justify-between items-center">
+                          <span className="truncate max-w-[140px]">{targetImage?.filename || 'Primary Scene'}</span>
+                          <span className="text-sky-400 font-bold">{targetImage?.modality || 'OPTICAL'}</span>
+                        </div>
+                        <img
+                          src={primaryThumb}
+                          alt="Primary Satellite"
+                          className="w-full h-40 object-cover"
+                          onError={(e) => {
+                            (e.currentTarget as HTMLImageElement).src = SatQueryAPI.getRasterPreviewUrl('cartosat_t1.tif');
+                          }}
+                        />
+                      </div>
+                    )}
+
+                    {secondaryThumb && (
+                      <div className="rounded-xl border border-[var(--border-subtle)] bg-slate-950 overflow-hidden">
+                        <div className="p-2 border-b border-slate-800 text-[10.5px] font-mono text-slate-300 flex justify-between items-center">
+                          <span className="truncate max-w-[140px]">{secondaryImage?.filename || 'Surveillance Scene'}</span>
+                          <span className="text-purple-400 font-bold">{secondaryImage?.modality || 'SAR'}</span>
+                        </div>
+                        <img
+                          src={secondaryThumb}
+                          alt="Secondary Satellite"
+                          className="w-full h-40 object-cover"
+                          onError={(e) => {
+                            (e.currentTarget as HTMLImageElement).src = SatQueryAPI.getRasterPreviewUrl('cartosat_t2.tif');
+                          }}
+                        />
+                      </div>
+                    )}
+
+                    {spatial?.mask_url && (
+                      <div className="rounded-xl border border-[var(--border-subtle)] bg-slate-950 overflow-hidden sm:col-span-2">
+                        <div className="p-2 border-b border-slate-800 text-[10.5px] font-mono text-slate-300 flex justify-between items-center">
+                          <span>Delineated Spatial Mask / Feature Overlay</span>
+                          <span className="text-emerald-400 font-bold">ANALYZED</span>
+                        </div>
+                        <img
+                          src={SatQueryAPI.getRasterPreviewUrl(spatial.mask_url)}
+                          alt="Output Mask"
+                          className="w-full h-48 object-cover"
+                        />
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                {/* Executive Briefing Synthesized from Middle Chat */}
+                <div className="rounded-2xl p-4 bg-[var(--bg-card)] border border-[var(--border-subtle)] shadow-subtle space-y-3">
+                  <div className="flex items-center justify-between pb-2 border-b border-[var(--border-subtle)]">
+                    <span className="font-semibold text-xs text-[var(--text-main)] flex items-center gap-2">
+                      <FileText className="w-3.5 h-3.5 text-[#0EA5E9]" />
+                      Executive Mission Briefing
+                    </span>
+                    {trace?.confidence_score && (
+                      <Badge variant="success">
+                        {(trace.confidence_score * 100).toFixed(0)}% Match
+                      </Badge>
+                    )}
+                  </div>
+
+                  <div className="text-xs text-[var(--text-main)] leading-relaxed space-y-2">
+                    <MarkdownContent content={result.text_response} compact={true} />
+                  </div>
+                </div>
+
+                {/* Mensuration Telemetry Quick-Summary */}
+                <div className="rounded-2xl p-4 bg-[var(--bg-card)] border border-[var(--border-subtle)] shadow-subtle space-y-2.5">
+                  <span className="font-semibold text-xs text-[var(--text-main)] block pb-1 border-b border-[var(--border-subtle)]">
+                    Mensuration & Operational Metrics
+                  </span>
+                  <div className="divide-y divide-[var(--border-subtle)] text-[11px] font-mono">
+                    {spatial?.changed_area_hectares != null && (
+                      <div className="py-1.5 flex justify-between">
+                        <span className="text-[var(--text-muted)]">Active Inundated / Changed Area</span>
+                        <span className="text-sky-400 font-bold">{spatial.changed_area_hectares.toFixed(1)} ha</span>
+                      </div>
+                    )}
+                    {spatial?.changed_area_percent != null && (
+                      <div className="py-1.5 flex justify-between">
+                        <span className="text-[var(--text-muted)]">AOI Inundation Ratio</span>
+                        <span className="text-[var(--text-main)]">{spatial.changed_area_percent.toFixed(2)}%</span>
+                      </div>
+                    )}
+                    {boxes && boxes.length > 0 && (
+                      <div className="py-1.5 flex justify-between">
+                        <span className="text-[var(--text-muted)]">Delineated Targets</span>
+                        <span className="text-emerald-400 font-bold">{boxes.length} Bounded Features</span>
+                      </div>
+                    )}
+                    {trace?.task_identified && (
+                      <div className="py-1.5 flex justify-between">
+                        <span className="text-[var(--text-muted)]">Pipeline Routing</span>
+                        <span className="text-[var(--text-main)]">{trace.task_identified}</span>
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                {/* Action Buttons */}
+                <div className="pt-2 flex flex-col sm:flex-row gap-2">
+                  <button
+                    type="button"
+                    onClick={handleDownloadPdf}
+                    disabled={isGeneratingPdf}
+                    className="flex-1 py-2 px-3 rounded-xl bg-[#0EA5E9] hover:bg-[#0284C7] text-white font-medium text-xs flex items-center justify-center gap-1.5 shadow-sm transition-colors cursor-pointer"
+                  >
+                    <FileDown className="w-3.5 h-3.5" />
+                    <span>Download Executive PDF</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setActiveTab('canvas')}
+                    className="py-2 px-3 rounded-xl bg-[var(--bg-surface)] hover:bg-[var(--bg-card)] text-[var(--text-main)] border border-[var(--border-subtle)] font-medium text-xs flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
+                  >
+                    <Satellite className="w-3.5 h-3.5 text-[#0EA5E9]" />
+                    <span>Interactive Studio</span>
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <div className="p-8 rounded-2xl border border-dashed border-[var(--border-subtle)] text-center text-[var(--text-muted)] space-y-2">
+                <Satellite className="w-8 h-8 text-[var(--text-dim)] mx-auto" />
+                <p className="font-medium text-xs text-[var(--text-main)]">
+                  No mission analysis active
+                </p>
+                <p className="text-[11px] text-[var(--text-dim)] max-w-xs mx-auto">
+                  Ask a question or select an Earth observation sample in the middle chatbot to view the briefing and satellite imagery here.
+                </p>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* TAB 1: OFFICIAL SAC-ISRO OUTPUT DOCUMENT BULLETIN */}
         {activeTab === 'document' && (
           <div className="h-full flex flex-col space-y-3">
             {activeReportId ? (
