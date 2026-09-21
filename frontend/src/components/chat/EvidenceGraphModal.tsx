@@ -48,7 +48,7 @@ export const EvidenceGraphModal: React.FC<EvidenceGraphModalProps> = ({
     switch (type.toLowerCase()) {
       case 'query':
       case 'interpretation':
-        return <Info className="w-4 h-4 text-[#cc785c]" />;
+        return <Info className="w-4 h-4 text-[#0EA5E9]" />;
       case 'gate':
       case 'validation':
         return <ShieldCheck className="w-4 h-4 text-sky-500" />;
@@ -109,7 +109,7 @@ export const EvidenceGraphModal: React.FC<EvidenceGraphModalProps> = ({
         {/* Header Bar */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-[var(--border-subtle)] bg-[var(--bg-app)]/50">
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-lg bg-[#cc785c]/10 border border-[#cc785c]/20 flex items-center justify-center text-[#cc785c]">
+            <div className="w-8 h-8 rounded-lg bg-[#0EA5E9]/10 border border-[#0EA5E9]/20 flex items-center justify-center text-[#0EA5E9]">
               <Share2 className="w-4 h-4" />
             </div>
             <div>
@@ -174,7 +174,7 @@ export const EvidenceGraphModal: React.FC<EvidenceGraphModalProps> = ({
                         onClick={() => setSelectedNode(node)}
                         className={`cursor-pointer p-4 rounded-xl border transition-all ${
                           isSelected
-                            ? 'bg-[#cc785c]/10 border-[#cc785c] shadow-md ring-1 ring-[#cc785c]'
+                            ? 'bg-[#0EA5E9]/10 border-[#0EA5E9] shadow-md ring-1 ring-[#0EA5E9]'
                             : 'bg-[var(--bg-app)]/60 hover:bg-[var(--bg-app)] border-[var(--border-subtle)] hover:border-[var(--border-hover)]'
                         }`}
                       >
@@ -233,7 +233,7 @@ export const EvidenceGraphModal: React.FC<EvidenceGraphModalProps> = ({
                               key={eIdx}
                               className="text-[10px] font-mono px-2 py-0.5 rounded bg-[var(--bg-surface)] border border-[var(--border-subtle)] flex items-center gap-1"
                             >
-                              <ArrowRight className="w-2.5 h-2.5 text-[#cc785c]" />
+                              <ArrowRight className="w-2.5 h-2.5 text-[#0EA5E9]" />
                               {e.label || 'flows to'} <span className="text-[var(--text-main)] font-semibold">{e.target}</span>
                             </span>
                           ))}
@@ -257,7 +257,7 @@ export const EvidenceGraphModal: React.FC<EvidenceGraphModalProps> = ({
               <div className="space-y-4 animate-fadeIn">
                 <div className="p-4 rounded-xl bg-[var(--bg-surface)] border border-[var(--border-subtle)] space-y-2">
                   <div className="flex items-center justify-between">
-                    <span className="font-mono text-xs font-bold text-[#cc785c]">
+                    <span className="font-mono text-xs font-bold text-[#0EA5E9]">
                       {selectedNode.id}
                     </span>
                     {getStatusBadge(selectedNode.status)}
@@ -276,7 +276,7 @@ export const EvidenceGraphModal: React.FC<EvidenceGraphModalProps> = ({
                       </div>
                       <div className="w-full bg-[var(--bg-app)] rounded-full h-1.5 overflow-hidden">
                         <div
-                          className="bg-[#cc785c] h-1.5 rounded-full transition-all"
+                          className="bg-[#0EA5E9] h-1.5 rounded-full transition-all"
                           style={{ width: `${selectedNode.confidence * 100}%` }}
                         />
                       </div>

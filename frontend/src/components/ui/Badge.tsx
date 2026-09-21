@@ -14,15 +14,15 @@ export const Badge: React.FC<BadgeProps> = ({
   const variantStyles = {
     default: 'bg-[var(--bg-surface)] text-[var(--text-main)] border-[var(--border-subtle)]',
     neutral: 'bg-[var(--bg-panel)] text-[var(--text-muted)] border-[var(--border-subtle)]',
-    success: 'bg-[#cc785c]/10 text-[#cc785c] border-[#cc785c]/25',
+    success: 'bg-[#0EA5E9]/10 text-[#0EA5E9] border-[#0EA5E9]/25',
     warning: 'bg-[var(--bg-surface)] text-[var(--text-main)] border-[var(--border-subtle)]',
-    purple: 'bg-[#cc785c]/10 text-[#cc785c] border-[#cc785c]/25',
+    purple: 'bg-[#0EA5E9]/10 text-[#0EA5E9] border-[#0EA5E9]/25',
     // Aliases mapped cleanly to unified minimalist palette
     cyan: 'bg-[var(--bg-panel)] text-[var(--text-muted)] border-[var(--border-subtle)]',
-    emerald: 'bg-[#cc785c]/10 text-[#cc785c] border-[#cc785c]/25',
-    amber: 'bg-[#cc785c]/10 text-[#cc785c] border-[#cc785c]/25',
-    violet: 'bg-[#cc785c]/10 text-[#cc785c] border-[#cc785c]/25',
-    rose: 'bg-[#cc785c]/10 text-[#cc785c] border-[#cc785c]/25',
+    emerald: 'bg-[#0EA5E9]/10 text-[#0EA5E9] border-[#0EA5E9]/25',
+    amber: 'bg-[#0EA5E9]/10 text-[#0EA5E9] border-[#0EA5E9]/25',
+    violet: 'bg-[#0EA5E9]/10 text-[#0EA5E9] border-[#0EA5E9]/25',
+    rose: 'bg-[#0EA5E9]/10 text-[#0EA5E9] border-[#0EA5E9]/25',
     slate: 'bg-[var(--bg-panel)] text-[var(--text-muted)] border-[var(--border-subtle)]',
   };
 

@@ -1,0 +1,179 @@
+{
+  "type": "FeatureCollection",
+  "crs": {
+    "type": "name",
+    "properties": {
+      "name": "urn:ogc:def:crs:OGC:1.3:CRS84"
+    }
+  },
+  "features": [
+    {
+      "type": "Feature",
+      "id": "safe_zone_alpha",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              84.896015,
+              20.788014
+            ],
+            [
+              85.196173,
+              20.788014
+            ],
+            [
+              85.196173,
+              20.530736
+            ],
+            [
+              84.896015,
+              20.530736
+            ],
+            [
+              84.896015,
+              20.788014
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "name": "Safe Zone Alpha",
+        "category": "Primary Safe Zone: Aviation Staging & Air-Bridge Evacuation Hub (100% Dry Elevated Infrastructure)",
+        "area_hectares": 85.4,
+        "area_km2": 0.854,
+        "centroid_geo": [
+          85.046094,
+          20.659375
+        ],
+        "pixel_count": 21294
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "safe_zone_beta",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              84.719202,
+              21.134881
+            ],
+            [
+              85.318298,
+              21.134881
+            ],
+            [
+              85.318298,
+              20.621369
+            ],
+            [
+              84.719202,
+              20.621369
+            ],
+            [
+              84.719202,
+              21.134881
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "name": "Safe Zone Beta",
+        "category": "Next Fallback Safe Zone: High-Elevation Plateau & Community Shelter (Highest Topographic Relief)",
+        "area_hectares": 340.2,
+        "area_km2": 3.402,
+        "centroid_geo": [
+          85.01875,
+          20.878125
+        ],
+        "pixel_count": 84830
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "safe_zone_gamma",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              85.45911,
+              20.738174
+            ],
+            [
+              85.71589,
+              20.738174
+            ],
+            [
+              85.71589,
+              20.518076
+            ],
+            [
+              85.45911,
+              20.518076
+            ],
+            [
+              85.45911,
+              20.738174
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "name": "Safe Zone Gamma",
+        "category": "Secondary Safe Zone: Elevated Levee Settlement Buffer",
+        "area_hectares": 62.5,
+        "area_km2": 0.625,
+        "centroid_geo": [
+          85.5875,
+          20.628125
+        ],
+        "pixel_count": 15584
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "safe_zone_delta",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              84.723941,
+              20.588631
+            ],
+            [
+              84.948976,
+              20.588631
+            ],
+            [
+              84.948976,
+              20.395744
+            ],
+            [
+              84.723941,
+              20.395744
+            ],
+            [
+              84.723941,
+              20.588631
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "name": "Safe Zone Delta",
+        "category": "Tertiary Safe Zone: Coastal Barrier Sand Ridge",
+        "area_hectares": 48.0,
+        "area_km2": 0.48,
+        "centroid_geo": [
+          84.836458,
+          20.492188
+        ],
+        "pixel_count": 11969
+      }
+    }
+  ]
+}

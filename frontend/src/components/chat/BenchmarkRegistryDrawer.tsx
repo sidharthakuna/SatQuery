@@ -136,7 +136,7 @@ export const BenchmarkRegistryDrawer: React.FC<BenchmarkRegistryDrawerProps> = (
         {/* Header */}
         <div className="px-6 py-4 border-b border-[var(--border-subtle)] bg-[var(--bg-app)]/50 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-lg bg-[#cc785c]/10 border border-[#cc785c]/20 flex items-center justify-center text-[#cc785c]">
+            <div className="w-8 h-8 rounded-lg bg-[#0EA5E9]/10 border border-[#0EA5E9]/20 flex items-center justify-center text-[#0EA5E9]">
               <Award className="w-4 h-4" />
             </div>
             <div>
@@ -156,7 +156,7 @@ export const BenchmarkRegistryDrawer: React.FC<BenchmarkRegistryDrawerProps> = (
               className="p-1.5 rounded-lg border border-[var(--border-subtle)] hover:bg-[var(--bg-hover)] text-[var(--text-muted)] hover:text-[var(--text-main)] transition-colors cursor-pointer"
               title="Refresh Registry"
             >
-              <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin text-[#cc785c]' : ''}`} />
+              <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin text-[#0EA5E9]' : ''}`} />
             </button>
             <button
               onClick={onClose}
@@ -175,7 +175,7 @@ export const BenchmarkRegistryDrawer: React.FC<BenchmarkRegistryDrawerProps> = (
               onClick={() => setActiveFilter(filter)}
               className={`px-3 py-1 rounded-md transition-colors cursor-pointer ${
                 activeFilter === filter
-                  ? 'bg-[#cc785c] text-white font-semibold'
+                  ? 'bg-[#0EA5E9] text-white font-semibold'
                   : 'bg-[var(--bg-app)] text-[var(--text-muted)] hover:text-[var(--text-main)] border border-[var(--border-subtle)]'
               }`}
             >
@@ -194,7 +194,7 @@ export const BenchmarkRegistryDrawer: React.FC<BenchmarkRegistryDrawerProps> = (
               <div className="flex items-start justify-between gap-3">
                 <div>
                   <div className="flex items-center gap-2">
-                    <span className="font-mono text-xs text-[#cc785c] font-bold">
+                    <span className="font-mono text-xs text-[#0EA5E9] font-bold">
                       {key}
                     </span>
                     <span className="inline-flex items-center gap-1 text-[10px] font-mono px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 border border-emerald-500/20">
@@ -223,7 +223,7 @@ export const BenchmarkRegistryDrawer: React.FC<BenchmarkRegistryDrawerProps> = (
                 </div>
                 <div className="p-2.5 rounded-lg bg-[var(--bg-surface)] border border-[var(--border-subtle)]">
                   <span className="text-[10px] uppercase text-[var(--text-dim)] block">Benchmark Reference</span>
-                  <span className="text-[#cc785c] font-medium truncate block">{model.benchmark_dataset}</span>
+                  <span className="text-[#0EA5E9] font-medium truncate block">{model.benchmark_dataset}</span>
                 </div>
               </div>
 
@@ -242,7 +242,7 @@ export const BenchmarkRegistryDrawer: React.FC<BenchmarkRegistryDrawerProps> = (
                         <span className="text-[10px] text-[var(--text-dim)] block truncate">
                           {metric}
                         </span>
-                        <span className="text-sm font-bold text-[#cc785c] font-mono mt-0.5 block">
+                        <span className="text-sm font-bold text-[#0EA5E9] font-mono mt-0.5 block">
                           {String(value)}
                         </span>
                       </div>
@@ -269,7 +269,7 @@ export const BenchmarkRegistryDrawer: React.FC<BenchmarkRegistryDrawerProps> = (
         {/* Footer */}
         <div className="px-6 py-3.5 border-t border-[var(--border-subtle)] bg-[var(--bg-app)] flex items-center justify-between text-xs text-[var(--text-muted)] font-mono">
           <div className="flex items-center gap-2">
-            <ShieldCheck className="w-4 h-4 text-[#cc785c]" />
+            <ShieldCheck className="w-4 h-4 text-[#0EA5E9]" />
             <span>Audited & Certified for ISRO Hackathon PS 26167</span>
           </div>
           <span className="text-[10px] text-[var(--text-dim)]">5 Active Engines</span>

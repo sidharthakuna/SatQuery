@@ -25,11 +25,11 @@ const NorthArrow: React.FC<{ isCyan?: boolean }> = ({ isCyan }) => (
   <div className="absolute top-2.5 right-2.5 z-20 flex flex-col items-center pointer-events-none drop-shadow-md">
     <div
       className={`w-6 h-6 rounded-full bg-[#181614]/90 border flex items-center justify-center shadow ${
-        isCyan ? 'border-[#cc785c]' : 'border-white/50'
+        isCyan ? 'border-[#0EA5E9]' : 'border-white/50'
       }`}
     >
       <Compass
-        className={`w-3.5 h-3.5 ${isCyan ? 'text-[#cc785c]' : 'text-white'}`}
+        className={`w-3.5 h-3.5 ${isCyan ? 'text-[#0EA5E9]' : 'text-white'}`}
       />
     </div>
     <span className="text-[7.5px] font-mono font-bold text-white drop-shadow">
@@ -42,7 +42,7 @@ const ScaleBar: React.FC<{ isCyan?: boolean }> = ({ isCyan }) => (
   <div className="absolute bottom-2 left-2 z-20 pointer-events-none">
     <div
       className={`bg-[#181614]/95 border rounded px-1.5 py-0.5 shadow-md ${
-        isCyan ? 'border-[#cc785c]/70' : 'border-white/40'
+        isCyan ? 'border-[#0EA5E9]/70' : 'border-white/40'
       }`}
     >
       <div className="flex items-center text-[7px] font-mono text-white mb-0.5 tracking-tighter">
@@ -52,10 +52,10 @@ const ScaleBar: React.FC<{ isCyan?: boolean }> = ({ isCyan }) => (
       </div>
       <div
         className={`flex h-1 w-17 border ${
-          isCyan ? 'border-[#cc785c]' : 'border-white'
+          isCyan ? 'border-[#0EA5E9]' : 'border-white'
         }`}
       >
-        <div className={`w-1/2 ${isCyan ? 'bg-[#cc785c]' : 'bg-white'}`} />
+        <div className={`w-1/2 ${isCyan ? 'bg-[#0EA5E9]' : 'bg-white'}`} />
         <div className="w-1/2 bg-[#181614]" />
       </div>
     </div>
@@ -212,7 +212,7 @@ export const CartographicIntelligenceViewer: React.FC<CartographicIntelligenceVi
         <span className="font-mono text-[9.5px] font-medium text-[var(--text-main)] truncate max-w-[75%] tracking-tight">
           {panelATitle}
         </span>
-        <span className="font-mono text-[8.5px] text-[#cc785c] font-semibold uppercase tracking-wider">
+        <span className="font-mono text-[8.5px] text-[#0EA5E9] font-semibold uppercase tracking-wider">
           {panelAPass}
         </span>
       </div>
@@ -237,7 +237,7 @@ export const CartographicIntelligenceViewer: React.FC<CartographicIntelligenceVi
           <span className="font-mono text-[9.5px] font-medium text-[var(--text-main)] truncate max-w-[75%] tracking-tight">
             {panelBTitle}
           </span>
-          <span className="font-mono text-[8.5px] text-[#cc785c] font-semibold uppercase tracking-wider">
+          <span className="font-mono text-[8.5px] text-[#0EA5E9] font-semibold uppercase tracking-wider">
             {panelBPass}
           </span>
         </div>
@@ -258,12 +258,12 @@ export const CartographicIntelligenceViewer: React.FC<CartographicIntelligenceVi
     // For optical-SAR fusion, maskUrl contains the reconstructed cloud-free optical raster!
     const cBaseUrl = isFusion ? (maskUrl || image1Url) : isVqa ? image1Url : (image2Url || image1Url);
     return (
-      <div className="relative rounded-xl overflow-hidden border border-[#cc785c]/40 bg-black shadow-md flex flex-col">
-        <div className="h-6 bg-[#181614]/95 border-b border-[#cc785c]/40 flex items-center justify-between px-2.5 z-20 shrink-0">
+      <div className="relative rounded-xl overflow-hidden border border-[#0EA5E9]/40 bg-black shadow-md flex flex-col">
+        <div className="h-6 bg-[#181614]/95 border-b border-[#0EA5E9]/40 flex items-center justify-between px-2.5 z-20 shrink-0">
           <span className="font-mono text-[9.5px] font-semibold text-[var(--text-main)] truncate max-w-[75%] tracking-tight">
             {panelCTitle}
           </span>
-          <span className="font-mono text-[8.5px] text-[#cc785c] bg-[#cc785c]/10 px-1.5 py-0.2 rounded font-bold uppercase tracking-wider border border-[#cc785c]/25">
+          <span className="font-mono text-[8.5px] text-[#0EA5E9] bg-[#0EA5E9]/10 px-1.5 py-0.2 rounded font-bold uppercase tracking-wider border border-[#0EA5E9]/25">
             {isFusion ? 'Cloud-Free Optical' : 'Marked Output'}
           </span>
         </div>
@@ -311,7 +311,7 @@ export const CartographicIntelligenceViewer: React.FC<CartographicIntelligenceVi
                     width={w}
                     height={h}
                     fill="rgba(204, 120, 92, 0.15)"
-                    stroke="#cc785c"
+                    stroke="#0EA5E9"
                     strokeWidth="1.8"
                     strokeDasharray="4 2"
                   />
@@ -321,7 +321,7 @@ export const CartographicIntelligenceViewer: React.FC<CartographicIntelligenceVi
                     width={tagWidth}
                     height={13}
                     fill="#181614"
-                    stroke="#cc785c"
+                    stroke="#0EA5E9"
                     strokeWidth="0.8"
                     rx="2"
                   />
@@ -358,12 +358,12 @@ export const CartographicIntelligenceViewer: React.FC<CartographicIntelligenceVi
                   onMouseEnter={() => setHoveredCluster(cIdx)}
                   onMouseLeave={() => setHoveredCluster(null)}
                 >
-                  <div className="w-2 h-2 rounded-full bg-[#cc785c] border border-white shadow mx-auto mb-1 animate-ping" />
+                  <div className="w-2 h-2 rounded-full bg-[#0EA5E9] border border-white shadow mx-auto mb-1 animate-ping" />
                   <div
                     className={`px-1.5 py-0.5 rounded text-[8.5px] font-mono font-bold tracking-tight shadow-lg border transition-transform ${
                       isHovered
-                        ? 'bg-[#cc785c] text-white border-white scale-110'
-                        : 'bg-[#181614]/95 text-[var(--text-main)] border-[#cc785c] backdrop-blur-sm'
+                        ? 'bg-[#0EA5E9] text-white border-white scale-110'
+                        : 'bg-[#181614]/95 text-[var(--text-main)] border-[#0EA5E9] backdrop-blur-sm'
                     }`}
                   >
                     {cluster.zone} (
@@ -384,7 +384,7 @@ export const CartographicIntelligenceViewer: React.FC<CartographicIntelligenceVi
         <div className="px-3 py-1.5 bg-[var(--bg-panel)] border-t border-[var(--border-subtle)] flex flex-wrap items-center justify-between gap-2 text-[10.5px] font-mono">
           <div className="flex items-center gap-1.5 flex-wrap">
             <span className="text-[var(--text-muted)] font-semibold flex items-center gap-1">
-              <MapPin className="w-3 h-3 text-[#cc785c]" />
+              <MapPin className="w-3 h-3 text-[#0EA5E9]" />
               Delineated:
             </span>
             {safeClusters.map((cluster, cIdx) => (
@@ -394,8 +394,8 @@ export const CartographicIntelligenceViewer: React.FC<CartographicIntelligenceVi
                 onMouseLeave={() => setHoveredCluster(null)}
                 className={`px-1.5 py-0.2 rounded border text-[9.5px] transition-colors cursor-pointer ${
                   hoveredCluster === cIdx
-                    ? 'bg-[#cc785c] text-white border-white font-bold'
-                    : 'bg-[var(--bg-surface)] text-[#cc785c] border-[#cc785c]/30 hover:border-[#cc785c]'
+                    ? 'bg-[#0EA5E9] text-white border-white font-bold'
+                    : 'bg-[var(--bg-surface)] text-[#0EA5E9] border-[#0EA5E9]/30 hover:border-[#0EA5E9]'
                 }`}
               >
                 {cluster.zone}:{' '}
@@ -423,12 +423,12 @@ export const CartographicIntelligenceViewer: React.FC<CartographicIntelligenceVi
       {/* ── Top Cartographic Studio Ribbon (Claude Warm Aesthetic) ── */}
       <div className="flex flex-wrap items-center justify-between px-3.5 py-2.5 bg-[var(--bg-panel)] border-b border-[var(--border-subtle)] text-xs gap-2">
         <div className="flex items-center gap-2 flex-wrap">
-          <span className="w-2 h-2 rounded-full bg-[#cc785c] animate-pulse" />
+          <span className="w-2 h-2 rounded-full bg-[#0EA5E9] animate-pulse" />
           <span className="font-semibold text-xs text-[var(--text-main)] tracking-tight">
             Cartographic Intelligence Studio
           </span>
           {changedAreaHectares != null && (
-            <span className="px-2 py-0.5 rounded-md font-mono text-[10.5px] font-semibold bg-[#cc785c]/10 text-[#cc785c] border border-[#cc785c]/25">
+            <span className="px-2 py-0.5 rounded-md font-mono text-[10.5px] font-semibold bg-[#0EA5E9]/10 text-[#0EA5E9] border border-[#0EA5E9]/25">
               {changedAreaHectares.toFixed(1)} ha marked
             </span>
           )}
@@ -447,12 +447,12 @@ export const CartographicIntelligenceViewer: React.FC<CartographicIntelligenceVi
               onClick={() => setViewMode('flow')}
               className={`flex items-center gap-1 px-2.5 py-1 rounded-lg text-[11px] font-medium cursor-pointer transition-colors ${
                 viewMode === 'flow'
-                  ? 'bg-[var(--bg-card)] text-[#cc785c] shadow-subtle'
+                  ? 'bg-[var(--bg-card)] text-[#0EA5E9] shadow-subtle'
                   : 'text-[var(--text-muted)] hover:text-[var(--text-main)]'
               }`}
               title="Sequential: 1. Input Passes -> 2. Description -> 3. Output Map"
             >
-              <ListOrdered className="w-3 h-3 text-[#cc785c]" />
+              <ListOrdered className="w-3 h-3 text-[#0EA5E9]" />
               <span>1-2-3 Flow</span>
             </button>
 
@@ -462,12 +462,12 @@ export const CartographicIntelligenceViewer: React.FC<CartographicIntelligenceVi
                 onClick={() => setViewMode('swipe')}
                 className={`flex items-center gap-1 px-2.5 py-1 rounded-lg text-[11px] font-medium cursor-pointer transition-colors ${
                   viewMode === 'swipe'
-                    ? 'bg-[var(--bg-card)] text-[#cc785c] shadow-subtle'
+                    ? 'bg-[var(--bg-card)] text-[#0EA5E9] shadow-subtle'
                     : 'text-[var(--text-muted)] hover:text-[var(--text-main)]'
                 }`}
                 title="Interactive Swipe Divider Comparison"
               >
-                <SlidersHorizontal className="w-3 h-3 text-[#cc785c]" />
+                <SlidersHorizontal className="w-3 h-3 text-[#0EA5E9]" />
                 <span>Swipe Compare</span>
               </button>
             )}
@@ -478,12 +478,12 @@ export const CartographicIntelligenceViewer: React.FC<CartographicIntelligenceVi
                 onClick={() => setViewMode('grounding')}
                 className={`flex items-center gap-1 px-2.5 py-1 rounded-lg text-[11px] font-medium cursor-pointer transition-colors ${
                   viewMode === 'grounding'
-                    ? 'bg-[var(--bg-card)] text-[#cc785c] shadow-subtle'
+                    ? 'bg-[var(--bg-card)] text-[#0EA5E9] shadow-subtle'
                     : 'text-[var(--text-muted)] hover:text-[var(--text-main)]'
                 }`}
                 title="Target Grounding Reticles & Bounding Boxes"
               >
-                <Crosshair className="w-3 h-3 text-[#cc785c]" />
+                <Crosshair className="w-3 h-3 text-[#0EA5E9]" />
                 <span>Grounding ({boxes.length})</span>
               </button>
             )}
@@ -494,12 +494,12 @@ export const CartographicIntelligenceViewer: React.FC<CartographicIntelligenceVi
                 onClick={() => setViewMode('mask')}
                 className={`flex items-center gap-1 px-2.5 py-1 rounded-lg text-[11px] font-medium cursor-pointer transition-colors ${
                   viewMode === 'mask'
-                    ? 'bg-[var(--bg-card)] text-[#cc785c] shadow-subtle'
+                    ? 'bg-[var(--bg-card)] text-[#0EA5E9] shadow-subtle'
                     : 'text-[var(--text-muted)] hover:text-[var(--text-main)]'
                 }`}
                 title="Calibrated Mask with Opacity Controls"
               >
-                <Layers className="w-3 h-3 text-[#cc785c]" />
+                <Layers className="w-3 h-3 text-[#0EA5E9]" />
                 <span>{isVqa ? 'Land Cover' : isGrounding ? 'Target Mask' : 'Change Mask'}</span>
               </button>
             )}
@@ -510,12 +510,12 @@ export const CartographicIntelligenceViewer: React.FC<CartographicIntelligenceVi
                 onClick={() => setViewMode('map')}
                 className={`flex items-center gap-1 px-2.5 py-1 rounded-lg text-[11px] font-medium cursor-pointer transition-colors ${
                   viewMode === 'map'
-                    ? 'bg-[var(--bg-card)] text-[#cc785c] shadow-subtle'
+                    ? 'bg-[var(--bg-card)] text-[#0EA5E9] shadow-subtle'
                     : 'text-[var(--text-muted)] hover:text-[var(--text-main)]'
                 }`}
                 title="Leaflet Slippy Map & Tile Coordinates"
               >
-                <MapIcon className="w-3 h-3 text-[#cc785c]" />
+                <MapIcon className="w-3 h-3 text-[#0EA5E9]" />
                 <span>Slippy Map</span>
               </button>
             )}
@@ -530,7 +530,7 @@ export const CartographicIntelligenceViewer: React.FC<CartographicIntelligenceVi
               title="Toggle marked overlay"
             >
               {showOverlay ? (
-                <Eye className="w-3 h-3 text-[#cc785c]" />
+                <Eye className="w-3 h-3 text-[#0EA5E9]" />
               ) : (
                 <EyeOff className="w-3 h-3 text-[var(--text-dim)]" />
               )}
@@ -545,10 +545,10 @@ export const CartographicIntelligenceViewer: React.FC<CartographicIntelligenceVi
             <button
               type="button"
               onClick={onOpenPdf}
-              className="px-2.5 py-1 rounded-lg text-[11px] font-medium bg-[#cc785c]/15 hover:bg-[#cc785c]/25 text-[#cc785c] border border-[#cc785c]/30 flex items-center gap-1.5 cursor-pointer transition-colors shadow-subtle"
+              className="px-2.5 py-1 rounded-lg text-[11px] font-medium bg-[#0EA5E9]/15 hover:bg-[#0EA5E9]/25 text-[#0EA5E9] border border-[#0EA5E9]/30 flex items-center gap-1.5 cursor-pointer transition-colors shadow-subtle"
               title="Open Executive Mission Briefing Dossier (PDF)"
             >
-              <FileText className="w-3.5 h-3.5 text-[#cc785c]" />
+              <FileText className="w-3.5 h-3.5 text-[#0EA5E9]" />
               <span className="font-semibold">PDF Dossier</span>
             </button>
           )}
@@ -575,7 +575,7 @@ export const CartographicIntelligenceViewer: React.FC<CartographicIntelligenceVi
           {/* 1. GIVEN SATELLITE IMAGES */}
           <div>
             <div className="flex items-center gap-2 mb-2 pb-1 border-b border-[var(--border-subtle)]">
-              <span className="w-4 h-4 rounded-full bg-[#cc785c]/15 text-[#cc785c] font-mono text-[10px] font-bold flex items-center justify-center border border-[#cc785c]/30">
+              <span className="w-4 h-4 rounded-full bg-[#0EA5E9]/15 text-[#0EA5E9] font-mono text-[10px] font-bold flex items-center justify-center border border-[#0EA5E9]/30">
                 1
               </span>
               <h4 className="font-mono text-[11px] font-semibold text-[var(--text-main)] uppercase tracking-wider">
@@ -595,7 +595,7 @@ export const CartographicIntelligenceViewer: React.FC<CartographicIntelligenceVi
           {/* 2. GEOSPATIAL INTELLIGENCE & ANALYTICAL NARRATIVE */}
           <div>
             <div className="flex items-center gap-2 mb-2 pb-1 border-b border-[var(--border-subtle)]">
-              <span className="w-4 h-4 rounded-full bg-[#cc785c]/15 text-[#cc785c] font-mono text-[10px] font-bold flex items-center justify-center border border-[#cc785c]/30">
+              <span className="w-4 h-4 rounded-full bg-[#0EA5E9]/15 text-[#0EA5E9] font-mono text-[10px] font-bold flex items-center justify-center border border-[#0EA5E9]/30">
                 2
               </span>
               <h4 className="font-mono text-[11px] font-semibold text-[var(--text-main)] uppercase tracking-wider">
@@ -610,7 +610,7 @@ export const CartographicIntelligenceViewer: React.FC<CartographicIntelligenceVi
               {descriptionNode || (
                 <div className="space-y-2 font-sans">
                   <div className="flex items-center justify-between text-[11px] font-mono pb-1 border-b border-[var(--border-subtle)]">
-                    <span className="text-[#cc785c] font-semibold">
+                    <span className="text-[#0EA5E9] font-semibold">
                       {isVqa ? 'RS-VLM Biophysical Synthesis' : 'AI Analytical Findings'}
                     </span>
                     <span className="text-[var(--text-muted)]">
@@ -629,14 +629,14 @@ export const CartographicIntelligenceViewer: React.FC<CartographicIntelligenceVi
 
           {/* 3. SATELLITE VIEW OF THE OUTPUT */}
           <div>
-            <div className="flex items-center gap-2 mb-2 pb-1 border-b border-[#cc785c]/30">
-              <span className="w-4 h-4 rounded-full bg-[#cc785c] text-white font-mono text-[10px] font-bold flex items-center justify-center shadow">
+            <div className="flex items-center gap-2 mb-2 pb-1 border-b border-[#0EA5E9]/30">
+              <span className="w-4 h-4 rounded-full bg-[#0EA5E9] text-white font-mono text-[10px] font-bold flex items-center justify-center shadow">
                 3
               </span>
               <h4 className="font-mono text-[11px] font-semibold text-[var(--text-main)] uppercase tracking-wider">
                 Satellite View of the Output
               </h4>
-              <span className="text-[10px] font-mono text-[#cc785c]">
+              <span className="text-[10px] font-mono text-[#0EA5E9]">
                 {isVqa
                   ? 'Classified Land Cover Overlay'
                   : isFusion

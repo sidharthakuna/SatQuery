@@ -182,7 +182,7 @@ export const ChatInput: React.FC = () => {
                   <span className="text-xs font-medium text-[var(--text-main)] truncate max-w-[140px]">
                     {img.filename}
                   </span>
-                  <span className="font-mono text-[10px] text-[#cc785c] bg-[#cc785c]/10 px-1.5 py-0.2 rounded border border-[#cc785c]/20">
+                  <span className="font-mono text-[10px] text-[#0EA5E9] bg-[#0EA5E9]/10 px-1.5 py-0.2 rounded border border-[#0EA5E9]/20">
                     {img.modality}
                   </span>
                 </div>
@@ -203,7 +203,7 @@ export const ChatInput: React.FC = () => {
           ))}
 
           {activeImages.length === 2 && (
-            <span className="text-[11px] font-mono text-[#cc785c] bg-[#cc785c]/10 px-2 py-1 rounded-lg border border-[#cc785c]/20 flex items-center gap-1.5">
+            <span className="text-[11px] font-mono text-[#0EA5E9] bg-[#0EA5E9]/10 px-2 py-1 rounded-lg border border-[#0EA5E9]/20 flex items-center gap-1.5">
               <Layers className="w-3 h-3" /> Pair Ready for Fusion / Change Analysis
             </span>
           )}
@@ -217,12 +217,12 @@ export const ChatInput: React.FC = () => {
         onDrop={handleDrop}
         className={`relative rounded-[26px] bg-[var(--bg-input)] border transition-all duration-200 shadow-claude dark:shadow-claudeDark ${
           isDraggingOver
-            ? 'border-[#cc785c] ring-2 ring-[#cc785c]/25 bg-[#cc785c]/5'
-            : 'border-[var(--border-subtle)] focus-within:border-[#cc785c]/60 focus-within:ring-2 focus-within:ring-[#cc785c]/15'
+            ? 'border-[#0EA5E9] ring-2 ring-[#0EA5E9]/25 bg-[#0EA5E9]/5'
+            : 'border-[var(--border-subtle)] focus-within:border-[#0EA5E9]/60 focus-within:ring-2 focus-within:ring-[#0EA5E9]/15'
         }`}
       >
         {isDraggingOver && (
-          <div className="absolute inset-0 rounded-[26px] bg-[var(--bg-card)]/90 backdrop-blur-sm z-20 flex items-center justify-center gap-2 text-xs font-medium text-[#cc785c]">
+          <div className="absolute inset-0 rounded-[26px] bg-[var(--bg-card)]/90 backdrop-blur-sm z-20 flex items-center justify-center gap-2 text-xs font-medium text-[#0EA5E9]">
             <UploadCloud className="w-5 h-5 animate-bounce" />
             <span>Drop GeoTIFF raster to attach</span>
           </div>
@@ -289,7 +289,7 @@ export const ChatInput: React.FC = () => {
               <button
                 type="button"
                 onClick={cancelProcessing}
-                className="w-8 h-8 rounded-full bg-[#cc785c] hover:bg-[#b8674d] text-white flex items-center justify-center transition-colors shadow-sm cursor-pointer"
+                className="w-8 h-8 rounded-full bg-[#0EA5E9] hover:bg-[#0284C7] text-white flex items-center justify-center transition-colors shadow-sm cursor-pointer"
                 title="Stop generation"
               >
                 <Square className="w-3.5 h-3.5 fill-current" />
@@ -301,7 +301,7 @@ export const ChatInput: React.FC = () => {
                 disabled={!text.trim()}
                 className={`w-8 h-8 rounded-full flex items-center justify-center transition-all ${
                   text.trim()
-                    ? 'bg-[#cc785c] hover:bg-[#b8674d] text-white shadow-sm cursor-pointer'
+                    ? 'bg-[#0EA5E9] hover:bg-[#0284C7] text-white shadow-sm cursor-pointer'
                     : 'bg-[var(--border-subtle)] text-[var(--text-dim)] opacity-60 cursor-not-allowed'
                 }`}
                 title="Send message"

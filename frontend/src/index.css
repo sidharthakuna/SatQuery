@@ -6,67 +6,67 @@
 @tailwind utilities;
 
 :root {
-  /* Claude.ai Warm Minimalist Dark Theme (Default) */
-  --bg-app: #181614;
-  --bg-panel: #141210;
-  --bg-card: #201c19;
-  --bg-surface: #282420;
-  --bg-surface-hover: #322d28;
-  --bg-input: #201c19;
-  --bg-user-bubble: #28231f;
-  --border-subtle: #342e29;
-  --border-hover: #484039;
-  --border-active: #5f554c;
-  --text-main: #ede8e1;
-  --text-muted: #a19a90;
-  --text-dim: #6e675e;
-  --accent-primary: #cc785c;
-  --accent-hover: #b8674d;
-  --accent-tint: rgba(204, 120, 92, 0.12);
-  --accent-border: rgba(204, 120, 92, 0.28);
+  /* SatQuery Deep Space Dark Theme (Default) */
+  --bg-app: #090B10;
+  --bg-panel: #06070B;
+  --bg-card: #11151E;
+  --bg-surface: #181D29;
+  --bg-surface-hover: #222938;
+  --bg-input: #11151E;
+  --bg-user-bubble: #171E2D;
+  --border-subtle: #202736;
+  --border-hover: #2F394D;
+  --border-active: #404E67;
+  --text-main: #E2E8F0;
+  --text-muted: #94A3B8;
+  --text-dim: #64748B;
+  --accent-primary: #0EA5E9;
+  --accent-hover: #0284C7;
+  --accent-tint: rgba(14, 165, 233, 0.12);
+  --accent-border: rgba(14, 165, 233, 0.28);
   --shadow-claude: 0 4px 24px -2px rgba(0, 0, 0, 0.45);
 }
 
 .dark {
-  --bg-app: #181614;
-  --bg-panel: #141210;
-  --bg-card: #201c19;
-  --bg-surface: #282420;
-  --bg-surface-hover: #322d28;
-  --bg-input: #201c19;
-  --bg-user-bubble: #28231f;
-  --border-subtle: #342e29;
-  --border-hover: #484039;
-  --border-active: #5f554c;
-  --text-main: #ede8e1;
-  --text-muted: #a19a90;
-  --text-dim: #6e675e;
-  --accent-primary: #cc785c;
-  --accent-hover: #b8674d;
-  --accent-tint: rgba(204, 120, 92, 0.12);
-  --accent-border: rgba(204, 120, 92, 0.28);
+  --bg-app: #090B10;
+  --bg-panel: #06070B;
+  --bg-card: #11151E;
+  --bg-surface: #181D29;
+  --bg-surface-hover: #222938;
+  --bg-input: #11151E;
+  --bg-user-bubble: #171E2D;
+  --border-subtle: #202736;
+  --border-hover: #2F394D;
+  --border-active: #404E67;
+  --text-main: #E2E8F0;
+  --text-muted: #94A3B8;
+  --text-dim: #64748B;
+  --accent-primary: #0EA5E9;
+  --accent-hover: #0284C7;
+  --accent-tint: rgba(14, 165, 233, 0.12);
+  --accent-border: rgba(14, 165, 233, 0.28);
   --shadow-claude: 0 4px 24px -2px rgba(0, 0, 0, 0.45);
 }
 
 .light {
-  /* Claude.ai Warm Minimalist Light Theme (Warm Ivory & Terracotta) */
-  --bg-app: #faf8f5;
-  --bg-panel: #f3f0e8;
-  --bg-card: #ffffff;
-  --bg-surface: #ece7de;
-  --bg-surface-hover: #e2dbcf;
-  --bg-input: #ffffff;
-  --bg-user-bubble: #f0ebe2;
-  --border-subtle: #e4ddd2;
-  --border-hover: #d2c8bc;
-  --border-active: #b5a999;
-  --text-main: #24211e;
-  --text-muted: #6b6359;
-  --text-dim: #999083;
-  --accent-primary: #cc785c;
-  --accent-hover: #b8674d;
-  --accent-tint: rgba(204, 120, 92, 0.08);
-  --accent-border: rgba(204, 120, 92, 0.24);
+  /* SatQuery Atmospheric Light Theme */
+  --bg-app: #F8FAFC;
+  --bg-panel: #F1F5F9;
+  --bg-card: #FFFFFF;
+  --bg-surface: #F1F5F9;
+  --bg-surface-hover: #E2E8F0;
+  --bg-input: #FFFFFF;
+  --bg-user-bubble: #EBF2FA;
+  --border-subtle: #E2E8F0;
+  --border-hover: #CBD5E1;
+  --border-active: #94A3B8;
+  --text-main: #0F172A;
+  --text-muted: #475569;
+  --text-dim: #64748B;
+  --accent-primary: #0284C7;
+  --accent-hover: #0369A1;
+  --accent-tint: rgba(2, 132, 199, 0.08);
+  --accent-border: rgba(2, 132, 199, 0.24);
   --shadow-claude: 0 4px 20px -2px rgba(0, 0, 0, 0.08);
 }
 
@@ -114,22 +114,22 @@ body {
 @keyframes satQueryBreathe {
   0% {
     transform: scale(1) rotate(0deg);
-    filter: drop-shadow(0 0 3px rgba(240, 106, 68, 0.4));
+    filter: drop-shadow(0 0 3px rgba(14, 165, 233, 0.4));
     opacity: 0.95;
   }
   30% {
     transform: scale(0.82) rotate(90deg);
-    filter: drop-shadow(0 0 10px rgba(255, 122, 80, 0.85));
+    filter: drop-shadow(0 0 10px rgba(56, 189, 248, 0.85));
     opacity: 0.85;
   }
   65% {
     transform: scale(1.08) rotate(225deg);
-    filter: drop-shadow(0 0 14px rgba(255, 145, 100, 0.95));
+    filter: drop-shadow(0 0 14px rgba(125, 211, 252, 0.95));
     opacity: 1;
   }
   100% {
     transform: scale(1) rotate(360deg);
-    filter: drop-shadow(0 0 3px rgba(240, 106, 68, 0.4));
+    filter: drop-shadow(0 0 3px rgba(14, 165, 233, 0.4));
     opacity: 0.95;
   }
 }
@@ -172,7 +172,7 @@ body {
   50% {
     transform: scale(1.35);
     opacity: 1;
-    filter: drop-shadow(0 0 5px rgba(255, 200, 160, 1));
+    filter: drop-shadow(0 0 5px rgba(186, 230, 253, 1));
   }
 }
 

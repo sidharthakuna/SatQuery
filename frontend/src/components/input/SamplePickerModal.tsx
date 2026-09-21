@@ -70,6 +70,40 @@ const MISSION_PAIRS: MissionPairInfo[] = [
       { url: '/samples/urban_t2.tif', name: 'cartosat_urban_t2.tif', thumb: '/api/v1/preview/urban_t2.tif', modality: 'OPTICAL' },
     ],
   },
+  {
+    id: 'flood_sar_pair',
+    title: 'Flood Impact Assessment (SAR + Optical)',
+    category: 'Cross-Modal Disaster',
+    icon: Waves,
+    description: 'Assess flood extent under dense cloud cover by combining Sentinel-1 SAR and cloudy optical passes.',
+    query: 'Identify the exact extent of flood inundation by correlating the cloudy optical scene with the SAR backscatter radar data.',
+    files: [
+      { url: '/samples/public_flood_cloudy_optical.tif', name: 'cloudy_optical.tif', thumb: '/api/v1/preview/public_flood_cloudy_optical.tif', modality: 'OPTICAL' },
+      { url: '/samples/public_flood_sentinel1_sar.tif', name: 'sentinel1_flood_sar.tif', thumb: '/api/v1/preview/public_flood_sentinel1_sar.tif', modality: 'SAR' },
+    ],
+  },
+  {
+    id: 'forest_vqa_mission',
+    title: 'Forest Canopy Health & Vegetation VQA',
+    category: 'Single Image VQA',
+    icon: Layers,
+    description: 'Perform Visual Question Answering (VQA) on dense forest canopies and spectral vegetation index responses.',
+    query: 'Estimate the forest density, classify the vegetation health, and identify any signs of deforestation or clear-cutting.',
+    files: [
+      { url: '/samples/forest_vqa.tif', name: 'forest_vqa.tif', thumb: '/api/v1/preview/forest_vqa.tif', modality: 'OPTICAL' },
+    ],
+  },
+  {
+    id: 'port_grounding_mission',
+    title: 'Maritime Port Defense & Vessel Grounding',
+    category: 'Single Image Recon',
+    icon: Satellite,
+    description: 'Detect and ground commercial vessels, dry docks, and industrial cranes in a complex harbor facility.',
+    query: 'Perform object grounding: identify all commercial vessels, map the harbor boundary, and locate industrial cranes.',
+    files: [
+      { url: '/samples/port_grounding.tif', name: 'port_grounding.tif', thumb: '/api/v1/preview/port_grounding.tif', modality: 'OPTICAL' },
+    ],
+  }
 ];
 
 const SERVER_SAMPLES: SamplePresetInfo[] = [
@@ -205,6 +239,30 @@ const SERVER_SAMPLES: SamplePresetInfo[] = [
     description: 'Authentic C-band radar backscatter penetrating clouds to reveal maritime shipping and port structures.',
     details: '2 Bands (VV/VH) • EPSG:4326 • Calibrated Backscatter',
   },
+  {
+    id: 'public_flood_sar',
+    filename: 'public_flood_sentinel1_sar.tif',
+    url: '/samples/public_flood_sentinel1_sar.tif',
+    thumbnailUrl: '/api/v1/preview/public_flood_sentinel1_sar.tif',
+    name: 'Sentinel-1 SAR Flood Assessment',
+    sensor: 'Sentinel-1 RTC',
+    modality: 'SAR',
+    category: 'sar',
+    description: 'Water body and inundation detection using low-backscatter signatures from Sentinel-1 radar.',
+    details: '2 Bands (VV/VH) • EPSG:4326',
+  },
+  {
+    id: 'public_flood_cloudy',
+    filename: 'public_flood_cloudy_optical.tif',
+    url: '/samples/public_flood_cloudy_optical.tif',
+    thumbnailUrl: '/api/v1/preview/public_flood_cloudy_optical.tif',
+    name: 'Cloud-Obscured Optical Flood',
+    sensor: 'Sentinel-2 MSI Optical',
+    modality: 'OPTICAL',
+    category: 'optical',
+    description: 'Optical capture of a flood event severely limited by atmospheric cumulus clouds.',
+    details: '3 Bands (RGB) • EPSG:4326',
+  }
 ];
 
 export const SamplePickerModal: React.FC<SamplePickerModalProps> = ({ isOpen, onClose }) => {
@@ -286,11 +344,11 @@ export const SamplePickerModal: React.FC<SamplePickerModalProps> = ({ isOpen, on
             onClick={() => setActiveTab('pairs')}
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg transition-colors cursor-pointer ${
               activeTab === 'pairs'
-                ? 'bg-[var(--bg-card)] text-[#cc785c] shadow-subtle font-semibold'
+                ? 'bg-[var(--bg-card)] text-[#0EA5E9] shadow-subtle font-semibold'
                 : 'text-[var(--text-muted)] hover:text-[var(--text-main)]'
             }`}
           >
-            <Layers className="w-3.5 h-3.5 text-[#cc785c]" />
+            <Layers className="w-3.5 h-3.5 text-[#0EA5E9]" />
             <span>Mission Pairs (1-Click Launch)</span>
           </button>
 
@@ -299,11 +357,11 @@ export const SamplePickerModal: React.FC<SamplePickerModalProps> = ({ isOpen, on
             onClick={() => setActiveTab('optical')}
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg transition-colors cursor-pointer ${
               activeTab === 'optical'
-                ? 'bg-[var(--bg-card)] text-[#cc785c] shadow-subtle font-semibold'
+                ? 'bg-[var(--bg-card)] text-[#0EA5E9] shadow-subtle font-semibold'
                 : 'text-[var(--text-muted)] hover:text-[var(--text-main)]'
             }`}
           >
-            <Satellite className="w-3.5 h-3.5 text-[#cc785c]" />
+            <Satellite className="w-3.5 h-3.5 text-[#0EA5E9]" />
             <span>Optical Multispectral</span>
           </button>
 
@@ -312,11 +370,11 @@ export const SamplePickerModal: React.FC<SamplePickerModalProps> = ({ isOpen, on
             onClick={() => setActiveTab('sar')}
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg transition-colors cursor-pointer ${
               activeTab === 'sar'
-                ? 'bg-[var(--bg-card)] text-[#cc785c] shadow-subtle font-semibold'
+                ? 'bg-[var(--bg-card)] text-[#0EA5E9] shadow-subtle font-semibold'
                 : 'text-[var(--text-muted)] hover:text-[var(--text-main)]'
             }`}
           >
-            <Radio className="w-3.5 h-3.5 text-[#cc785c]" />
+            <Radio className="w-3.5 h-3.5 text-[#0EA5E9]" />
             <span>SAR Microwave Radar</span>
           </button>
 
@@ -325,17 +383,17 @@ export const SamplePickerModal: React.FC<SamplePickerModalProps> = ({ isOpen, on
             onClick={() => setActiveTab('disaster')}
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg transition-colors cursor-pointer ${
               activeTab === 'disaster'
-                ? 'bg-[var(--bg-card)] text-[#cc785c] shadow-subtle font-semibold'
+                ? 'bg-[var(--bg-card)] text-[#0EA5E9] shadow-subtle font-semibold'
                 : 'text-[var(--text-muted)] hover:text-[var(--text-main)]'
             }`}
           >
-            <Waves className="w-3.5 h-3.5 text-[#cc785c]" />
+            <Waves className="w-3.5 h-3.5 text-[#0EA5E9]" />
             <span>Disasters & Floods</span>
           </button>
         </div>
 
         {error && (
-          <div className="p-3 bg-[#cc785c]/10 border border-[#cc785c]/30 rounded-xl text-[#cc785c] text-xs">
+          <div className="p-3 bg-[#0EA5E9]/10 border border-[#0EA5E9]/30 rounded-xl text-[#0EA5E9] text-xs">
             {error}
           </div>
         )}
@@ -350,18 +408,18 @@ export const SamplePickerModal: React.FC<SamplePickerModalProps> = ({ isOpen, on
               return (
                 <div
                   key={pair.id}
-                  className="p-3.5 rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-panel)] hover:border-[#cc785c]/40 hover:bg-[var(--bg-card)] transition-all shadow-subtle"
+                  className="p-3.5 rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-panel)] hover:border-[#0EA5E9]/40 hover:bg-[var(--bg-card)] transition-all shadow-subtle"
                 >
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-2.5">
                     <div className="flex items-center gap-2.5">
-                      <div className="w-8 h-8 rounded-lg bg-[var(--bg-surface)] border border-[var(--border-subtle)] flex items-center justify-center text-[#cc785c]">
+                      <div className="w-8 h-8 rounded-lg bg-[var(--bg-surface)] border border-[var(--border-subtle)] flex items-center justify-center text-[#0EA5E9]">
                         <Icon className="w-4 h-4" />
                       </div>
                       <div>
                         <h4 className="font-semibold text-xs text-[var(--text-main)]">
                           {pair.title}
                         </h4>
-                        <span className="text-[10px] font-mono text-[#cc785c]">
+                        <span className="text-[10px] font-mono text-[#0EA5E9]">
                           {pair.category}
                         </span>
                       </div>
@@ -371,7 +429,7 @@ export const SamplePickerModal: React.FC<SamplePickerModalProps> = ({ isOpen, on
                       type="button"
                       disabled={isLoading}
                       onClick={() => handleLoadPair(pair)}
-                      className="inline-flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#cc785c] hover:bg-[#b8674d] text-white font-medium text-xs shadow-sm transition-colors cursor-pointer disabled:opacity-50"
+                      className="inline-flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#0EA5E9] hover:bg-[#0284C7] text-white font-medium text-xs shadow-sm transition-colors cursor-pointer disabled:opacity-50"
                     >
                       {isLoading ? (
                         <>
@@ -410,7 +468,7 @@ export const SamplePickerModal: React.FC<SamplePickerModalProps> = ({ isOpen, on
                           <span className="font-mono text-[10.5px] text-[var(--text-main)] block truncate">
                             {f.name}
                           </span>
-                          <span className="font-mono text-[9px] text-[#cc785c]">
+                          <span className="font-mono text-[9px] text-[#0EA5E9]">
                             {f.modality}
                           </span>
                         </div>
@@ -436,8 +494,8 @@ export const SamplePickerModal: React.FC<SamplePickerModalProps> = ({ isOpen, on
                   onClick={() => !isLoading && !isAlreadyAttached && handleSelectSample(sample)}
                   className={`p-3 rounded-xl border transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-3 ${
                     isAlreadyAttached
-                      ? 'border-[#cc785c]/40 bg-[#cc785c]/5 cursor-default'
-                      : 'border-[var(--border-subtle)] hover:border-[#cc785c]/40 bg-[var(--bg-panel)] hover:bg-[var(--bg-card)] cursor-pointer shadow-subtle'
+                      ? 'border-[#0EA5E9]/40 bg-[#0EA5E9]/5 cursor-default'
+                      : 'border-[var(--border-subtle)] hover:border-[#0EA5E9]/40 bg-[var(--bg-panel)] hover:bg-[var(--bg-card)] cursor-pointer shadow-subtle'
                   }`}
                 >
                   <div className="flex items-start gap-3">
@@ -460,7 +518,7 @@ export const SamplePickerModal: React.FC<SamplePickerModalProps> = ({ isOpen, on
                       <p className="text-[11px] text-[var(--text-muted)] line-clamp-2 leading-relaxed">
                         {sample.description}
                       </p>
-                      <span className="text-[10px] font-mono text-[#cc785c] block mt-1">
+                      <span className="text-[10px] font-mono text-[#0EA5E9] block mt-1">
                         {sample.sensor} • {sample.details}
                       </span>
                     </div>
@@ -468,12 +526,12 @@ export const SamplePickerModal: React.FC<SamplePickerModalProps> = ({ isOpen, on
 
                   <div className="shrink-0 flex items-center justify-end">
                     {isLoading ? (
-                      <div className="flex items-center gap-1.5 text-xs text-[#cc785c] font-mono">
+                      <div className="flex items-center gap-1.5 text-xs text-[#0EA5E9] font-mono">
                         <Loader2 className="w-3.5 h-3.5 animate-spin" />
                         <span>Attaching...</span>
                       </div>
                     ) : isAlreadyAttached ? (
-                      <div className="flex items-center gap-1 text-[11px] font-mono text-[#cc785c] bg-[#cc785c]/10 px-2.5 py-1 rounded-lg border border-[#cc785c]/25">
+                      <div className="flex items-center gap-1 text-[11px] font-mono text-[#0EA5E9] bg-[#0EA5E9]/10 px-2.5 py-1 rounded-lg border border-[#0EA5E9]/25">
                         <Check className="w-3.5 h-3.5" />
                         <span>Attached</span>
                       </div>

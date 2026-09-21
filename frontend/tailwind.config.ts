@@ -22,8 +22,8 @@ const config: Config = {
           text: "var(--text-main)",
           textMuted: "var(--text-muted)",
           textDim: "var(--text-dim)",
-          terracotta: "#CC785C",
-          terracottaHover: "#B8674D",
+          terracotta: "var(--accent-primary)",
+          terracottaHover: "var(--accent-hover)",
           terracottaTint: "var(--accent-tint)",
         },
         chat: {
@@ -36,7 +36,7 @@ const config: Config = {
           borderHover: "var(--border-hover)",
           text: "var(--text-main)",
           textMuted: "var(--text-muted)",
-          accent: "#CC785C",
+          accent: "var(--accent-primary)",
         },
       },
       fontFamily: {

@@ -81,9 +81,9 @@ export const MapView: React.FC<MapViewProps> = ({
       const latLngBounds = L.latLngBounds(southWest, northEast);
 
       L.rectangle(latLngBounds, {
-        color: '#cc785c',
+        color: '#0EA5E9',
         weight: 1.5,
-        fillColor: '#cc785c',
+        fillColor: '#0EA5E9',
         fillOpacity: 0.08,
         dashArray: '4, 4',
       }).addTo(map);
@@ -94,7 +94,7 @@ export const MapView: React.FC<MapViewProps> = ({
         radius: 5,
         color: '#ffffff',
         weight: 1.5,
-        fillColor: '#cc785c',
+        fillColor: '#0EA5E9',
         fillOpacity: 1,
       })
         .addTo(map)
@@ -126,7 +126,7 @@ export const MapView: React.FC<MapViewProps> = ({
     <div className="w-full rounded-xl overflow-hidden border border-[var(--border-subtle)] bg-[var(--bg-card)] my-3 select-none shadow-subtle">
       <div className="flex items-center justify-between px-3.5 py-2 bg-[var(--bg-panel)] border-b border-[var(--border-subtle)] text-xs">
         <div className="flex items-center gap-2 font-mono text-[11px]">
-          <Navigation className="w-3.5 h-3.5 text-[#cc785c]" />
+          <Navigation className="w-3.5 h-3.5 text-[#0EA5E9]" />
           <span className="font-medium text-[var(--text-main)]">Map View</span>
         </div>
 

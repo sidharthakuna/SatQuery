@@ -38,13 +38,13 @@ export const ChangeMaskViewer: React.FC<ChangeMaskViewerProps> = ({
       {/* ── Top Header ────────────────────────────────────────── */}
       <div className="flex flex-wrap items-center justify-between px-3.5 py-2 bg-[var(--bg-panel)] border-b border-[var(--border-subtle)] text-xs gap-2">
         <div className="flex items-center gap-2">
-          <Layers className="w-3.5 h-3.5 text-[#cc785c]" />
+          <Layers className="w-3.5 h-3.5 text-[#0EA5E9]" />
           <span className="font-medium text-[var(--text-main)] text-[11px]">
             {title}
           </span>
           <Badge variant="neutral">{badgeLabel}</Badge>
           {safeClusters.length > 0 && (
-            <span className="px-1.5 py-0.2 rounded text-[10px] font-mono bg-[#cc785c]/10 text-[#cc785c] border border-[#cc785c]/25">
+            <span className="px-1.5 py-0.2 rounded text-[10px] font-mono bg-[#0EA5E9]/10 text-[#0EA5E9] border border-[#0EA5E9]/25">
               {safeClusters.length} Places Marked
             </span>
           )}
@@ -58,12 +58,12 @@ export const ChangeMaskViewer: React.FC<ChangeMaskViewerProps> = ({
               onClick={() => setShowPins(!showPins)}
               className={`px-2 py-0.5 rounded text-[10px] font-mono border transition-colors flex items-center gap-1 cursor-pointer ${
                 showPins
-                  ? 'bg-[var(--bg-surface)] text-[var(--text-main)] border-[#cc785c]/40 font-medium'
+                  ? 'bg-[var(--bg-surface)] text-[var(--text-main)] border-[#0EA5E9]/40 font-medium'
                   : 'bg-[var(--bg-card)] text-[var(--text-dim)] border-[var(--border-subtle)] opacity-60'
               }`}
               title="Show or hide place markers"
             >
-              <MapPin className="w-2.5 h-2.5 text-[#cc785c]" />
+              <MapPin className="w-2.5 h-2.5 text-[#0EA5E9]" />
               <span>Pins: {showPins ? 'ON' : 'OFF'}</span>
             </button>
           )}
@@ -78,7 +78,7 @@ export const ChangeMaskViewer: React.FC<ChangeMaskViewerProps> = ({
               step={0.05}
               value={opacity}
               onChange={(e) => setOpacity(parseFloat(e.target.value))}
-              className="w-14 h-1 bg-[var(--border-subtle)] rounded-lg appearance-none cursor-pointer accent-[#cc785c]"
+              className="w-14 h-1 bg-[var(--border-subtle)] rounded-lg appearance-none cursor-pointer accent-[#0EA5E9]"
               title="Mask Opacity"
             />
             <span className="text-[10px] font-mono text-[var(--text-main)] w-7">
@@ -97,7 +97,7 @@ export const ChangeMaskViewer: React.FC<ChangeMaskViewerProps> = ({
             className="px-2 py-0.5 rounded text-[10px] font-mono border border-[var(--border-subtle)] bg-[var(--bg-surface)] text-[var(--text-muted)] hover:text-[var(--text-main)] flex items-center gap-1 cursor-pointer transition-colors"
             title="Toggle blend mode"
           >
-            <Sparkles className="w-2.5 h-2.5 text-[#cc785c]" />
+            <Sparkles className="w-2.5 h-2.5 text-[#0EA5E9]" />
             <span>Blend: {blendMode.toUpperCase()}</span>
           </button>
 
@@ -111,7 +111,7 @@ export const ChangeMaskViewer: React.FC<ChangeMaskViewerProps> = ({
             onTouchEnd={() => setIsPeeking(false)}
             className={`px-2 py-0.5 rounded text-[10px] font-mono border transition-colors flex items-center gap-1 cursor-pointer ${
               isPeeking
-                ? 'bg-[#cc785c]/20 text-[#cc785c] border-[#cc785c]/40 font-semibold'
+                ? 'bg-[#0EA5E9]/20 text-[#0EA5E9] border-[#0EA5E9]/40 font-semibold'
                 : 'bg-[var(--bg-surface)] text-[var(--text-muted)] hover:text-[var(--text-main)] border-[var(--border-subtle)]'
             }`}
             title="Hold to Peek"
@@ -182,15 +182,15 @@ export const ChangeMaskViewer: React.FC<ChangeMaskViewerProps> = ({
                 >
                   <div className="relative flex items-center justify-center">
                     <span
-                      className={`absolute w-7 h-7 rounded-full bg-[#cc785c] opacity-75 animate-ping ${
+                      className={`absolute w-7 h-7 rounded-full bg-[#0EA5E9] opacity-75 animate-ping ${
                         isHovered ? 'scale-150' : ''
                       }`}
                     />
                     <div
                       className={`w-5 h-5 rounded-full flex items-center justify-center shadow-lg border-2 border-white transition-transform ${
                         isHovered
-                          ? 'bg-[#cc785c] scale-125 ring-4 ring-[#cc785c]/40'
-                          : 'bg-[#cc785c]'
+                          ? 'bg-[#0EA5E9] scale-125 ring-4 ring-[#0EA5E9]/40'
+                          : 'bg-[#0EA5E9]'
                       }`}
                     >
                       <MapPin className="w-2.5 h-2.5 text-white" />
@@ -200,7 +200,7 @@ export const ChangeMaskViewer: React.FC<ChangeMaskViewerProps> = ({
                   <div
                     className={`mt-1 px-1.5 py-0.2 rounded text-[9px] font-mono font-bold whitespace-nowrap shadow border transition-all text-center ${
                       isHovered
-                        ? 'bg-[var(--bg-card)] text-[#cc785c] border-[#cc785c]'
+                        ? 'bg-[var(--bg-card)] text-[#0EA5E9] border-[#0EA5E9]'
                         : 'bg-black/85 text-white border-white/30 backdrop-blur-sm'
                     }`}
                   >
@@ -218,7 +218,7 @@ export const ChangeMaskViewer: React.FC<ChangeMaskViewerProps> = ({
         <div className="p-3 bg-[var(--bg-panel)] border-t border-[var(--border-subtle)]">
           <div className="flex items-center justify-between mb-2">
             <span className="font-semibold text-xs text-[var(--text-main)] flex items-center gap-1.5">
-              <MapPin className="w-3 h-3 text-[#cc785c]" />
+              <MapPin className="w-3 h-3 text-[#0EA5E9]" />
               Marked Places & Delineated Sectors
             </span>
             <span className="text-[10px] font-mono text-[var(--text-dim)]">
@@ -238,17 +238,17 @@ export const ChangeMaskViewer: React.FC<ChangeMaskViewerProps> = ({
                   onMouseLeave={() => setHoveredClusterIndex(null)}
                   className={`p-2.5 rounded-xl border transition-all cursor-pointer ${
                     isHovered
-                      ? 'bg-[#cc785c]/10 border-[#cc785c] shadow-sm'
-                      : 'bg-[var(--bg-surface)] border-[var(--border-subtle)] hover:border-[#cc785c]/40'
+                      ? 'bg-[#0EA5E9]/10 border-[#0EA5E9] shadow-sm'
+                      : 'bg-[var(--bg-surface)] border-[var(--border-subtle)] hover:border-[#0EA5E9]/40'
                   }`}
                 >
                   <div className="flex items-center justify-between mb-1">
                     <span className="font-bold text-xs text-[var(--text-main)] flex items-center gap-1.5">
-                      <span className="w-1.5 h-1.5 rounded-full bg-[#cc785c]" />
+                      <span className="w-1.5 h-1.5 rounded-full bg-[#0EA5E9]" />
                       {cluster.zone}
                     </span>
                     {cluster.area_ha !== undefined && cluster.area_ha !== null && (
-                      <span className="text-[10px] font-mono font-semibold px-1.5 py-0.2 rounded bg-[var(--bg-card)] border border-[var(--border-subtle)] text-[#cc785c]">
+                      <span className="text-[10px] font-mono font-semibold px-1.5 py-0.2 rounded bg-[var(--bg-card)] border border-[var(--border-subtle)] text-[#0EA5E9]">
                         {cluster.area_ha} ha
                       </span>
                     )}
