@@ -285,7 +285,14 @@ class SatQueryAgent:
             spatial_extra = {}
             for out in tool_outputs:
                 if out.extra:
-                    spatial_extra.update(out.extra)
+                    out_extra = copy.deepcopy(out.extra)
+                    for k, v in out_extra.items():
+                        if k not in spatial_extra:
+                            spatial_extra[k] = v
+                        elif isinstance(v, list) and isinstance(spatial_extra[k], list):
+                            spatial_extra[k].extend(v)
+                        elif isinstance(v, dict) and isinstance(spatial_extra[k], dict):
+                            spatial_extra[k].update(v)
 
             # ═══════════════════════════════════════════════════
             #  Stage 5: Cross-Model Evidence Validation & Counter-Evidence
@@ -371,6 +378,7 @@ class SatQueryAgent:
                     },
                     message=f"Query-to-Evidence complete: {verification.status} ({int(decomposition.overall_confidence*100)}% confidence)",
                 )
+            chart_data_payload = spatial_evidence.chart_data if spatial_evidence else None
 
             return SatQueryResult(
                 query=query,
@@ -387,6 +395,7 @@ class SatQueryAgent:
                 evidence_timeline=timeline,
                 tool_execution_plan=execution_plan,
                 vqa_grounding=vqa_grounding,
+                chart_data=chart_data_payload,
             )
 
         except Exception as e:
@@ -629,7 +638,7 @@ class SatQueryAgent:
                     vqa_grounding_obj = VQAGrounding(**vg)
                 elif isinstance(vg, VQAGrounding):
                     vqa_grounding_obj = vg
-                if output.tool_id == "tool_rs_vqa" and output.text_response:
+                if output.tool_id == "tool_rs_vqa" and output.text_response and not combined_text:
                     combined_text = output.text_response
                 break
 
@@ -687,6 +696,28 @@ class SatQueryAgent:
             spatial.vqa_grounding = vqa_grounding_obj
             if not spatial.mask_url:
                 spatial.mask_url = vqa_grounding_obj.overlay_url
+
+        # Extract and attach dynamic chart telemetry
+        chart_data = merged_extra.get("chart_data")
+        if not chart_data and images and len(images) > 0 and images[0] is not None:
+            try:
+                from app.core.geospatial.grounded.scene_telemetry import SceneTelemetry
+                m_dict = image_metas[0].model_dump() if hasattr(image_metas[0], "model_dump") else (image_metas[0] if isinstance(image_metas[0], dict) else {})
+                tel = SceneTelemetry.extract_telemetry(images[0], m_dict)
+                chart_data = tel.get("chart_data")
+                if chart_data:
+                    merged_extra["chart_data"] = chart_data
+            except Exception as e:
+                logger.warning(f"Failed to generate dynamic chart_data: {e}")
+
+        if spatial is not None and chart_data is not None:
+            spatial.chart_data = chart_data
+        elif spatial is None and chart_data is not None:
+            spatial = SpatialEvidence(
+                type="telemetry_chart",
+                chart_data=chart_data,
+                extra=merged_extra,
+            )
 
         return combined_text, spatial, suggested_actions, vqa_grounding_obj
 

@@ -37,8 +37,46 @@ export interface VQAGrounding {
   metrics?: Record<string, any>;
 }
 
+export interface LandCoverChartItem {
+  label: string;
+  key: string;
+  pct: number;
+  area_ha: number;
+  color: string;
+}
+
+export interface QuadrantChartItem {
+  quadrant: string;
+  veg_pct: number;
+  water_pct: number;
+  built_pct: number;
+}
+
+export interface SpectralHistogramData {
+  metric_name: string;
+  bins: string[];
+  values: number[];
+  is_proxy: boolean;
+  calibration_method: string;
+}
+
+export interface SensorFidelityData {
+  band_count: number;
+  resolution_m: number;
+  total_area_ha: number;
+  calibration_method: string;
+  is_proxy: boolean;
+}
+
+export interface ChartDataPayload {
+  land_cover_chart?: LandCoverChartItem[];
+  quadrant_chart?: QuadrantChartItem[];
+  spectral_histogram?: SpectralHistogramData;
+  sensor_fidelity?: SensorFidelityData;
+}
+
 export interface SpatialEvidence {
-  type: 'bounding_boxes' | 'change_mask' | 'fusion_map' | 'multi_layer' | 'vqa_grounding' | string;
+  type: 'bounding_boxes' | 'change_mask' | 'fusion_map' | 'multi_layer' | 'vqa_grounding' | 'telemetry_chart' | string;
   bounding_boxes?: [number, number, number, number][] | null;
   mask_url?: string | null;
   geojson_url?: string | null;
@@ -47,6 +85,7 @@ export interface SpatialEvidence {
   clusters?: SpatialCluster[];
   layers?: Record<string, any>[] | null;
   vqa_grounding?: VQAGrounding | null;
+  chart_data?: ChartDataPayload | null;
   extra?: Record<string, any>;
 }
 
@@ -168,6 +207,7 @@ export interface SatQueryResult {
   geojson_data?: Record<string, any> | null;
   evidence_timeline?: EvidenceTimelineItem[];
   vqa_grounding?: VQAGrounding | null;
+  chart_data?: ChartDataPayload | null;
 }
 
 export interface ReportRequest {

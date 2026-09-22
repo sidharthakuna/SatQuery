@@ -215,25 +215,54 @@ class MultimodalFloodAgenticRouter:
             ),
         ))
 
-        # Optical-SAR Card Assets for CartographicIntelligenceViewer
-        optical_sar_card = {
-            "optical_url": "/static/samples/public_flood_cloudy_optical.tif",
-            "sar_url": "/static/samples/public_flood_sentinel1_sar.tif",
-            "fused_result_url": assets["fused_result_url"],
-            "cloud_mask_url": assets["flood_mask_url"],
-            "cloud_coverage_pct": cloud_pct,
-            "resolved_pct": 100.0,
-            "flooded_ha": analysis_res["flooded_hectares"],
-            "flooded_pct": analysis_res["flooded_percent"],
-            "sub_cloud_flooded_ha": analysis_res["sub_cloud_flooded_ha"],
-            "safe_zones": analysis_res["safe_clusters"],
-            "card_type": "optical_sar",
-        }
+        # Optical-SAR Card Assets for CartographicIntelligenceViewer and OpticalSarFusionCard
+        from app.core.geospatial.grounded_analyzer import GroundedRSAnalyzer
+        try:
+            optical_sar_card = GroundedRSAnalyzer.generate_optical_sar_card_assets(
+                optical=opt_raster,
+                sar=sar_raster,
+                image_metas=[m.dict() if hasattr(m, "dict") else {} for m in image_metas] if image_metas else None,
+                query=query,
+            )
+            optical_sar_card.update({
+                "cloud_coverage_pct": cloud_pct,
+                "resolved_pct": 100.0,
+                "flooded_ha": analysis_res["flooded_hectares"],
+                "flooded_pct": analysis_res["flooded_percent"],
+                "sub_cloud_flooded_ha": analysis_res["sub_cloud_flooded_ha"],
+                "safe_zones": analysis_res["safe_clusters"],
+                "flood_clusters": analysis_res["flood_clusters"],
+                "card_type": "optical_sar",
+            })
+        except Exception as card_err:
+            logger.warning(f"Error generating full optical-sar card: {card_err}")
+            optical_sar_card = {
+                "optical_url": "/static/samples/public_flood_cloudy_optical.tif",
+                "sar_url": "/static/samples/public_flood_sentinel1_sar.tif",
+                "optical_result_url": "/static/samples/public_flood_cloudy_optical.tif",
+                "sar_result_url": "/static/samples/public_flood_sentinel1_sar.tif",
+                "fused_result_url": assets.get("fused_result_url", "/static/samples/fusion_optical_clean.tif"),
+                "cloud_mask_url": assets.get("flood_mask_url", "/static/samples/public_flood_cloudy_optical.tif"),
+                "cloud_coverage_pct": cloud_pct,
+                "resolved_pct": 100.0,
+                "flooded_ha": analysis_res["flooded_hectares"],
+                "flooded_pct": analysis_res["flooded_percent"],
+                "sub_cloud_flooded_ha": analysis_res["sub_cloud_flooded_ha"],
+                "safe_zones": analysis_res["safe_clusters"],
+                "card_type": "optical_sar",
+                "zoomed_views": {
+                    "optical_url": "/static/samples/fusion_zoom_opt.png",
+                    "sar_url": "/static/samples/fusion_zoom_sar.png",
+                    "fused_url": "/static/samples/fusion_zoom_recon.png",
+                    "reference_url": "/static/samples/fusion_zoom_ref.png",
+                },
+            }
 
         # Spatial Evidence
+        fused_out_url = optical_sar_card.get("fused_result_url") or assets.get("fused_result_url")
         spatial_evidence = SpatialEvidence(
             type="fusion_map",
-            mask_url=assets["mask_url"],
+            mask_url=fused_out_url,
             bounding_boxes=analysis_res["boxes"],
             clusters=analysis_res["safe_clusters"],
             changed_area_hectares=analysis_res["flooded_hectares"],
@@ -248,8 +277,8 @@ class MultimodalFloodAgenticRouter:
                 "sub_cloud_flooded_ha": analysis_res["sub_cloud_flooded_ha"],
                 "safe_clusters": analysis_res["safe_clusters"],
                 "flood_clusters": analysis_res["flood_clusters"],
-                "mask_url": assets["mask_url"],
-                "reconstructed_image_url": assets["reconstructed_image_url"],
+                "mask_url": fused_out_url,
+                "reconstructed_image_url": fused_out_url,
             },
         )
 

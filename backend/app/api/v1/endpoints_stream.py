@@ -84,30 +84,7 @@ async def websocket_query(websocket: WebSocket):
                     "data": {"message": f"Image not found: {img_id}"},
                 })
 
-        # ── Stream: Validation & Classification steps (for imagery tasks) ──
-        if image_metas:
-            await websocket.send_json({
-                "type": "step",
-                "data": {
-                    "step_index": 0,
-                    "step_name": "VALIDATING",
-                    "status": "IN_PROGRESS",
-                    "duration_ms": 0,
-                    "details": {"image_count": len(image_metas)},
-                    "message": f"Validating {len(image_metas)} image(s)...",
-                },
-            })
-            await websocket.send_json({
-                "type": "step",
-                "data": {
-                    "step_index": 1,
-                    "step_name": "CLASSIFYING",
-                    "status": "IN_PROGRESS",
-                    "duration_ms": 0,
-                    "details": {},
-                    "message": "Classifying query intent...",
-                },
-            })
+
 
         # ── Execute full pipeline with real-time streaming ──
         agent = _get_agent()

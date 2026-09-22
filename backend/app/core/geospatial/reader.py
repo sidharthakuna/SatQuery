@@ -59,6 +59,31 @@ def inspect_geotiff(file_path: str, file_id: Optional[str] = None) -> GeoTIFFMet
 
         modality = detect_modality(src.count, file_path)
 
+        # Calculate authentic Ground Sampling Distance (GSD) in meters
+        gsd_m = None
+        if src.res:
+            try:
+                res_x = abs(float(src.res[0]))
+                if (src.crs and src.crs.is_geographic) or res_x < 0.1:
+                    gsd_m = round(res_x * 111320.0, 2)
+                else:
+                    gsd_m = round(res_x, 2)
+            except Exception:
+                pass
+
+        if gsd_m is None or gsd_m <= 0:
+            fn_lower = path.name.lower()
+            if "cartosat" in fn_lower:
+                gsd_m = 0.65
+            elif "sentinel2" in fn_lower or "s2" in fn_lower:
+                gsd_m = 10.0
+            elif "landsat" in fn_lower:
+                gsd_m = 30.0
+            elif "sentinel1" in fn_lower or "sar" in fn_lower or "risat" in fn_lower:
+                gsd_m = 10.0
+            else:
+                gsd_m = 10.0
+
         thumbnail_url = f"/api/v1/preview/{file_id or path.name}"
 
         return GeoTIFFMetadata(
@@ -71,6 +96,7 @@ def inspect_geotiff(file_path: str, file_id: Optional[str] = None) -> GeoTIFFMet
             dtypes=list(src.dtypes),
             modality=modality,
             resolution=src.res,
+            gsd_m=gsd_m,
             bounds_latlon=bounds_latlon,
             file_size_bytes=path.stat().st_size,
             thumbnail_url=thumbnail_url,
@@ -92,8 +118,10 @@ def detect_modality(band_count: int, file_path: str = "") -> str:
         return "OPTICAL"
 
     # 2 bands is almost exclusively dual-pol SAR (VV+VH)
-    if band_count == 2:
+    if band_count == 2 and not any(k in fname for k in ["optical", "sentinel2", "s2", "rgb"]):
         return "SAR"
+    elif band_count == 2:
+        return "OPTICAL"
     if band_count in OPTICAL_BAND_COUNTS:
         return "OPTICAL"
 
@@ -168,8 +196,9 @@ def generate_rgb_thumbnail(file_path: str, output_path: str) -> str:
 
     # Convert to uint8 PIL image
     rgb_uint8 = (np.clip(rgb, 0, 1) * 255).astype(np.uint8)
+    pil_img = Image.fromarray(np.transpose(rgb_uint8, (1, 2, 0)))
     if output_path.lower().endswith(".png"):
         output_path = output_path[:-4] + ".tif"
-    img.save(output_path, format="TIFF")
+    pil_img.save(output_path, format="TIFF")
 
     return output_path

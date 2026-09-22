@@ -217,11 +217,15 @@ def _render_preview_bytes(file_path: str, max_dim: int = 768) -> bytes:
     except Exception as e:
         logger.warning(f"GeoTIFF preview reader error ({e}), falling back to PIL: {file_path}")
         from PIL import Image
-        img = Image.open(file_path).convert("RGB")
-        img.thumbnail((max_dim, max_dim), Image.Resampling.LANCZOS)
-        buffer = BytesIO()
-        img.save(buffer, format="WEBP", quality=92)
-        return buffer.getvalue()
+        try:
+            img = Image.open(file_path).convert("RGB")
+            img.thumbnail((max_dim, max_dim), Image.Resampling.LANCZOS)
+            buffer = BytesIO()
+            img.save(buffer, format="WEBP", quality=92)
+            return buffer.getvalue()
+        except Exception as pil_err:
+            logger.error(f"PIL fallback also failed for {file_path}: {pil_err}")
+            raise HTTPException(status_code=500, detail="Cannot render preview for this raster.")
 
 
 

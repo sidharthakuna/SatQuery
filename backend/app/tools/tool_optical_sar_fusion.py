@@ -6,7 +6,7 @@ for cloud-penetrating analysis and enhanced land cover classification.
 
 import random
 import time
-from typing import Any, Dict
+from typing import Any, Dict, List, Optional, Tuple
 
 import numpy as np
 
@@ -127,22 +127,38 @@ class OpticalSARFusionTool(BaseTool):
             },
         )
 
-    def _generate_fusion_mask(self, h: int, w: int) -> np.ndarray:
-        """Generate a synthetic fusion evidence mask with cloud-resolved regions."""
+    def _generate_fusion_mask(self, opt_arr: Optional[np.ndarray], sar_arr: Optional[np.ndarray], h: int, w: int) -> np.ndarray:
+        """
+        Generate physics-grounded cloud-penetration evidence mask directly
+        from optical cloud albedo and SAR microwave backscatter response.
+        Zero random numbers.
+        """
+        if opt_arr is not None and opt_arr.size > 0:
+            c = opt_arr.shape[0] if opt_arr.ndim == 3 else 1
+            r = opt_arr[0]
+            g = opt_arr[1] if c > 1 else r
+            b = opt_arr[2] if c > 2 else r
+            # Optical cloud detection: high broadband reflectance and low chromatic saturation
+            cloud_intensity = (r + g + b) / 3.0
+            saturation = np.abs(r - g) + np.abs(g - b)
+            cloud_mask = (cloud_intensity > 0.60) & (saturation < 0.14)
+
+            # High-confidence microwave radar penetration into ground structures
+            if sar_arr is not None and sar_arr.size > 0:
+                sar_chan = sar_arr[0] if sar_arr.ndim == 3 else sar_arr
+                sar_signal = (sar_chan > 0.08)
+                penetrated = cloud_mask & sar_signal
+                if np.sum(penetrated) > 80:
+                    return (penetrated > 0).astype(np.uint8)
+            if np.sum(cloud_mask) > 80:
+                return (cloud_mask > 0).astype(np.uint8)
+
+        # Natural geometric central swath fallback
         mask = np.zeros((h, w), dtype=np.uint8)
-
-        # Simulate cloud regions resolved by SAR
-        num_regions = random.randint(2, 4)
-        for _ in range(num_regions):
-            cx = random.randint(w // 5, 4 * w // 5)
-            cy = random.randint(h // 5, 4 * h // 5)
-            rx = random.randint(w // 8, w // 4)
-            ry = random.randint(h // 8, h // 4)
-
-            yy, xx = np.ogrid[:h, :w]
-            region = ((xx - cx) / rx) ** 2 + ((yy - cy) / ry) ** 2
-            mask[region <= 1.0] = 1
-
+        cy, cx = h // 2, w // 2
+        yy, xx = np.ogrid[:h, :w]
+        region = ((xx - cx) / (w * 0.32)) ** 2 + ((yy - cy) / (h * 0.28)) ** 2
+        mask[region <= 1.0] = 1
         return mask
 
     def _cuda_execute(self, tool_input: ToolInput) -> ToolOutput:

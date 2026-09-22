@@ -4,11 +4,14 @@ Produces pixel-level change masks and area statistics from two temporally
 separated satellite images (t1 vs t2).
 """
 
+import logging
 import random
 import time
 from typing import Any, Dict
 
 import numpy as np
+
+logger = logging.getLogger(__name__)
 
 from app.tools.base import BaseTool, ToolInput, ToolOutput, register_tool
 from config.constants import MOCK_LATENCY_RANGE_MS
@@ -135,8 +138,8 @@ class ChangeDetectionTool(BaseTool):
             t1_arr = _to_float32_chw(tool_input.images[0])
             t2_arr = _to_float32_chw(tool_input.images[1])
         else:
-            t1_arr = np.random.uniform(0.1, 0.8, (3, 256, 256)).astype(np.float32)
-            t2_arr = np.random.uniform(0.1, 0.8, (3, 256, 256)).astype(np.float32)
+            logger.warning("ChangeDetection CUDA: fewer than 2 images provided — falling back to mock execution")
+            return self._mock_execute(tool_input)
 
         def _ensure_3ch(arr: np.ndarray) -> np.ndarray:
             if arr.ndim == 2:
@@ -180,11 +183,6 @@ class ChangeDetectionTool(BaseTool):
         changed_pixels = int(np.sum(binary_mask))
         total_pixels = binary_mask.size
         change_pct = round((changed_pixels / max(total_pixels, 1)) * 100, 2)
-        change_hectares = analytics["change_hectares"]
-        elapsed_ms = int((time.time() - start_time) * 1000)
-
-        narrative = analytics["narrative"]
-
         # Prioritize real learned neural mask when ChangeFormer detects change
         if changed_pixels > 20:
             final_mask = binary_mask
@@ -193,6 +191,10 @@ class ChangeDetectionTool(BaseTool):
 
         final_changed = int(np.sum(final_mask > 0))
         final_pct = round((final_changed / max(total_pixels, 1)) * 100, 2)
+        total_aoi_ha = float(tool_input.image_metas[0].get("area_ha", 2365.4) if isinstance(tool_input.image_metas[0], dict) else getattr(tool_input.image_metas[0], "area_ha", 2365.4) or 2365.4) if tool_input.image_metas else 2365.4
+        change_hectares = round((final_changed / max(total_pixels, 1)) * total_aoi_ha, 1)
+        elapsed_ms = int((time.time() - start_time) * 1000)
+        narrative = analytics["narrative"]
 
         return ToolOutput(
             tool_id=self.tool_id,

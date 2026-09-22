@@ -54,8 +54,8 @@ const MISSION_PAIRS: MissionPairInfo[] = [
     description: 'Combines dense cloud-obscured Sentinel-2 optical scene with all-weather Sentinel-1 C-Band microwave radar backscatter.',
     query: 'Execute cross-modal optical and microwave SAR fusion to penetrate dense cloud cover and reconstruct ground terrain.',
     files: [
-      { url: '/samples/fusion_optical.tif', name: 'sentinel2_optical_cloudy.tif', thumb: '/api/v1/preview/fusion_optical.tif', modality: 'OPTICAL' },
-      { url: '/samples/fusion_sar.tif', name: 'sentinel1_sar_backscatter.tif', thumb: '/api/v1/preview/fusion_sar.tif', modality: 'SAR' },
+      { url: '/samples/fusion_optical.tif', name: 'cloudy_optical_pass.tif', thumb: '/api/v1/preview/fusion_optical.tif', modality: 'OPTICAL' },
+      { url: '/samples/fusion_sar.tif', name: 'sentinel1_sar_radar.tif', thumb: '/api/v1/preview/fusion_sar.tif', modality: 'SAR' },
     ],
   },
   {
@@ -63,129 +63,112 @@ const MISSION_PAIRS: MissionPairInfo[] = [
     title: 'Urban Sprawl & Infrastructure Development',
     category: 'Bi-temporal Expansion',
     icon: Building2,
-    description: 'Cartosat bi-temporal survey comparing historical baseline with newly built industrial and residential corridors.',
+    description: 'Bi-temporal survey comparing historical baseline with newly built industrial and residential corridors.',
     query: 'Analyze bi-temporal urban expansion, new residential footprints, and roadway corridors between these acquisition dates.',
     files: [
-      { url: '/samples/urban_t1.tif', name: 'cartosat_urban_t1.tif', thumb: '/api/v1/preview/urban_t1.tif', modality: 'OPTICAL' },
-      { url: '/samples/urban_t2.tif', name: 'cartosat_urban_t2.tif', thumb: '/api/v1/preview/urban_t2.tif', modality: 'OPTICAL' },
+      { url: '/samples/urban_t1.tif', name: 'urban_baseline_t1.tif', thumb: '/api/v1/preview/urban_t1.tif', modality: 'OPTICAL' },
+      { url: '/samples/urban_t2.tif', name: 'urban_expansion_t2.tif', thumb: '/api/v1/preview/urban_t2.tif', modality: 'OPTICAL' },
     ],
   },
   {
-    id: 'flood_sar_pair',
-    title: 'Flood Impact Assessment (SAR + Optical)',
-    category: 'Cross-Modal Disaster',
+    id: 'cloud_free_flood_pair',
+    title: 'All-Weather Cloud-Free Flood & Safe Zones',
+    category: 'Multimodal Disaster',
     icon: Waves,
-    description: 'Assess flood extent under dense cloud cover by combining Sentinel-1 SAR and cloudy optical passes.',
-    query: 'Identify the exact extent of flood inundation by correlating the cloudy optical scene with the SAR backscatter radar data.',
+    description: 'Penetrate storm clouds using Sentinel-1 SAR radar to clear cloud cover, map inundated areas, and delineate elevated dry safe zones.',
+    query: 'Penetrate storm clouds using Sentinel-1 SAR and Sentinel-2 optical imagery, reconstruct a cloud-free ground view, calculate total flooded area, and pinpoint elevated safe evacuation zones.',
     files: [
       { url: '/samples/public_flood_cloudy_optical.tif', name: 'cloudy_optical.tif', thumb: '/api/v1/preview/public_flood_cloudy_optical.tif', modality: 'OPTICAL' },
-      { url: '/samples/public_flood_sentinel1_sar.tif', name: 'sentinel1_flood_sar.tif', thumb: '/api/v1/preview/public_flood_sentinel1_sar.tif', modality: 'SAR' },
+      { url: '/samples/public_flood_sentinel1_sar.tif', name: 'sentinel1_sar.tif', thumb: '/api/v1/preview/public_flood_sentinel1_sar.tif', modality: 'SAR' },
     ],
   },
-  {
-    id: 'forest_vqa_mission',
-    title: 'Forest Canopy Health & Vegetation VQA',
-    category: 'Single Image VQA',
-    icon: Layers,
-    description: 'Perform Visual Question Answering (VQA) on dense forest canopies and spectral vegetation index responses.',
-    query: 'Estimate the forest density, classify the vegetation health, and identify any signs of deforestation or clear-cutting.',
-    files: [
-      { url: '/samples/forest_vqa.tif', name: 'forest_vqa.tif', thumb: '/api/v1/preview/forest_vqa.tif', modality: 'OPTICAL' },
-    ],
-  },
-  {
-    id: 'port_grounding_mission',
-    title: 'Maritime Port Defense & Vessel Grounding',
-    category: 'Single Image Recon',
-    icon: Satellite,
-    description: 'Detect and ground commercial vessels, dry docks, and industrial cranes in a complex harbor facility.',
-    query: 'Perform object grounding: identify all commercial vessels, map the harbor boundary, and locate industrial cranes.',
-    files: [
-      { url: '/samples/port_grounding.tif', name: 'port_grounding.tif', thumb: '/api/v1/preview/port_grounding.tif', modality: 'OPTICAL' },
-    ],
-  }
 ];
 
 const SERVER_SAMPLES: SamplePresetInfo[] = [
-  {
-    id: 'cartosat_t1',
-    filename: 'cartosat_t1.tif',
-    url: '/samples/cartosat_t1.tif',
-    thumbnailUrl: '/api/v1/preview/cartosat_t1.tif',
-    name: 'Cartosat-2S Optical (t₁ Baseline)',
-    sensor: 'ISRO Cartosat-2S High-Res Imager',
-    modality: 'OPTICAL',
-    category: 'optical',
-    description: 'Multispectral 4-band optical raster (Blue, Green, Red, NIR) at sub-meter ground sampling distance.',
-    details: '4 Bands • EPSG:4326 • 0.65m GSD',
-  },
-  {
-    id: 'cartosat_t2',
-    filename: 'cartosat_t2.tif',
-    url: '/samples/cartosat_t2.tif',
-    thumbnailUrl: '/api/v1/preview/cartosat_t2.tif',
-    name: 'Cartosat-2S Optical (t₂ Surveillance)',
-    sensor: 'ISRO Cartosat-2S Repeat Pass',
-    modality: 'OPTICAL',
-    category: 'optical',
-    description: 'Bi-temporal repeat optical scene acquired post-development for urban change and infrastructure analysis.',
-    details: '4 Bands • EPSG:4326 • 0.65m GSD',
-  },
-  {
-    id: 'risat_sar',
-    filename: 'risat_sar.tif',
-    url: '/samples/risat_sar.tif',
-    thumbnailUrl: '/api/v1/preview/risat_sar.tif',
-    name: 'RISAT-1 C-Band Microwave SAR',
-    sensor: 'ISRO Radar Imaging Satellite (RISAT)',
-    modality: 'SAR',
-    category: 'sar',
-    description: 'All-weather, day-and-night C-band microwave synthetic aperture radar with dual polarizations (VV/VH).',
-    details: '2 Bands (VV/VH) • EPSG:4326 • Radar Backscatter',
-  },
+  // ── Optical Multispectral ──────────────────────────────────
   {
     id: 'forest_vqa',
     filename: 'forest_vqa.tif',
     url: '/samples/forest_vqa.tif',
     thumbnailUrl: '/api/v1/preview/forest_vqa.tif',
     name: 'Forest Canopy & Vegetation VQA',
-    sensor: 'Sentinel-2 Multispectral MSI',
+    sensor: 'Sentinel-2 MSI Multispectral',
     modality: 'OPTICAL',
     category: 'optical',
-    description: 'Multispectral scene featuring dense forest canopies, spectral vegetation index responses, and water bodies.',
-    details: '4 Bands • EPSG:4326 • 10m GSD',
+    description: 'Multispectral scene featuring dense forest canopies, spectral vegetation index responses, and river channels for VQA analysis.',
+    details: '3 Bands • EPSG:4326 • 10m GSD',
   },
   {
     id: 'port_grounding',
     filename: 'port_grounding.tif',
     url: '/samples/port_grounding.tif',
     thumbnailUrl: '/api/v1/preview/port_grounding.tif',
-    name: 'Maritime Port & Defense Infrastructure',
-    sensor: 'DIOR High-Res Aerial Sensor',
+    name: 'Maritime Port & Harbor Grounding',
+    sensor: 'High-Resolution Optical Satellite',
     modality: 'OPTICAL',
     category: 'optical',
-    description: 'Complex harbor facility with commercial vessels, dry docks, storage tanks, and industrial cranes for visual grounding.',
+    description: 'Complex harbor facility with commercial vessels, dry docks, storage tanks, and industrial cranes for text-guided visual grounding.',
     details: '3 Bands (RGB) • EPSG:4326 • Object Grounding',
   },
   {
-    id: 'sentinel2_coastal',
-    filename: 'sentinel2_coastal.tif',
-    url: '/samples/sentinel2_coastal.tif',
-    thumbnailUrl: '/api/v1/preview/sentinel2_coastal.tif',
-    name: 'Sentinel-2 Coastal Metropolis & Port',
-    sensor: 'Sentinel-2 MSI Optical Imager',
+    id: 'urban_t1',
+    filename: 'urban_t1.tif',
+    url: '/samples/urban_t1.tif',
+    thumbnailUrl: '/api/v1/preview/urban_t1.tif',
+    name: 'Urban Core Baseline (t₁)',
+    sensor: 'High-Resolution Optical Satellite',
     modality: 'OPTICAL',
     category: 'optical',
-    description: 'Ultra-sharp 768x768 multispectral optical scene covering commercial deepwater berths, breakwaters, and urban core.',
-    details: '3 Bands (RGB) • EPSG:4326 • 768x768 High-Res GeoTIFF',
+    description: 'Optical satellite scene showing dense built-up residential districts, arterial highways, and industrial blocks.',
+    details: '3 Bands • EPSG:4326 • Sub-meter GSD',
   },
+  {
+    id: 'fusion_optical',
+    filename: 'fusion_optical.tif',
+    url: '/samples/fusion_optical.tif',
+    thumbnailUrl: '/api/v1/preview/fusion_optical.tif',
+    name: 'Sentinel-2 Optical (Cloudy Pass)',
+    sensor: 'Copernicus Sentinel-2 MSI',
+    modality: 'OPTICAL',
+    category: 'optical',
+    description: 'Multispectral optical capture severely obscured by thick atmospheric cumulus clouds.',
+    details: '3 Bands (RGB) • EPSG:4326 • 10m GSD',
+  },
+
+  // ── SAR Microwave Radar ──────────────────────────────────
+  {
+    id: 'fusion_sar',
+    filename: 'fusion_sar.tif',
+    url: '/samples/fusion_sar.tif',
+    thumbnailUrl: '/api/v1/preview/fusion_sar.tif',
+    name: 'Sentinel-1 C-Band SAR Radar',
+    sensor: 'Copernicus Sentinel-1 RTC Radar',
+    modality: 'SAR',
+    category: 'sar',
+    description: 'All-weather, day-and-night C-band microwave synthetic aperture radar with dual polarizations (VV/VH), penetrating cloud cover.',
+    details: '2 Bands (VV/VH) • EPSG:4326 • Calibrated Backscatter',
+  },
+  {
+    id: 'public_flood_sar',
+    filename: 'public_flood_sentinel1_sar.tif',
+    url: '/samples/public_flood_sentinel1_sar.tif',
+    thumbnailUrl: '/api/v1/preview/public_flood_sentinel1_sar.tif',
+    name: 'Sentinel-1 SAR Inundation Radar',
+    sensor: 'Sentinel-1 C-Band SAR Radar',
+    modality: 'SAR',
+    category: 'sar',
+    description: 'Low-backscatter specular radar signature delineating standing water bodies, floodplains, and submerged surfaces.',
+    details: '2 Bands (VV/VH) • EPSG:4326 • Water Penetration',
+  },
+
+  // ── Disasters & Floods ───────────────────────────────────
   {
     id: 'flood_t1',
     filename: 'flood_t1.tif',
     url: '/samples/flood_t1.tif',
     thumbnailUrl: '/api/v1/preview/flood_t1.tif',
-    name: 'Pre-Disaster Flood Basin (t₁)',
-    sensor: 'RapidEye Multispectral Sensor',
+    name: 'Pre-Disaster River Basin (t₁ Baseline)',
+    sensor: 'Multispectral Satellite Sensor',
     modality: 'OPTICAL',
     category: 'disaster',
     description: 'Agricultural floodplains captured under dry baseline conditions prior to severe riverine embankment breach.',
@@ -196,73 +179,13 @@ const SERVER_SAMPLES: SamplePresetInfo[] = [
     filename: 'flood_t2.tif',
     url: '/samples/flood_t2.tif',
     thumbnailUrl: '/api/v1/preview/flood_t2.tif',
-    name: 'Post-Disaster Submerged Inundation (t₂)',
-    sensor: 'RapidEye Multispectral Sensor',
+    name: 'Post-Disaster Submerged Inundation (t₂ Surge)',
+    sensor: 'Multispectral Satellite Sensor',
     modality: 'OPTICAL',
     category: 'disaster',
     description: 'Post-disaster inundation pass showing massive submerged acreage, damaged infrastructure, and waterlogged parcels.',
     details: '3 Bands • EPSG:4326 • Surge Pass',
   },
-  {
-    id: 'fusion_optical',
-    filename: 'fusion_optical.tif',
-    url: '/samples/fusion_optical.tif',
-    thumbnailUrl: '/api/v1/preview/fusion_optical.tif',
-    name: 'Sentinel-2 Optical (Cloudy Pass)',
-    sensor: 'Copernicus Sentinel-2 MSI (Real Satellite GeoTIFF)',
-    modality: 'OPTICAL',
-    category: 'optical',
-    description: 'Authentic 768x768 Sentinel-2 multispectral scene over Visakhapatnam Port with atmospheric cumulus cloud cover.',
-    details: '3 Bands (RGB) • EPSG:4326 • 10m GSD',
-  },
-  {
-    id: 'fusion_optical_clean',
-    filename: 'fusion_optical_clean.tif',
-    url: '/samples/fusion_optical_clean.tif',
-    thumbnailUrl: '/api/v1/preview/fusion_optical_clean.tif',
-    name: 'Sentinel-2 Optical (Clear Sky Ground Truth)',
-    sensor: 'Copernicus Sentinel-2 MSI (Real Satellite GeoTIFF)',
-    modality: 'OPTICAL',
-    category: 'optical',
-    description: 'Pristine, cloud-free true-color satellite capture of Visakhapatnam Port under clear skies.',
-    details: '3 Bands (RGB) • EPSG:4326 • 10m GSD',
-  },
-  {
-    id: 'fusion_sar',
-    filename: 'fusion_sar.tif',
-    url: '/samples/fusion_sar.tif',
-    thumbnailUrl: '/api/v1/preview/fusion_sar.tif',
-    name: 'Sentinel-1 C-Band SAR Radar',
-    sensor: 'Copernicus Sentinel-1 RTC (Real Satellite GeoTIFF)',
-    modality: 'SAR',
-    category: 'sar',
-    description: 'Authentic C-band radar backscatter penetrating clouds to reveal maritime shipping and port structures.',
-    details: '2 Bands (VV/VH) • EPSG:4326 • Calibrated Backscatter',
-  },
-  {
-    id: 'public_flood_sar',
-    filename: 'public_flood_sentinel1_sar.tif',
-    url: '/samples/public_flood_sentinel1_sar.tif',
-    thumbnailUrl: '/api/v1/preview/public_flood_sentinel1_sar.tif',
-    name: 'Sentinel-1 SAR Flood Assessment',
-    sensor: 'Sentinel-1 RTC',
-    modality: 'SAR',
-    category: 'sar',
-    description: 'Water body and inundation detection using low-backscatter signatures from Sentinel-1 radar.',
-    details: '2 Bands (VV/VH) • EPSG:4326',
-  },
-  {
-    id: 'public_flood_cloudy',
-    filename: 'public_flood_cloudy_optical.tif',
-    url: '/samples/public_flood_cloudy_optical.tif',
-    thumbnailUrl: '/api/v1/preview/public_flood_cloudy_optical.tif',
-    name: 'Cloud-Obscured Optical Flood',
-    sensor: 'Sentinel-2 MSI Optical',
-    modality: 'OPTICAL',
-    category: 'optical',
-    description: 'Optical capture of a flood event severely limited by atmospheric cumulus clouds.',
-    details: '3 Bands (RGB) • EPSG:4326',
-  }
 ];
 
 export const SamplePickerModal: React.FC<SamplePickerModalProps> = ({ isOpen, onClose }) => {
@@ -272,26 +195,20 @@ export const SamplePickerModal: React.FC<SamplePickerModalProps> = ({ isOpen, on
   const [error, setError] = useState<string | null>(null);
 
   const handleSelectSample = async (sample: SamplePresetInfo) => {
-    if (activeImages.length >= 2) {
-      setError('Maximum 2 images can be attached simultaneously. Remove one before adding another.');
-      return;
-    }
-
     setLoadingId(sample.id);
     setError(null);
 
     try {
       const resp = await fetch(`${sample.url}?t=${Date.now()}`, { cache: 'no-store' });
-      if (!resp.ok) throw new Error(`Failed to load server sample: ${sample.filename}`);
+      if (!resp.ok) throw new Error(`Failed to load sample: ${sample.filename}`);
       const blob = await resp.blob();
       const file = new File([blob], sample.filename, { type: 'image/tiff' });
-
       const uploaded = await SatQueryAPI.uploadImage(file);
       attachImage(uploaded);
       onClose();
     } catch (err: any) {
-      console.error('Error loading sample:', err);
-      setError(err.message || 'Failed to ingest sample GeoTIFF');
+      console.error('Error attaching sample:', err);
+      setError(err.message || 'Failed to attach sample');
     } finally {
       setLoadingId(null);
     }
@@ -315,8 +232,13 @@ export const SamplePickerModal: React.FC<SamplePickerModalProps> = ({ isOpen, on
       }
 
       onClose();
-      // Immediately run the mission query in the chat
-      await submitQuery(pair.query, uploadedImages);
+      // Focus textarea so user can type their own query for the paired rasters
+      setTimeout(() => {
+        const textarea = document.querySelector('textarea');
+        if (textarea) {
+          textarea.focus();
+        }
+      }, 50);
     } catch (err: any) {
       console.error('Error loading mission pair:', err);
       setError(err.message || 'Failed to ingest mission pair');
@@ -336,7 +258,7 @@ export const SamplePickerModal: React.FC<SamplePickerModalProps> = ({ isOpen, on
     <Modal
       isOpen={isOpen}
       onClose={onClose}
-      title="ISRO Remote Sensing Dataset Catalog"
+      title="Satellite Samples Catalog"
       maxWidth="max-w-3xl"
     >
       <div className="space-y-3.5 select-none text-xs">
@@ -352,7 +274,7 @@ export const SamplePickerModal: React.FC<SamplePickerModalProps> = ({ isOpen, on
             }`}
           >
             <Layers className="w-3.5 h-3.5 text-[#0EA5E9]" />
-            <span>Mission Pairs (1-Click Launch)</span>
+            <span>Mission Pairs (Attach 2 Rasters)</span>
           </button>
 
           <button

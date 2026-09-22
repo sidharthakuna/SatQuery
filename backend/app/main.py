@@ -97,8 +97,8 @@ settings.data_dir.mkdir(parents=True, exist_ok=True)
 settings.samples_dir.mkdir(parents=True, exist_ok=True)
 
 # ── Dynamic Raster Image & Preview Handlers ──────────────────
-@app.get("/static/uploads/{file_name:path}")
-async def serve_static_upload(file_name: str):
+@app.get("/static/preview/{file_name:path}")
+async def serve_static_preview(file_name: str):
     from fastapi import HTTPException
     from fastapi.responses import FileResponse, Response
     from app.api.v1.endpoints_tiles import _find_raster_file, _render_preview_bytes

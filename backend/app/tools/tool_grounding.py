@@ -196,7 +196,11 @@ class GroundingTool(BaseTool):
             else:
                 pred_boxes, pred_scores = out
             scores = pred_scores.squeeze().cpu().numpy()
+            if scores.ndim == 0:
+                scores = scores.reshape(1)
             boxes_norm = pred_boxes.squeeze().cpu().numpy()
+            if boxes_norm.ndim == 1:
+                boxes_norm = boxes_norm.reshape(1, -1)
 
         boxes: List[List[float]] = []
         box_thresh = tool_input.parameters.get("box_threshold", 0.35)
@@ -229,13 +233,28 @@ class GroundingTool(BaseTool):
             meta,
         )
 
-        if has_semantic and semantic_boxes:
-            boxes = semantic_boxes
-        elif not boxes and semantic_boxes:
-            boxes = semantic_boxes
-        elif not boxes:
-            # Add at least one localized region if threshold was high
-            boxes.append([img_w * 0.2, img_h * 0.2, img_w * 0.45, img_h * 0.45])
+        def compute_iou(b1: List[float], b2: List[float]) -> float:
+            xx1 = max(b1[0], b2[0])
+            yy1 = max(b1[1], b2[1])
+            xx2 = min(b1[2], b2[2])
+            yy2 = min(b1[3], b2[3])
+            w_inter = max(0.0, xx2 - xx1)
+            h_inter = max(0.0, yy2 - yy1)
+            inter = w_inter * h_inter
+            area1 = max(0.0, b1[2] - b1[0]) * max(0.0, b1[3] - b1[1])
+            area2 = max(0.0, b2[2] - b2[0]) * max(0.0, b2[3] - b2[1])
+            union = area1 + area2 - inter
+            return inter / max(union, 1e-6)
+
+        # Fuse neural model candidate proposals with dynamic spectral/morphological candidates
+        fused_candidates = list(boxes)
+        for s_box in semantic_boxes:
+            if not any(compute_iou(s_box, existing) > 0.45 for existing in fused_candidates):
+                fused_candidates.append(s_box)
+
+        boxes = fused_candidates if fused_candidates else semantic_boxes
+        if not boxes:
+            boxes = [[img_w * 0.2, img_h * 0.2, img_w * 0.65, img_h * 0.65]]
 
         count = len(boxes)
         elapsed_ms = int((time.time() - start_time) * 1000)

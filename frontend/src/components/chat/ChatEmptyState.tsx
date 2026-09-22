@@ -37,8 +37,8 @@ const QUICK_PROMPTS: QuickPrompt[] = [
   },
   {
     id: 3,
-    label: 'Locate Buildings & Infrastructure',
-    query: 'Locate and count all buildings and roads in this satellite scene.',
+    label: 'Locate Harbor Vessels & Infrastructure',
+    query: 'Locate, outline, and delineate all maritime vessels, storage facilities, and harbor infrastructure with bounding boxes.',
     icon: <Target className="w-3.5 h-3.5 text-emerald-400" />,
     presetType: 'grounding',
   },
@@ -59,7 +59,7 @@ const QUICK_PROMPTS: QuickPrompt[] = [
 ];
 
 export const ChatEmptyState: React.FC = () => {
-  const { activeImages, submitQuery, loadPresetAnalysis, isProcessing } = useChat();
+  const { activeImages, submitQuery, loadPresetAnalysis, isProcessing, setAnalysisPanelOpen } = useChat();
   const [loadingId, setLoadingId] = useState<number | null>(null);
   const isMountedRef = useRef(true);
 
@@ -75,13 +75,16 @@ export const ChatEmptyState: React.FC = () => {
     setLoadingId(prompt.id);
 
     try {
-      if (activeImages.length > 0) {
-        await submitQuery(prompt.query);
-      } else {
-        await loadPresetAnalysis(prompt.presetType || 'flood');
-      }
+      await loadPresetAnalysis(prompt.presetType || 'flood');
+      // Focus textarea so user can immediately type their own natural language query
+      setTimeout(() => {
+        const textarea = document.querySelector('textarea');
+        if (textarea) {
+          textarea.focus();
+        }
+      }, 60);
     } catch (err) {
-      console.error('Failed to run quick prompt:', err);
+      console.error('Failed to attach preset images:', err);
     } finally {
       if (isMountedRef.current) setLoadingId(null);
     }
@@ -113,7 +116,7 @@ export const ChatEmptyState: React.FC = () => {
                 key={item.id}
                 type="button"
                 onClick={() => handlePromptClick(item)}
-                disabled={loadingId !== null}
+                disabled={loadingId !== null || isProcessing}
                 className="inline-flex items-center gap-2 px-3.5 py-2 rounded-full border border-[var(--border-subtle)] bg-[var(--bg-card)] hover:bg-[var(--bg-surface)] hover:border-sky-500/40 text-[12px] text-[var(--text-main)] transition-all cursor-pointer shadow-xs hover:shadow-sm group disabled:opacity-50"
               >
                 {isLoadingThis ? (

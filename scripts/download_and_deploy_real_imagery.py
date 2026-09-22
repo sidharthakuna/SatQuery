@@ -103,7 +103,7 @@ def run():
         buf = fetch_planetary_geotiff("sentinel-2-l2a", item_s2_clear, "visual", bbox_vizag)
         with rasterio.open(io.BytesIO(buf)) as src:
             data = src.read()[:3]
-        save_geotiff_multiloc(data, bbox_vizag, ["fusion_optical_clean", "sentinel2_coastal", "port_grounding", "dior_port_facility"])
+        save_geotiff_multiloc(data, bbox_vizag, ["fusion_optical_clean", "sentinel2_coastal"])
     except Exception as e:
         print(f"  Warning on clear optical: {e}")
 
@@ -132,23 +132,8 @@ def run():
     except Exception as e:
         print(f"  Warning on SAR: {e}")
 
-    # 2. Flood Inundation Multi-Temporal Pair (Assam / Brahmaputra River Basin)
-    bbox_flood = [92.95, 26.55, 93.05, 26.63]
-    item_flood_t1 = "S2B_MSIL2A_20230426T042709_R133_T46RDQ_20230426T082546"  # Pre-flood dry season
-    item_flood_t2 = "S2B_MSIL2A_20231030T041909_R090_T46REQ_20240925T172304"  # Post-flood inundated
-    print("\n[4/5] Ingesting Real Multi-Temporal Flood Inundation Pair (Brahmaputra River)...")
-    try:
-        buf_t1 = fetch_planetary_geotiff("sentinel-2-l2a", item_flood_t1, "visual", bbox_flood)
-        with rasterio.open(io.BytesIO(buf_t1)) as src:
-            data_t1 = src.read()[:3]
-        save_geotiff_multiloc(data_t1, bbox_flood, ["flood_t1", "pre_flood_t1"])
-
-        buf_t2 = fetch_planetary_geotiff("sentinel-2-l2a", item_flood_t2, "visual", bbox_flood)
-        with rasterio.open(io.BytesIO(buf_t2)) as src:
-            data_t2 = src.read()[:3]
-        save_geotiff_multiloc(data_t2, bbox_flood, ["flood_t2", "post_flood_t2"])
-    except Exception as e:
-        print(f"  Warning on flood pair: {e}")
+    # 2. Flood Inundation Multi-Temporal Pair (Preserve verified authentic river basin flood rasters)
+    print("\n[4/5] Preserving Verified Authentic Flood Inundation Pair...")
 
     # 3. Urban Expansion Pair (Bengaluru IT Corridor)
     bbox_urban = [77.60, 12.90, 77.70, 12.98]

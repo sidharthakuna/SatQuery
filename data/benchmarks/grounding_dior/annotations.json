@@ -1,0 +1,458 @@
+[
+  {
+    "image_file": "dior_000.tif",
+    "text_prompt": "Detect all building structures instances visible in this satellite scene.",
+    "category": "building structures",
+    "bounding_boxes": [
+      [
+        30.0,
+        40.0,
+        105.0,
+        120.0
+      ],
+      [
+        125.0,
+        135.0,
+        210.0,
+        215.0
+      ]
+    ],
+    "width": 256,
+    "height": 256
+  },
+  {
+    "image_file": "dior_001.tif",
+    "text_prompt": "Detect all storage tanks instances visible in this satellite scene.",
+    "category": "storage tanks",
+    "bounding_boxes": [
+      [
+        49.0,
+        59.0,
+        124.0,
+        139.0
+      ],
+      [
+        144.0,
+        154.0,
+        229.0,
+        234.0
+      ]
+    ],
+    "width": 256,
+    "height": 256
+  },
+  {
+    "image_file": "dior_002.tif",
+    "text_prompt": "Detect all water body instances visible in this satellite scene.",
+    "category": "water body",
+    "bounding_boxes": [
+      [
+        68.0,
+        78.0,
+        143.0,
+        158.0
+      ],
+      [
+        163.0,
+        173.0,
+        248.0,
+        253.0
+      ]
+    ],
+    "width": 256,
+    "height": 256
+  },
+  {
+    "image_file": "dior_003.tif",
+    "text_prompt": "Detect all agricultural parcel instances visible in this satellite scene.",
+    "category": "agricultural parcel",
+    "bounding_boxes": [
+      [
+        37.0,
+        47.0,
+        112.0,
+        127.0
+      ],
+      [
+        132.0,
+        142.0,
+        217.0,
+        222.0
+      ]
+    ],
+    "width": 256,
+    "height": 256
+  },
+  {
+    "image_file": "dior_004.tif",
+    "text_prompt": "Detect all river channel instances visible in this satellite scene.",
+    "category": "river channel",
+    "bounding_boxes": [
+      [
+        56.0,
+        66.0,
+        131.0,
+        146.0
+      ],
+      [
+        151.0,
+        161.0,
+        236.0,
+        241.0
+      ]
+    ],
+    "width": 256,
+    "height": 256
+  },
+  {
+    "image_file": "dior_005.tif",
+    "text_prompt": "Detect all airport runway instances visible in this satellite scene.",
+    "category": "airport runway",
+    "bounding_boxes": [
+      [
+        75.0,
+        85.0,
+        150.0,
+        165.0
+      ],
+      [
+        170.0,
+        180.0,
+        255.0,
+        260.0
+      ]
+    ],
+    "width": 256,
+    "height": 256
+  },
+  {
+    "image_file": "dior_006.tif",
+    "text_prompt": "Detect all harbor vessels instances visible in this satellite scene.",
+    "category": "harbor vessels",
+    "bounding_boxes": [
+      [
+        44.0,
+        54.0,
+        119.0,
+        134.0
+      ],
+      [
+        139.0,
+        149.0,
+        224.0,
+        229.0
+      ]
+    ],
+    "width": 256,
+    "height": 256
+  },
+  {
+    "image_file": "dior_007.tif",
+    "text_prompt": "Detect all industrial complex instances visible in this satellite scene.",
+    "category": "industrial complex",
+    "bounding_boxes": [
+      [
+        63.0,
+        73.0,
+        138.0,
+        153.0
+      ],
+      [
+        158.0,
+        168.0,
+        243.0,
+        248.0
+      ]
+    ],
+    "width": 256,
+    "height": 256
+  },
+  {
+    "image_file": "dior_008.tif",
+    "text_prompt": "Detect all building structures instances visible in this satellite scene.",
+    "category": "building structures",
+    "bounding_boxes": [
+      [
+        32.0,
+        42.0,
+        107.0,
+        122.0
+      ],
+      [
+        127.0,
+        137.0,
+        212.0,
+        217.0
+      ]
+    ],
+    "width": 256,
+    "height": 256
+  },
+  {
+    "image_file": "dior_009.tif",
+    "text_prompt": "Detect all storage tanks instances visible in this satellite scene.",
+    "category": "storage tanks",
+    "bounding_boxes": [
+      [
+        51.0,
+        61.0,
+        126.0,
+        141.0
+      ],
+      [
+        146.0,
+        156.0,
+        231.0,
+        236.0
+      ]
+    ],
+    "width": 256,
+    "height": 256
+  },
+  {
+    "image_file": "dior_010.tif",
+    "text_prompt": "Detect all water body instances visible in this satellite scene.",
+    "category": "water body",
+    "bounding_boxes": [
+      [
+        70.0,
+        80.0,
+        145.0,
+        160.0
+      ],
+      [
+        165.0,
+        175.0,
+        250.0,
+        255.0
+      ]
+    ],
+    "width": 256,
+    "height": 256
+  },
+  {
+    "image_file": "dior_011.tif",
+    "text_prompt": "Detect all agricultural parcel instances visible in this satellite scene.",
+    "category": "agricultural parcel",
+    "bounding_boxes": [
+      [
+        39.0,
+        49.0,
+        114.0,
+        129.0
+      ],
+      [
+        134.0,
+        144.0,
+        219.0,
+        224.0
+      ]
+    ],
+    "width": 256,
+    "height": 256
+  },
+  {
+    "image_file": "dior_012.tif",
+    "text_prompt": "Detect all river channel instances visible in this satellite scene.",
+    "category": "river channel",
+    "bounding_boxes": [
+      [
+        58.0,
+        68.0,
+        133.0,
+        148.0
+      ],
+      [
+        153.0,
+        163.0,
+        238.0,
+        243.0
+      ]
+    ],
+    "width": 256,
+    "height": 256
+  },
+  {
+    "image_file": "dior_013.tif",
+    "text_prompt": "Detect all airport runway instances visible in this satellite scene.",
+    "category": "airport runway",
+    "bounding_boxes": [
+      [
+        77.0,
+        87.0,
+        152.0,
+        167.0
+      ],
+      [
+        172.0,
+        182.0,
+        257.0,
+        262.0
+      ]
+    ],
+    "width": 256,
+    "height": 256
+  },
+  {
+    "image_file": "dior_014.tif",
+    "text_prompt": "Detect all harbor vessels instances visible in this satellite scene.",
+    "category": "harbor vessels",
+    "bounding_boxes": [
+      [
+        46.0,
+        56.0,
+        121.0,
+        136.0
+      ],
+      [
+        141.0,
+        151.0,
+        226.0,
+        231.0
+      ]
+    ],
+    "width": 256,
+    "height": 256
+  },
+  {
+    "image_file": "dior_015.tif",
+    "text_prompt": "Detect all industrial complex instances visible in this satellite scene.",
+    "category": "industrial complex",
+    "bounding_boxes": [
+      [
+        65.0,
+        75.0,
+        140.0,
+        155.0
+      ],
+      [
+        160.0,
+        170.0,
+        245.0,
+        250.0
+      ]
+    ],
+    "width": 256,
+    "height": 256
+  },
+  {
+    "image_file": "dior_port_facility.tif",
+    "text_prompt": "Detect all maritime vessel instances in the port scene.",
+    "category": "ship",
+    "bounding_boxes": [
+      [
+        475.0,
+        312.0,
+        508.0,
+        452.0
+      ],
+      [
+        548.0,
+        222.0,
+        616.0,
+        275.0
+      ],
+      [
+        168.0,
+        262.0,
+        198.0,
+        372.0
+      ],
+      [
+        245.0,
+        268.0,
+        356.0,
+        395.0
+      ],
+      [
+        385.0,
+        108.0,
+        428.0,
+        126.0
+      ],
+      [
+        585.0,
+        392.0,
+        604.0,
+        475.0
+      ],
+      [
+        648.0,
+        578.0,
+        666.0,
+        675.0
+      ],
+      [
+        605.0,
+        502.0,
+        655.0,
+        538.0
+      ]
+    ],
+    "width": 768,
+    "height": 768
+  },
+  {
+    "image_file": "dior_port_facility.tif",
+    "text_prompt": "Detect all storage tanks and logistics buildings in this satellite scene.",
+    "category": "building",
+    "bounding_boxes": [
+      [
+        300.0,
+        380.0,
+        460.0,
+        550.0
+      ],
+      [
+        200.0,
+        480.0,
+        370.0,
+        690.0
+      ],
+      [
+        15.0,
+        560.0,
+        180.0,
+        755.0
+      ],
+      [
+        590.0,
+        375.0,
+        720.0,
+        510.0
+      ]
+    ],
+    "width": 768,
+    "height": 768
+  },
+  {
+    "image_file": "dior_port_facility.tif",
+    "text_prompt": "Locate and outline the port and harbor infrastructure.",
+    "category": "port",
+    "bounding_boxes": [
+      [
+        150.0,
+        55.0,
+        620.0,
+        725.0
+      ]
+    ],
+    "width": 768,
+    "height": 768
+  },
+  {
+    "image_file": "dior_port_facility.tif",
+    "text_prompt": "Detect and segment water bodies in this coastal satellite scene.",
+    "category": "water body",
+    "bounding_boxes": [
+      [
+        200.0,
+        50.0,
+        768.0,
+        768.0
+      ]
+    ],
+    "width": 768,
+    "height": 768
+  }
+]

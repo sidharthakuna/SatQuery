@@ -29,6 +29,7 @@ import { DisasterAssessmentCard } from './DisasterAssessmentCard';
 import { OpticalSarFusionCard } from './OpticalSarFusionCard';
 import { GroundingDinoCard } from './GroundingDinoCard';
 import { MultiModelAnalysisCard } from './MultiModelAnalysisCard';
+import { DynamicTelemetryChart } from '../visualization/DynamicTelemetryChart';
 import { SatQueryAPI } from '../../services/api';
 
 interface ChatMessageItemProps {
@@ -161,8 +162,16 @@ export const ChatMessageItem: React.FC<ChatMessageItemProps> = ({ message }) => 
   const groundingCard = (spatial?.extra?.grounding_card as any) || (result?.spatial_evidence?.extra?.grounding_card as any);
   const multiModelCard = (spatial?.extra?.multi_model_card as any) || (result?.spatial_evidence?.extra?.multi_model_card as any);
   const vqaGrounding = result?.vqa_grounding || (spatial as any)?.vqa_grounding;
+  const chartData = (result?.chart_data || spatial?.chart_data || (spatial?.extra?.chart_data as any)) || null;
   const hasRichCard = Boolean(
-    bitemporalCard || disasterCard || vqaGrounding || opticalSarCard || groundingCard || multiModelCard
+    bitemporalCard ||
+      disasterCard ||
+      vqaGrounding ||
+      opticalSarCard ||
+      groundingCard ||
+      multiModelCard ||
+      chartData ||
+      (!isConversational && (primaryThumb || spatial?.mask_url || (boxes && boxes.length > 0)))
   );
 
   return (
@@ -306,126 +315,69 @@ export const ChatMessageItem: React.FC<ChatMessageItemProps> = ({ message }) => 
           </div>
         ) : null}
 
-        {/* ── Sleek Satellite Intelligence & Evidence Banner (Links to Right Workspace) ── */}
-        {!isConversational && result && !message.isStreaming && (
-          <div className="mt-4 rounded-2xl border border-[var(--border-subtle)] bg-[var(--bg-card)]/90 hover:bg-[var(--bg-card)] p-4 shadow-sm transition-all space-y-3.5">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-[var(--border-subtle)]/70">
-              <div className="flex items-center gap-2.5">
-                <div className="w-8 h-8 rounded-xl bg-sky-500/10 border border-sky-500/20 flex items-center justify-center text-sky-400 shrink-0">
-                  <Satellite className="w-4 h-4" />
-                </div>
-                <div>
-                  <h4 className="font-semibold text-xs text-[var(--text-main)] flex items-center gap-1.5">
-                    <span>Satellite Evidence & Geospatial Briefing</span>
-                    <Badge variant="success" className="text-[9px]">READY</Badge>
-                  </h4>
-                  <span className="text-[11px] font-mono text-[var(--text-dim)]">
-                    {trace?.task_identified || 'Earth Observation'} • {spatial?.changed_area_hectares ? `${spatial.changed_area_hectares.toFixed(1)} ha detected` : `${boxes.length} targets isolated`}
-                  </span>
-                </div>
-              </div>
+        {/* ── Cartographic Satellite Intelligence Displays (Model-wise & Interactive) ── */}
+        {!isConversational && !message.isStreaming && disasterCard && (
+          <DisasterAssessmentCard
+            data={disasterCard}
+            onOpenPdf={result ? () => handleOpenPdf() : undefined}
+            onDownloadGeoJson={hasGeoJsonFeatures ? handleDownloadGeoJson : undefined}
+          />
+        )}
 
-              <button
-                type="button"
-                onClick={handleOpenTelemetry}
-                className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-[#0EA5E9] hover:bg-[#0284C7] text-white text-xs font-medium shadow-xs hover:shadow-sm transition-all cursor-pointer whitespace-nowrap self-start sm:self-auto"
-              >
-                <span>Open Briefing & Images in Workspace</span>
-                <ArrowRight className="w-3.5 h-3.5" />
-              </button>
-            </div>
+        {!isConversational && !message.isStreaming && !disasterCard && bitemporalCard && (
+          <BitemporalChangeCard
+            data={bitemporalCard}
+            onOpenPdf={result ? () => handleOpenPdf() : undefined}
+          />
+        )}
 
-            {/* Visual Thumbnail Gallery */}
-            <div className="flex items-center gap-3 overflow-x-auto py-1">
-              {primaryThumb && (
-                <div
-                  onClick={handleOpenTelemetry}
-                  className="flex items-center gap-2.5 p-2 rounded-xl bg-[var(--bg-surface)] border border-[var(--border-subtle)] hover:border-sky-500/40 cursor-pointer transition-all shrink-0 group"
-                  title="Click to inspect primary satellite scene"
-                >
-                  <img
-                    src={primaryThumb}
-                    alt="Baseline Scene"
-                    className="w-10 h-10 rounded-lg object-cover border border-slate-700/50 bg-black"
-                    onError={(e) => {
-                      (e.currentTarget as HTMLImageElement).src = SatQueryAPI.getRasterPreviewUrl('cartosat_t1.tif');
-                    }}
-                  />
-                  <div className="text-[10.5px] font-mono pr-1">
-                    <span className="block text-[var(--text-main)] font-semibold truncate max-w-[120px] group-hover:text-sky-400 transition-colors">
-                      {primaryImage?.filename || 'baseline_t1.tif'}
-                    </span>
-                    <span className="text-sky-400 font-semibold">{primaryImage?.modality || 'OPTICAL'}</span>
-                  </div>
-                </div>
-              )}
+        {!isConversational && !message.isStreaming && !disasterCard && !bitemporalCard && opticalSarCard && (
+          <OpticalSarFusionCard
+            data={opticalSarCard}
+            onOpenPdf={result ? () => handleOpenPdf() : undefined}
+          />
+        )}
 
-              {secondaryThumb && (
-                <div
-                  onClick={handleOpenTelemetry}
-                  className="flex items-center gap-2.5 p-2 rounded-xl bg-[var(--bg-surface)] border border-[var(--border-subtle)] hover:border-purple-500/40 cursor-pointer transition-all shrink-0 group"
-                  title="Click to inspect secondary surveillance scene"
-                >
-                  <img
-                    src={secondaryThumb}
-                    alt="Surveillance Scene"
-                    className="w-10 h-10 rounded-lg object-cover border border-slate-700/50 bg-black"
-                    onError={(e) => {
-                      (e.currentTarget as HTMLImageElement).src = SatQueryAPI.getRasterPreviewUrl('cartosat_t2.tif');
-                    }}
-                  />
-                  <div className="text-[10.5px] font-mono pr-1">
-                    <span className="block text-[var(--text-main)] font-semibold truncate max-w-[120px] group-hover:text-purple-400 transition-colors">
-                      {secondaryImage?.filename || 'surveillance_t2.tif'}
-                    </span>
-                    <span className="text-purple-400 font-semibold">{secondaryImage?.modality || 'SAR'}</span>
-                  </div>
-                </div>
-              )}
+        {!isConversational && !message.isStreaming && !disasterCard && !bitemporalCard && !opticalSarCard && groundingCard && (
+          <GroundingDinoCard
+            data={groundingCard}
+            onOpenPdf={result ? () => handleOpenPdf() : undefined}
+          />
+        )}
 
-              {(spatial?.mask_url || vqaGrounding?.overlay_url) && (
-                <div
-                  onClick={handleOpenTelemetry}
-                  className="flex items-center gap-2.5 p-2 rounded-xl bg-[var(--bg-surface)] border border-[var(--border-subtle)] hover:border-emerald-500/40 cursor-pointer transition-all shrink-0 group"
-                  title="Click to inspect delineated output raster"
-                >
-                  <img
-                    src={SatQueryAPI.getRasterPreviewUrl(vqaGrounding?.overlay_url || spatial?.mask_url || '')}
-                    alt="Output Evidence"
-                    className="w-10 h-10 rounded-lg object-cover border border-slate-700/50 bg-black"
-                    onError={(e) => {
-                      (e.currentTarget as HTMLImageElement).src = primaryThumb || SatQueryAPI.getRasterPreviewUrl('cartosat_t1.tif');
-                    }}
-                  />
-                  <div className="text-[10.5px] font-mono pr-1">
-                    <span className="block text-emerald-400 font-semibold truncate max-w-[120px] group-hover:text-emerald-300 transition-colors">
-                      Output Analysis
-                    </span>
-                    <span className="text-[var(--text-dim)]">GeoTIFF Mask / Overlay</span>
-                  </div>
-                </div>
-              )}
-            </div>
+        {!isConversational && !message.isStreaming && !disasterCard && !bitemporalCard && !opticalSarCard && !groundingCard && multiModelCard && (
+          <MultiModelAnalysisCard
+            data={multiModelCard}
+            onOpenPdf={result ? () => handleOpenPdf() : undefined}
+            onQueryClick={(q) => submitQuery(q, message.images && message.images.length > 0 ? message.images : undefined)}
+          />
+        )}
 
-            {/* Quick Metrics Bar */}
-            <div className="flex flex-wrap items-center gap-2 pt-1 text-[11px] font-mono text-[var(--text-muted)]">
-              {spatial?.changed_area_hectares !== undefined && spatial.changed_area_hectares !== null && (
-                <span className="px-2 py-0.5 rounded-md bg-sky-500/10 text-sky-400 border border-sky-500/20">
-                  Delineated Area: {spatial.changed_area_hectares.toFixed(1)} ha
-                </span>
-              )}
-              {clusters && clusters.length > 0 && (
-                <span className="px-2 py-0.5 rounded-md bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
-                  {clusters.length} Safe / Grounded Sectors
-                </span>
-              )}
-              {trace?.confidence_score !== undefined && (
-                <span className="px-2 py-0.5 rounded-md bg-[var(--bg-surface)] text-[var(--text-main)] border border-[var(--border-subtle)]">
-                  Confidence: {(trace.confidence_score * 100).toFixed(0)}%
-                </span>
-              )}
-            </div>
-          </div>
+        {!isConversational && !message.isStreaming && !multiModelCard && !opticalSarCard && !groundingCard && !bitemporalCard && !disasterCard && (primaryThumb || spatial?.mask_url || vqaGrounding?.overlay_url || boxes.length > 0) && (
+          <CartographicIntelligenceViewer
+            image1Url={primaryThumb || spatial?.mask_url || ''}
+            image2Url={secondaryThumb || undefined}
+            maskUrl={vqaGrounding?.overlay_url || spatial?.mask_url}
+            boxes={boxes}
+            label1={primaryImage?.filename || (primaryThumb ? 'pre_event_t1.tif' : 'spatial_evidence.tif')}
+            label2={secondaryImage?.filename || 'surveillance_t2.tif'}
+            modality1={primaryImage?.modality || 'OPTICAL'}
+            modality2={secondaryImage?.modality || 'SAR'}
+            taskType={trace?.task_identified}
+            clusters={clusters}
+            changedAreaHectares={spatial?.changed_area_hectares}
+            changedAreaPercent={spatial?.changed_area_percent}
+            confidence={trace?.confidence_score}
+            bounds={primaryImage?.bounds_latlon || null}
+            gsd_m={(primaryImage as any)?.gsd_m || (primaryImage as any)?.spatial_resolution_m || null}
+            fileId={primaryImage?.file_id || null}
+            onOpenPdf={result ? () => handleOpenPdf() : undefined}
+          />
+        )}
+
+        {/* Dynamic Geospatial Telemetry Chart */}
+        {!isConversational && !message.isStreaming && chartData && (
+          <DynamicTelemetryChart data={chartData} />
         )}
 
         {/* Interactive Follow-Up Suggestion Chips (ChatGPT/Claude Style) */}

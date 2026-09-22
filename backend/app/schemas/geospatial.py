@@ -28,6 +28,7 @@ class GeoTIFFMetadata(BaseModel):
     dtypes: List[str] = Field(default_factory=list)
     modality: str = Field("OPTICAL", description="OPTICAL or SAR")
     resolution: Optional[Union[tuple, List[float]]] = None
+    gsd_m: Optional[float] = Field(default=None, description="Ground Sampling Distance in meters per pixel")
     bounds_latlon: Optional[GeoBoundsLatLon] = None
     file_size_bytes: int = 0
     thumbnail_url: Optional[str] = None

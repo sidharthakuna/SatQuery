@@ -1,0 +1,320 @@
+{
+  "timestamp": "2026-09-21 05:18:04 UTC",
+  "devices": "Local PyTorch CPU/CUDA",
+  "datasets": [
+    "NASA Landsat-8 Level-2 (LC08_L2SP_142051)",
+    "ESA Copernicus Sentinel-2 L2A (S2B_MSIL2A)",
+    "ESA Copernicus Sentinel-1 RTC C-Band SAR (S1A_IW_GRDH)",
+    "ISRO Space Applications Centre (SAC Ahmedabad AOI)",
+    "ISRO Satish Dhawan Space Centre (SHAR Sriharikota AOI)",
+    "Brahmaputra Basin Floodplain & Bengaluru Urban Corridor"
+  ],
+  "models_evaluated": {
+    "rs_vlm": [
+      {
+        "dataset": "NASA Landsat-8 Level-2 (ISRO SDSC SHAR Spaceport)",
+        "raster": "nasa_landsat_sriharikota.tif",
+        "bounds": [
+          80.18,
+          13.68,
+          80.28,
+          13.76
+        ],
+        "query": "What coastal features, barrier island geography, and facilities are visible at Sriharikota?",
+        "answer": "urban settlement with road with and and and"
+      },
+      {
+        "dataset": "Copernicus Sentinel-2 L2A (ISRO SAC Ahmedabad)",
+        "raster": "isro_ahmedabad_sac.tif",
+        "bounds": [
+          72.5,
+          23.0,
+          72.58,
+          23.08
+        ],
+        "query": "What urban infrastructure and institutional campus features are detected in this scene?",
+        "answer": "urban settlement with road with and and and"
+      },
+      {
+        "dataset": "Copernicus Sentinel-2 L2A (Western Ghats Nilgiris Biosphere)",
+        "raster": "forest_vqa.tif",
+        "bounds": [
+          76.5,
+          11.4,
+          76.6,
+          11.48
+        ],
+        "query": "What forest canopy density and vegetative biomass features are present in this scene?",
+        "answer": "urban settlement with road with and and and"
+      },
+      {
+        "dataset": "Copernicus Sentinel-2 L2A (Visakhapatnam Deepwater Sea Port)",
+        "raster": "sentinel2_coastal.tif",
+        "bounds": [
+          83.24,
+          17.66,
+          83.34,
+          17.74
+        ],
+        "query": "Describe the port maritime infrastructure, breakwater boundaries, and harbor waters.",
+        "answer": "urban settlement with road with and and and"
+      }
+    ],
+    "grounding_dino": [
+      {
+        "target": "Visakhapatnam Deepwater Sea Port",
+        "raster": "port_grounding.tif",
+        "prompt": "shipping vessels, maritime berths, and cargo fuel tanks",
+        "detections": [
+          {
+            "rank": 1,
+            "confidence": 1.0,
+            "pixel_box": [
+              0.619,
+              0.201,
+              0.059,
+              0.013
+            ],
+            "geo_coords": [
+              83.2413,
+              17.6905,
+              83.2601,
+              17.7353
+            ]
+          },
+          {
+            "rank": 2,
+            "confidence": 1.0,
+            "pixel_box": [
+              0.534,
+              0.432,
+              0.038,
+              0.049
+            ],
+            "geo_coords": [
+              83.2449,
+              17.6972,
+              83.2832,
+              17.7369
+            ]
+          },
+          {
+            "rank": 3,
+            "confidence": 0.014,
+            "pixel_box": [
+              0.387,
+              0.361,
+              0.005,
+              0.03
+            ],
+            "geo_coords": [
+              83.243,
+              17.709,
+              83.2761,
+              17.7396
+            ]
+          },
+          {
+            "rank": 4,
+            "confidence": 0.001,
+            "pixel_box": [
+              0.2,
+              0.299,
+              0.017,
+              0.055
+            ],
+            "geo_coords": [
+              83.2455,
+              17.724,
+              83.2699,
+              17.7387
+            ]
+          }
+        ]
+      },
+      {
+        "target": "Sriharikota ISRO Spaceport (NASA Landsat-8)",
+        "raster": "nasa_landsat_sriharikota.tif",
+        "prompt": "launchpad complex, technical road grid, and shoreline barrier",
+        "detections": [
+          {
+            "rank": 1,
+            "confidence": 0.951,
+            "pixel_box": [
+              0.603,
+              0.447,
+              0.119,
+              0.154
+            ],
+            "geo_coords": [
+              80.1954,
+              13.7117,
+              80.2247,
+              13.7505
+            ]
+          },
+          {
+            "rank": 2,
+            "confidence": 0.86,
+            "pixel_box": [
+              0.702,
+              0.286,
+              0.106,
+              0.052
+            ],
+            "geo_coords": [
+              80.1852,
+              13.7039,
+              80.2086,
+              13.7515
+            ]
+          },
+          {
+            "rank": 3,
+            "confidence": 0.281,
+            "pixel_box": [
+              0.817,
+              0.766,
+              0.397,
+              0.273
+            ],
+            "geo_coords": [
+              80.2073,
+              13.6946,
+              80.2566,
+              13.7283
+            ]
+          },
+          {
+            "rank": 4,
+            "confidence": 0.113,
+            "pixel_box": [
+              0.748,
+              0.331,
+              0.416,
+              0.242
+            ],
+            "geo_coords": [
+              80.2042,
+              13.7002,
+              80.2131,
+              13.7267
+            ]
+          }
+        ]
+      }
+    ],
+    "changeformer": [
+      {
+        "scenario": "Brahmaputra Flood Basin (Pre-Flood Dry Season vs Post-Monsoon Inundation)",
+        "mission": "Disaster Inundation Assessment",
+        "t1": "flood_t1.tif",
+        "t2": "flood_t2.tif",
+        "bounds": [
+          92.95,
+          26.55,
+          93.05,
+          26.63
+        ],
+        "change_pct": 84.7,
+        "area_sq_km": 74.66,
+        "area_hectares": 7465.6
+      },
+      {
+        "scenario": "Bengaluru Tech Corridor (Multi-temporal Urban Expansion)",
+        "mission": "Urban Growth & Land Cover Conversion",
+        "t1": "urban_t1.tif",
+        "t2": "urban_t2.tif",
+        "bounds": [
+          77.6,
+          12.9,
+          77.7,
+          12.98
+        ],
+        "change_pct": 46.5,
+        "area_sq_km": 44.67,
+        "area_hectares": 4467.3
+      }
+    ],
+    "optical_sar_fusion": {
+      "aoi": "Visakhapatnam Port",
+      "cloudy_raster": "fusion_optical.tif",
+      "sar_raster": "fusion_sar.tif",
+      "confidence_pct": 54.5,
+      "cloudy_psnr_db": 8.630000114440918,
+      "reconstructed_psnr_db": 11.109999656677246,
+      "psnr_gain_db": 2.4800000190734863
+    },
+    "agent_intent_router": [
+      {
+        "query": "What is the vegetation density and NDVI index across the Nilgiris biosphere reserve?",
+        "predicted": "SINGLE_VQA",
+        "confidence": 93.9,
+        "status": "PASSED"
+      },
+      {
+        "query": "Detect and localize all cargo vessels and dry docks inside Visakhapatnam port.",
+        "predicted": "SINGLE_GROUNDING",
+        "confidence": 93.9,
+        "status": "PASSED"
+      },
+      {
+        "query": "Measure the flood inundation surface change between April and October in Brahmaputra.",
+        "predicted": "BITEMPORAL_CHANGE",
+        "confidence": 92.3,
+        "status": "PASSED"
+      },
+      {
+        "query": "Pierce through cloud obscuration over the harbor using Sentinel-1 C-band SAR radar.",
+        "predicted": "CROSS_MODAL_FUSION",
+        "confidence": 94.2,
+        "status": "PASSED"
+      },
+      {
+        "query": "Explain Cartosat-3 spatial resolution and technical payload specifications.",
+        "predicted": "AGENT_ASSISTANT",
+        "confidence": 84.5,
+        "status": "PASSED"
+      },
+      {
+        "query": "Identify flooded villages in Assam and draw bounding boxes around inundated structures.",
+        "predicted": "MULTI_MODEL",
+        "confidence": 91.0,
+        "status": "PASSED"
+      }
+    ],
+    "domain_knowledge": [
+      {
+        "query": "What are the payload details, swath, and spatial resolution of ISRO Cartosat-3?",
+        "title": "ISRO Cartosat Satellite Constellation",
+        "score": 0.785,
+        "snippet": "ISRO's Cartosat series represents India's dedicated high-resolution optical Earth observation constellation. Cartosat-1 provided 2.5m stereo"
+      },
+      {
+        "query": "Explain how ISRO RISAT-1A / EOS-04 C-band radar penetrates tropical monsoon clouds.",
+        "title": "ISRO RISAT Series & Microwave Radar (EOS-04)",
+        "score": 0.937,
+        "snippet": "RISAT (Radar Imaging Satellite) and EOS-04 are ISRO's active microwave Synthetic Aperture Radar (SAR) spacecraft. Operating at C-band freque"
+      },
+      {
+        "query": "What are the specifications of the NASA-ISRO NISAR dual-frequency L-band and S-band SAR?",
+        "title": "NASA-ISRO SAR (NISAR) Dual-Frequency Radar Mission",
+        "score": 0.875,
+        "snippet": "NISAR is a groundbreaking joint mission between NASA and ISRO featuring dual-frequency SweepSAR radar. NASA provides the L-band SAR (1.25 GH"
+      },
+      {
+        "query": "What are the spectral bands and revisit period of NASA Landsat-8 and Landsat-9 OLI?",
+        "title": "NASA / USGS Landsat Constellation (Landsat-8 & Landsat-9)",
+        "score": 0.928,
+        "snippet": "NASA and USGS operate Landsat-8 and Landsat-9 in sun-synchronous polar orbits at 705km altitude. Both carry the Operational Land Imager (OLI"
+      },
+      {
+        "query": "What are NDMA national flood inundation and reservoir buffer safety regulations?",
+        "title": "NDMA & CWC Flood Inundation Assessment Protocols",
+        "score": 0.821,
+        "snippet": "Under National Disaster Management Authority (NDMA) and Central Water Commission (CWC) guidelines, satellite-derived flood maps support rapi"
+      }
+    ]
+  },
+  "execution_time_seconds": 1.35
+}

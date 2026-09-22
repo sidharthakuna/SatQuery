@@ -8,7 +8,7 @@ import time
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, BackgroundTasks, HTTPException
 from fastapi.responses import FileResponse
 from pydantic import BaseModel, Field
 
@@ -63,7 +63,7 @@ class ReportResponse(BaseModel):
         "analysis results, geospatial evidence proof, execution audit trace, and multi-model AI audit."
     ),
 )
-async def generate_report(request: ReportRequest):
+async def generate_report(request: ReportRequest, background_tasks: BackgroundTasks):
     """Create a downloadable mission briefing PDF and Word (.docx) dossier."""
     try:
         # Fallback extraction of thumbnails and mask if caller omitted explicit fields
@@ -99,8 +99,8 @@ async def generate_report(request: ReportRequest):
         report_id = pdf_file.stem.replace("briefing_", "")
         docx_file = settings.report_dir / f"briefing_{report_id}.docx"
 
-        # Clean up orphaned reports older than 24 hours in background thread
-        asyncio.create_task(asyncio.to_thread(_cleanup_old_reports))
+        # Clean up orphaned reports older than 24 hours in background task
+        background_tasks.add_task(_cleanup_old_reports)
 
         return ReportResponse(
             report_id=report_id,

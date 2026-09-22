@@ -58,9 +58,11 @@ class InputCompatibilityGuard:
 
         # --- Check file format ---
         for meta in image_metas:
-            ext = Path(meta.file_path).suffix.lower()
-            if ext not in SUPPORTED_EXTENSIONS:
-                errors.append(f"Unsupported format for {meta.file_path}: '{ext}'")
+            file_ref = meta.file_path or getattr(meta, "filename", "") or ""
+            if file_ref:
+                ext = Path(file_ref).suffix.lower()
+                if ext and ext not in SUPPORTED_EXTENSIONS:
+                    errors.append(f"Unsupported format for {file_ref}: '{ext}'")
 
         # --- Check band counts ---
         for meta in image_metas:

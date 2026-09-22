@@ -1,27 +1,10 @@
 # ============================================================
-# Large binary files - store in cloud storage (HuggingFace/GDrive)
+# Runtime caches & temporary uploads
 # ============================================================
-
-# Model checkpoints & weights
-*.pt
-*.pth
-*.ckpt
-*.safetensors
-backend/data/checkpoints/
-backend/models/weights/
-
-# Satellite imagery & GeoTIFF files (large binary)
-*.tif
-*.tiff
-*.geotiff
-
-# PDF reports (generated at runtime)
-*.pdf
-backend/data/reports/
-
-# Large data directories
-backend/data/
-data/
+backend/data/uploads/*
+!backend/data/uploads/.gitkeep
+backend/data/reports/*.pdf
+backend/data/reports/*.docx
 
 # ============================================================
 # Python
@@ -89,8 +72,6 @@ data/*.json
 *.pkl
 *.pickle
 
-# Scratch / temp
-scratch/
 
 # Jupyter
 .ipynb_checkpoints/

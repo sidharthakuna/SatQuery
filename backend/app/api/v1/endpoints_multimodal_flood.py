@@ -57,11 +57,13 @@ async def analyze_multimodal_flood(request: MultimodalFloodRequest):
     if request.optical_image_id:
         opt_file = find_uploaded_file(request.optical_image_id)
     if not opt_file or not Path(opt_file).exists():
-        opt_file = settings.samples_dir / "public_flood_cloudy_optical.tif"
+        opt_file = settings.samples_dir / "fusion_optical.tif"
+        if not opt_file.exists():
+            opt_file = settings.samples_dir / "public_flood_cloudy_optical.tif"
     
     if opt_file and Path(opt_file).exists():
         try:
-            image_metas.append(inspect_geotiff(str(opt_file), file_id=request.optical_image_id or "public_flood_cloudy_optical"))
+            image_metas.append(inspect_geotiff(str(opt_file), file_id=request.optical_image_id or opt_file.stem))
         except Exception as e:
             logger.warning(f"Error inspecting optical raster {opt_file}: {e}")
 
@@ -70,11 +72,13 @@ async def analyze_multimodal_flood(request: MultimodalFloodRequest):
     if request.sar_image_id:
         sar_file = find_uploaded_file(request.sar_image_id)
     if not sar_file or not Path(sar_file).exists():
-        sar_file = settings.samples_dir / "public_flood_sentinel1_sar.tif"
+        sar_file = settings.samples_dir / "fusion_sar.tif"
+        if not sar_file.exists():
+            sar_file = settings.samples_dir / "public_flood_sentinel1_sar.tif"
 
     if sar_file and Path(sar_file).exists():
         try:
-            image_metas.append(inspect_geotiff(str(sar_file), file_id=request.sar_image_id or "public_flood_sentinel1_sar"))
+            image_metas.append(inspect_geotiff(str(sar_file), file_id=request.sar_image_id or sar_file.stem))
         except Exception as e:
             logger.warning(f"Error inspecting SAR raster {sar_file}: {e}")
 

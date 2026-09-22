@@ -51,7 +51,7 @@ export const ChatContainer: React.FC = () => {
         {messages.map((msg) => (
           <ChatMessageItem key={msg.id} message={msg} />
         ))}
-        <div ref={bottomAnchorRef} className="h-4" />
+        <div ref={bottomAnchorRef} className="h-16" />
       </div>
 
       {/* Floating Scroll to Bottom Button */}

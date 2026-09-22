@@ -125,7 +125,8 @@ class InputIntelligenceGate:
                     # Optical Cloud Contamination Check
                     if idx < len(modalities) and modalities[idx] == "OPTICAL" and arr.ndim >= 2:
                         # Normalize to 0..1 if raw 8-bit or 16-bit
-                        norm_arr = arr / (255.0 if arr.max() > 1.0 else 1.0)
+                        max_v = float(arr.max()) if arr.size > 0 and arr.max() > 1.0 else 1.0
+                        norm_arr = arr / max(max_v, 255.0)
                         if norm_arr.ndim == 3 and norm_arr.shape[0] >= 3:
                             r, g, b = norm_arr[0], norm_arr[1], norm_arr[2]
                             lum = 0.299 * r + 0.587 * g + 0.114 * b

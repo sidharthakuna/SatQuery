@@ -12,6 +12,7 @@ export interface StreamQueryCallbacks {
 export class SatQueryWebSocket {
   private ws: WebSocket | null = null;
   private isClosedManually = false;
+  private connectTimeout: ReturnType<typeof setTimeout> | null = null;
 
   /**
    * Execute query with streaming execution trace via WebSocket.
@@ -23,6 +24,10 @@ export class SatQueryWebSocket {
     callbacks: StreamQueryCallbacks,
     history?: { role: string; content: string }[]
   ): () => void {
+    if (this.connectTimeout) {
+      clearTimeout(this.connectTimeout);
+      this.connectTimeout = null;
+    }
     if (this.ws) {
       try {
         this.ws.close();
@@ -40,12 +45,11 @@ export class SatQueryWebSocket {
     let isFallingBack = false;
     let hasReceivedResult = false;
     let hasReceivedError = false;
-    let connectTimeout: any = null;
 
     try {
       this.ws = new WebSocket(wsUrl);
 
-      connectTimeout = setTimeout(() => {
+      this.connectTimeout = setTimeout(() => {
         if (this.ws && this.ws.readyState === WebSocket.CONNECTING && !this.isClosedManually) {
           console.warn('WebSocket connection timed out, falling back to REST');
           isFallingBack = true;
@@ -60,7 +64,10 @@ export class SatQueryWebSocket {
       }, 6000);
 
       this.ws.onopen = () => {
-        if (connectTimeout) clearTimeout(connectTimeout);
+        if (this.connectTimeout) {
+          clearTimeout(this.connectTimeout);
+          this.connectTimeout = null;
+        }
         if (this.ws && this.ws.readyState === WebSocket.OPEN) {
           this.ws.send(
             JSON.stringify({
@@ -83,9 +90,8 @@ export class SatQueryWebSocket {
           if (type === 'ack') {
             callbacks.onAck?.(data);
           } else if (type === 'step') {
-            stepIndexCounter++;
             const step: TraceStep = {
-              step_index: data.step_index ?? stepIndexCounter,
+              step_index: data.step_index ?? stepIndexCounter++,
               step_name: data.step_name || 'PROCESSING',
               status: data.status || 'SUCCESS',
               duration_ms: data.duration_ms ?? 0,
@@ -106,27 +112,31 @@ export class SatQueryWebSocket {
       };
 
       this.ws.onerror = () => {
-        if (connectTimeout) clearTimeout(connectTimeout);
+        if (this.connectTimeout) {
+          clearTimeout(this.connectTimeout);
+          this.connectTimeout = null;
+        }
         // Fallback to REST API if WebSocket fails.
-        // Set flag BEFORE closing so onclose doesn't fire onClose() prematurely.
-        if (!this.isClosedManually && !isFallingBack) {
+        if (!isFallingBack && !hasReceivedResult && !hasReceivedError && !this.isClosedManually) {
+          console.warn('WebSocket error, falling back to REST API');
           isFallingBack = true;
-          try {
-            this.ws?.close();
-          } catch {
-            // ignore
-          }
-          this.ws = null;
           this.fallbackToRest(query, imageIds, callbacks, history);
         }
       };
 
       this.ws.onclose = (event) => {
-        if (connectTimeout) clearTimeout(connectTimeout);
-        if (isFallingBack || this.isClosedManually) return;
+        if (this.connectTimeout) {
+          clearTimeout(this.connectTimeout);
+          this.connectTimeout = null;
+        }
 
-        // If closed unexpectedly without result or error, fallback to REST
-        if (!hasReceivedResult && !hasReceivedError) {
+        if (this.isClosedManually) {
+          callbacks.onClose?.();
+          return;
+        }
+
+        // 1000 = normal closure. If not normal and no result yet, fall back to REST.
+        if (event.code !== 1000 && !isFallingBack && !hasReceivedResult && !hasReceivedError) {
           console.warn(`WebSocket closed unexpectedly (code ${event.code}). Falling back to REST.`);
           isFallingBack = true;
           this.fallbackToRest(query, imageIds, callbacks, history);
@@ -136,7 +146,10 @@ export class SatQueryWebSocket {
         callbacks.onClose?.();
       };
     } catch {
-      if (connectTimeout) clearTimeout(connectTimeout);
+      if (this.connectTimeout) {
+        clearTimeout(this.connectTimeout);
+        this.connectTimeout = null;
+      }
       // Fallback to REST if opening failed
       this.fallbackToRest(query, imageIds, callbacks, history);
     }
@@ -144,7 +157,10 @@ export class SatQueryWebSocket {
     // Return cleanup/cancel function
     return () => {
       this.isClosedManually = true;
-      if (connectTimeout) clearTimeout(connectTimeout);
+      if (this.connectTimeout) {
+        clearTimeout(this.connectTimeout);
+        this.connectTimeout = null;
+      }
       if (this.ws) {
         this.ws.close();
         this.ws = null;

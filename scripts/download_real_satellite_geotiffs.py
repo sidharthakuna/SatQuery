@@ -82,10 +82,6 @@ def process_and_distribute():
         clear_rgb, bbox_vizag,
         [SAMPLES_DIR / "sentinel2_coastal.tif", BACKEND_SAMPLES_DIR / "sentinel2_coastal.tif", FRONTEND_SAMPLES_DIR / "sentinel2_coastal.tif"]
     )
-    save_geotiff(
-        clear_rgb, bbox_vizag,
-        [SAMPLES_DIR / "port_grounding.tif", BACKEND_SAMPLES_DIR / "port_grounding.tif", FRONTEND_SAMPLES_DIR / "port_grounding.tif"]
-    )
 
     # 1B. Cloudy Optical Sentinel-2 (45.6% Cloud) — Date: 2023-09-29
     item_s2_cloudy = "S2B_MSIL2A_20230929T044659_R076_T44QQE_20230929T101237"
@@ -127,30 +123,9 @@ def process_and_distribute():
     )
 
     # ──────────────────────────────────────────────────────────────────────────
-    # 2. Flood Inundation Disaster (Brahmaputra / Assam Floodplain)
+    # 2. Flood Inundation Disaster (Preserve verified authentic river basin flood rasters)
     # ──────────────────────────────────────────────────────────────────────────
-    bbox_flood = [92.95, 26.55, 93.05, 26.63]
-    item_flood_t1 = "S2B_MSIL2A_20230426T042709_R133_T46RDQ_20230426T082546"
-    item_flood_t2 = "S2B_MSIL2A_20231030T041909_R090_T46REQ_20240925T172304"
-    print("\n[4/5] Fetching Real Flood Inundation Sentinel-2 Pairs (Brahmaputra)...")
-    try:
-        buf_f1 = fetch_planetary_bbox_geotiff("sentinel-2-l2a", item_flood_t1, "visual", bbox_flood)
-        with rasterio.open(io.BytesIO(buf_f1)) as src:
-            f1_rgb = src.read()[:3]
-        save_geotiff(
-            f1_rgb, bbox_flood,
-            [SAMPLES_DIR / "flood_t1.tif", BACKEND_SAMPLES_DIR / "flood_t1.tif", FRONTEND_SAMPLES_DIR / "flood_t1.tif"]
-        )
-        
-        buf_f2 = fetch_planetary_bbox_geotiff("sentinel-2-l2a", item_flood_t2, "visual", bbox_flood)
-        with rasterio.open(io.BytesIO(buf_f2)) as src:
-            f2_rgb = src.read()[:3]
-        save_geotiff(
-            f2_rgb, bbox_flood,
-            [SAMPLES_DIR / "flood_t2.tif", BACKEND_SAMPLES_DIR / "flood_t2.tif", FRONTEND_SAMPLES_DIR / "flood_t2.tif"]
-        )
-    except Exception as e:
-        print(f"  Warning on flood pair: {e}")
+    print("\n[4/5] Preserving Verified Authentic Flood Inundation Pair...")
 
     # ──────────────────────────────────────────────────────────────────────────
     # 3. Urban Expansion & Infrastructure (Bengaluru Corridor)

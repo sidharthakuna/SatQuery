@@ -236,29 +236,28 @@ export const ChatProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const deleteSession = (id: string) => {
+    const filtered = sessions.filter((s) => s.id !== id);
+    let nextSessions: AnalysisSession[];
     let nextActiveId: string | null = null;
     let nextImages: ImageUploadResponse[] = [];
     let nextResult: SatQueryResult | null = null;
     let nextImageForAnalysis: ImageUploadResponse | null = null;
 
-    setSessions((prev) => {
-      const filtered = prev.filter((s) => s.id !== id);
-      if (filtered.length === 0) {
-        const fresh = createDefaultSession();
-        nextActiveId = fresh.id;
-        nextImages = [];
-        nextResult = null;
-        nextImageForAnalysis = null;
-        return [fresh];
-      }
+    if (filtered.length === 0) {
+      const fresh = createDefaultSession();
+      nextSessions = [fresh];
+      nextActiveId = fresh.id;
+    } else {
+      nextSessions = filtered;
       if (activeSessionIdRef.current === id) {
         nextActiveId = filtered[0].id;
         nextImages = filtered[0].images || [];
         nextResult = filtered[0].lastResult || null;
         nextImageForAnalysis = filtered[0].images?.[0] || null;
       }
-      return filtered;
-    });
+    }
+
+    setSessions(nextSessions);
 
     if (nextActiveId) {
       setActiveSessionId(nextActiveId);
@@ -450,17 +449,6 @@ export const ChatProvider: React.FC<{ children: React.ReactNode }> = ({ children
           setIsProcessing(false);
           setActiveAnalysisResult(result);
 
-          // Only auto-open telemetry drawer if spatial evidence exists or spatial task was run
-          const isSpatialTask =
-            result.spatial_evidence ||
-            (result.audit_trace &&
-              result.audit_trace.task_identified !== 'AGENT_ASSISTANT' &&
-              result.audit_trace.task_identified !== 'UNKNOWN');
-
-          if (isSpatialTask && effectiveImages.length > 0) {
-            setAnalysisPanelOpen(true);
-          }
-
           setSessions((prev) =>
             prev.map((s) => {
               if (s.id === targetSessionId) {
@@ -488,6 +476,7 @@ export const ChatProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
           // Detect if the user explicitly requested a document or briefing dossier in their prompt
           const isExplicitDocRequest = /\b(report|dossier|briefing|bulletin|pdf|document|docx|executive summary)\b/i.test(queryText);
+          const isSpatialTask = Boolean(result.audit_trace?.task_identified && result.audit_trace.task_identified !== 'AGENT_ASSISTANT');
 
           // Auto-compile official SAC-ISRO Intelligence Bulletin only when explicitly requested
           if (isExplicitDocRequest && isSpatialTask && effectiveImages.length > 0) {
@@ -559,16 +548,10 @@ export const ChatProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   /**
-   * Helper to load pre-bundled server samples for quick 1-click testing
+   * Helper to load pre-bundled server samples and attach them to the chat input bar
+   * without auto-submitting or auto-writing queries, allowing the user to type their query freely.
    */
   const loadPresetAnalysis = async (presetType: string) => {
-    const newSession = createDefaultSession();
-    setSessions((prev) => [newSession, ...prev]);
-    setActiveSessionId(newSession.id);
-    setActiveImages([]);
-    setActiveAnalysisResult(null);
-    setActiveImageForAnalysis(null);
-
     interface PresetItem {
       files: Array<{ url: string; name: string }>;
       prompt: string;
@@ -594,22 +577,22 @@ export const ChatProvider: React.FC<{ children: React.ReactNode }> = ({ children
       },
       grounding: {
         files: [
-          { url: '/static/samples/port_grounding.tif', name: 'dior_port_facility.tif' },
+          { url: '/static/samples/port_grounding.tif', name: 'port_grounding.tif' },
         ],
         prompt: 'Locate, outline, and delineate all maritime vessels, storage facilities, and harbor infrastructure with bounding boxes.',
         title: 'Maritime Port & Infrastructure Grounding',
       },
       vqa: {
         files: [
-          { url: '/static/samples/forest_vqa.tif', name: 'sentinel2_forest_canopy.tif' },
+          { url: '/static/samples/forest_vqa.tif', name: 'sentinel2_forest_vqa.tif' },
         ],
         prompt: 'What land cover classes dominate this scene, and what is the estimated vegetation canopy density and spectral signature?',
         title: 'Forest Canopy & Spectral VQA',
       },
       urban: {
         files: [
-          { url: '/static/samples/urban_t1.tif', name: 'cartosat_urban_t1.tif' },
-          { url: '/static/samples/urban_t2.tif', name: 'cartosat_urban_t2.tif' },
+          { url: '/static/samples/urban_t1.tif', name: 'urban_baseline_t1.tif' },
+          { url: '/static/samples/urban_t2.tif', name: 'urban_expansion_t2.tif' },
         ],
         prompt: 'Analyze bi-temporal urban expansion, new residential footprints, and roadway corridors between these acquisition dates.',
         title: 'Urban Sprawl & Expansion Analysis',
@@ -617,26 +600,33 @@ export const ChatProvider: React.FC<{ children: React.ReactNode }> = ({ children
       // Aliases for backwards compatibility
       sar: {
         files: [
-          { url: '/static/samples/fusion_optical.tif', name: 'sentinel2_optical_cloudy.tif' },
-          { url: '/static/samples/fusion_sar.tif', name: 'sentinel1_sar_backscatter.tif' },
+          { url: '/static/samples/fusion_optical.tif', name: 'cloudy_optical_pass.tif' },
+          { url: '/static/samples/fusion_sar.tif', name: 'sentinel1_sar_radar.tif' },
         ],
         prompt: 'Execute cross-modal optical and microwave SAR fusion to penetrate dense cloud cover and reconstruct ground terrain.',
         title: 'Cloud-Penetrating SAR Fusion',
       },
       vegetation: {
         files: [
-          { url: '/static/samples/forest_vqa.tif', name: 'sentinel2_forest_canopy.tif' },
+          { url: '/static/samples/forest_vqa.tif', name: 'sentinel2_forest_vqa.tif' },
         ],
         prompt: 'What land cover classes dominate this scene, and what is the estimated vegetation canopy density and spectral signature?',
         title: 'Forest Canopy & Spectral VQA',
       },
       cloud_free_flood: {
         files: [
-          { url: '/static/samples/public_flood_cloudy_optical.tif', name: 'sentinel2_cloudy_optical.tif' },
-          { url: '/static/samples/public_flood_sentinel1_sar.tif', name: 'sentinel1_sar_penetration.tif' },
+          { url: '/static/samples/fusion_optical.tif', name: 'cloudy_optical_pass.tif' },
+          { url: '/static/samples/fusion_sar.tif', name: 'sentinel1_sar_radar.tif' },
         ],
         prompt: 'Penetrate storm clouds using Sentinel-1 SAR and Sentinel-2 optical imagery, reconstruct a cloud-free ground view, calculate total flooded area, and pinpoint elevated safe evacuation zones.',
         title: 'Cloud-Free SAR Flood & Safe Zones',
+      },
+      canopy: {
+        files: [
+          { url: '/static/samples/forest_vqa.tif', name: 'sentinel2_forest_vqa.tif' },
+        ],
+        prompt: 'Analyze the vegetation canopy health and delineate land cover categories.',
+        title: 'Vegetation & Land Cover Analysis',
       },
     };
 
@@ -660,75 +650,11 @@ export const ChatProvider: React.FC<{ children: React.ReactNode }> = ({ children
         setActiveImageForAnalysis(imagesToSubmit[0]);
       }
 
-      if (presetType === 'cloud_free_flood') {
-        setIsProcessing(true);
-        try {
-          const result = await SatQueryAPI.analyzeMultimodalFlood(
-            targetPreset.prompt,
-            imagesToSubmit[0]?.file_id,
-            imagesToSubmit[1]?.file_id
-          );
-          setActiveAnalysisResult(result);
-          setAnalysisPanelOpen(true);
-          setSessions((prev) =>
-            prev.map((s) => {
-              if (s.id === newSession.id) {
-                return {
-                  ...s,
-                  title: targetPreset.title,
-                  lastResult: result,
-                  taskType: result.audit_trace?.task_identified,
-                  messages: [
-                    {
-                      id: `msg_${Date.now()}_user`,
-                      role: 'user',
-                      content: targetPreset.prompt,
-                      timestamp: new Date().toISOString(),
-                      images: [...imagesToSubmit],
-                    },
-                    {
-                      id: `msg_${Date.now()}_assistant`,
-                      role: 'assistant',
-                      content: result.text_response,
-                      result,
-                      images: [...imagesToSubmit],
-                      isStreaming: false,
-                      streamingSteps: result.audit_trace?.execution_steps || [],
-                      timestamp: new Date().toISOString(),
-                    },
-                  ],
-                };
-              }
-              return s;
-            })
-          );
-        } finally {
-          setIsProcessing(false);
-        }
-        return;
-      }
-
-      await submitQuery(targetPreset.prompt, imagesToSubmit, newSession.id);
-    } catch (err: any) {
-      console.error('Failed to load sample preset:', err);
       setSessions((prev) =>
-        prev.map((s) => {
-          if (s.id === newSession.id) {
-            return {
-              ...s,
-              messages: [
-                {
-                  id: `err_${Date.now()}`,
-                  role: 'assistant',
-                  content: `**Failed to load sample preset (${presetType}):** ${err.message || 'Check network connection or file path'}`,
-                  timestamp: new Date().toISOString(),
-                },
-              ],
-            };
-          }
-          return s;
-        })
+        prev.map((s) => (s.id === activeSessionId ? { ...s, images: imagesToSubmit } : s))
       );
+    } catch (err: any) {
+      console.error('Failed to attach sample preset:', err);
     }
   };
 

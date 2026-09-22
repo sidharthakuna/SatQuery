@@ -36,8 +36,8 @@ def normalize_optical(band_data: np.ndarray) -> np.ndarray:
     if not np.any(finite_mask):
         return np.zeros_like(band_data, dtype=np.float32)
 
-    max_val = float(np.max(band_data))
-    min_val = float(np.min(band_data))
+    max_val = float(np.nanmax(band_data))
+    min_val = float(np.nanmin(band_data))
 
     # If already normalized in [0.0, 1.0]
     if max_val <= 1.0 and min_val >= 0.0:

@@ -17,7 +17,24 @@ logger = logging.getLogger(__name__)
 _GROUNDING_KEYWORDS = frozenset([
     "highlight", "locate", "find", "detect", "box", "bounding",
     "where is", "show me", "identify", "mark", "segment",
-    "point out", "outline", "circle", "pinpoint",
+    "point out", "outline", "circle", "pinpoint", "spot",
+])
+
+_GROUNDING_OBJECT_TOKENS = frozenset([
+    "ship", "ships", "vessel", "vessels", "boat", "boats", "tanker", "tankers", "cargo", "fleet", "berth", "berths",
+    "building", "buildings", "structure", "structures", "warehouse", "warehouses", "facility", "facilities", "tank", "tanks", "storage", "house", "houses", "hq", "plant", "complex", "depot", "shed",
+    "road", "roads", "highway", "highways", "expressway", "expressways", "street", "streets", "arterial", "path", "paths", "route", "routes", "interchange",
+    "port", "ports", "terminal", "terminals", "harbor", "harbors", "quay", "dock", "docks", "jetty", "jetties", "wharf", "wharves", "marina",
+    "coastline", "coast", "breakwater", "breakwaters", "seawall", "seawalls", "beach", "beaches", "shore", "shoreline", "sand",
+    "water body", "water bodies", "waterbody", "waterbodies", "water", "lake", "river", "ocean", "sea", "basin", "pond", "waterway", "waterways",
+    "runway", "runways", "aircraft", "airplane", "airplanes", "plane", "planes", "vehicle", "vehicles", "truck", "trucks",
+])
+
+_GROUNDING_ACTION_TOKENS = frozenset([
+    "locate", "find", "detect", "detection", "highlight", "outline", "box", "boxes", "bounding", "pinpoint",
+    "segment", "segmentation", "point out", "spot", "show", "show me", "identify", "mark", "circle",
+    "where is", "where are", "how many", "count", "is there", "are there", "tell me where", "can you find",
+    "delineate", "isolate", "what are the", "any", "look for", "grounding", "dino", "grounding dino", "catalog",
 ])
 
 _CHANGE_KEYWORDS = frozenset([
@@ -107,6 +124,7 @@ class QueryIntentClassifier:
         self,
         query: str,
         image_metas: List[GeoTIFFMetadata],
+        history: Optional[List[Dict[str, Any]]] = None,
     ) -> Tuple[TaskType, List[str], Dict[str, Any]]:
         """
         Classify a query into a TaskType and return the tools/params needed.
@@ -120,7 +138,7 @@ class QueryIntentClassifier:
         """
         q_lower = query.strip().lower()
         num_images = len(image_metas)
-        modalities = [m.modality for m in image_metas]
+        modalities = [m.get("modality") if isinstance(m, dict) else getattr(m, "modality", None) for m in image_metas]
 
         # 1. Neural Intent Prediction from AgentIntentNet v2.0
         provider = self._get_provider()
@@ -193,9 +211,9 @@ class QueryIntentClassifier:
 
         # Route to AGENT_ASSISTANT only if:
         # 1. Zero images uploaded (General Q&A / Copilot mode), OR
-        # 2. Pure greeting/farewell ("hi", "bye", etc.), OR
+        # 2. Pure greeting/farewell ("hi", "bye", etc.) with no rasters attached, OR
         # 3. Explicit theoretical/educational question with NO image context and NO task keywords
-        if is_greeting or (is_pure_educational and num_images == 0) or (
+        if (num_images == 0 and is_greeting) or is_pure_educational or (
             (self._has_keywords(q_lower, _CONVERSATIONAL_KEYWORDS) or (neural_task == "AGENT_ASSISTANT" and neural_conf > 0.80))
             and not has_task_keywords
             and not has_image_ref
@@ -220,14 +238,23 @@ class QueryIntentClassifier:
         is_explicit_multi_model = any(k in q_lower for k in _EXPLICIT_MULTI_MODEL_KEYWORDS)
 
         has_grounding = (neural_task == "SINGLE_GROUNDING" and neural_conf > 0.65) or self._has_keywords(q_lower, _GROUNDING_KEYWORDS)
-        has_change = (neural_task == "BITEMPORAL_CHANGE" and neural_conf > 0.50) or self._has_keywords(q_lower, _CHANGE_KEYWORDS)
+        has_temporal_markers = any(re.search(p, q_lower) for p in [
+            r"\b(between|from\s+.+?\s+to|pre[- ]|post[- ]|t1|t2|dates?|years?|baseline|subsequent)\b",
+            r"\b(\d{4}\s*(and|to|vs|-)\s*\d{4})\b",
+            r"\b(damage\s+assessment|impact\s+of|displacement|expansion|deforestation|urbanization)\b"
+        ])
+        has_change = (
+            (neural_task == "BITEMPORAL_CHANGE" and neural_conf > 0.50)
+            or self._has_keywords(q_lower, _CHANGE_KEYWORDS)
+            or (num_images >= 2 and has_temporal_markers)
+        )
         has_fusion = (neural_task == "CROSS_MODAL_FUSION" and neural_conf > 0.50) or self._has_keywords(q_lower, _FUSION_KEYWORDS)
 
         # ═══════════════════════════════════════════════════════
         #  Two-image scenarios
         # ═══════════════════════════════════════════════════════
         if num_images == 2:
-            sorted_mods = sorted(modalities)
+            sorted_mods = sorted([str(m) for m in modalities if m is not None])
 
             # Multi-model compound request with 2 images
             explicit_box_or_localize = any(k in q_lower for k in ["box", "bounding", "outline", "pinpoint", "highlight", "show the affected", "show affected", "locate the affected"])
@@ -344,27 +371,50 @@ class QueryIntentClassifier:
                     params,
                 )
 
-            has_explicit_grounding = any(
-                k in q_lower for k in [
-                    "locate", "find", "box", "bounding", "highlight", "outline", "pinpoint",
-                    "where is", "where are", "segment", "point out", "detect", "detection",
-                    "grounding", "dino", "grounding dino", "show me the", "how many ships",
-                    "how many buildings", "ships in", "buildings in", "tanks in", "aircraft in",
-                ]
-            )
-            has_descriptive_vqa = any(
-                w in q_lower for w in [
-                    "describe", "what is the land", "tell me about the scene", "analyze the terrain",
-                    "explain the land", "land cover", "landcover", "vegetation condition", "overview of the area",
-                ]
-            ) or (neural_task == "SINGLE_VQA" and neural_conf > 0.60)
+            # Check if previous conversation context was in Grounding DINO mode
+            history_was_grounding = False
+            if history:
+                for turn in reversed(history[-6:]):
+                    t_content = str(turn.get("content", "")).lower()
+                    if any(w in t_content for w in [
+                        "grounding", "grounding dino", "zero-shot", "delineated", "bboxes",
+                        "maritime vessels", "harbor water", "built-up structures", "road network",
+                        "port & maritime", "coastal breakwater", "port_grounding",
+                    ]):
+                        history_was_grounding = True
+                        break
 
-            # Grounding intent: queries asking to detect/locate/find objects
-            is_grounding = (
-                has_explicit_grounding
-                or (neural_task == "SINGLE_GROUNDING" and neural_conf > 0.60)
+            # Check if this raster is a grounding sample
+            first_img_name = ""
+            if image_metas and len(image_metas) > 0:
+                m0 = image_metas[0]
+                first_img_name = str(getattr(m0, "filename", "") or getattr(m0, "file_id", "") or (m0.get("filename") if isinstance(m0, dict) else "")).lower()
+            is_port_grounding_sample = "port_grounding" in first_img_name or "grounding" in first_img_name
+
+            has_grounding_action = any(
+                re.search(r"\b" + re.escape(k) + r"\b", q_lower) for k in _GROUNDING_ACTION_TOKENS
+            ) or self._has_keywords(q_lower, _GROUNDING_KEYWORDS)
+            has_grounding_object = any(
+                re.search(r"\b" + re.escape(k) + r"\b", q_lower) for k in _GROUNDING_OBJECT_TOKENS
             )
-            if is_grounding and not has_descriptive_vqa:
+
+            has_pure_descriptive_vqa = any(
+                re.search(r"\b" + re.escape(w) + r"\b", q_lower) for w in [
+                    "describe the scene", "describe the overall", "overview of the area",
+                    "land cover classification", "spectral reflectance", "explain the land cover",
+                    "vegetation condition", "ndvi analysis", "spectral signature",
+                ]
+            ) and not (has_grounding_action or has_grounding_object)
+
+            # Grounding intent: queries asking to detect/locate/find objects or follow-up in grounding session
+            is_grounding = (
+                has_grounding_action
+                or has_grounding_object
+                or (neural_task == "SINGLE_GROUNDING" and neural_conf > 0.40)
+                or (history_was_grounding and not has_pure_descriptive_vqa)
+                or (is_port_grounding_sample and not has_pure_descriptive_vqa)
+            )
+            if is_grounding and not has_pure_descriptive_vqa:
                 logger.info(f"Classified as SINGLE_GROUNDING (grounding query: {query})")
                 params = {"box_threshold": 0.35, "text_threshold": 0.25}
                 params.update(intent_extra)

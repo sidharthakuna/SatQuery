@@ -165,14 +165,29 @@ export const Sidebar: React.FC = () => {
       <Modal
         isOpen={isHelpOpen}
         onClose={() => setIsHelpOpen(false)}
-        title="About SatQuery AI"
+        title="Mission Information & Provenance"
       >
-        <div className="space-y-2 text-xs text-[var(--text-main)] leading-relaxed">
+        <div className="space-y-3 text-xs text-[var(--text-main)] leading-relaxed">
+          <div className="p-3 rounded-xl bg-[var(--bg-surface)] border border-[var(--border-subtle)] space-y-1.5">
+            <div className="flex items-center justify-between">
+              <span className="font-semibold text-[#0EA5E9]">The Gandivan’s</span>
+              <span className="font-mono text-[10px] px-2 py-0.5 rounded bg-[var(--bg-card)] border border-[var(--border-subtle)] text-[var(--text-muted)]">
+                Team ID: RECS10
+              </span>
+            </div>
+            <p className="text-[11px] text-[var(--text-muted)]">
+              Engineered for <strong>Smart India Hackathon (SIH 2026)</strong> • Problem Statement ID: <strong>26167</strong>
+            </p>
+            <p className="text-[11px] text-[var(--text-muted)]">
+              Organization: <strong>Indian Space Research Organisation (ISRO)</strong> / <strong>Space Applications Centre (SAC)</strong>
+            </p>
+          </div>
+
           <p>
-            SatQuery AI is an interactive vision-language assistant for remote sensing image analysis, developed for ISRO / Space Applications Centre (SAC).
+            <strong>SatQuery AI</strong> is an interactive, on-device vision-language assistant for remote sensing image analysis.
           </p>
           <p className="text-[var(--text-muted)]">
-            Supports Optical multispectral rasters, microwave SAR, bi-temporal change detection, and text-guided visual grounding.
+            Features full multi-model neural orchestration: Optical multispectral rasters (Cartosat / Sentinel-2), microwave SAR (RISAT / Sentinel-1), bi-temporal change detection (ChangeFormer), cloud-penetrating SAR fusion, and text-guided visual grounding (Grounding DINO).
           </p>
         </div>
       </Modal>

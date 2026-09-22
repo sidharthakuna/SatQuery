@@ -45,6 +45,21 @@ async def upload_geotiff(file: UploadFile = File(...)):
             detail=f"Unsupported file format: '{ext}'. Expected: {SUPPORTED_EXTENSIONS}",
         )
 
+    # ── Pre-check Content-Length header if provided ──────────────
+    if hasattr(file, "headers") and file.headers:
+        try:
+            content_length = int(file.headers.get("content-length", 0) or 0)
+            if content_length > settings.max_upload_bytes:
+                raise HTTPException(
+                    status_code=413,
+                    detail=(
+                        f"File too large (> {settings.max_upload_size_mb} MB). "
+                        f"Maximum allowed: {settings.max_upload_size_mb} MB."
+                    ),
+                )
+        except (ValueError, TypeError):
+            pass
+
     # ── Stream directly to disk in chunks (zero memory duplication) ─
     CHUNK_SIZE = 1024 * 1024  # 1 MB
     file_id = uuid4().hex[:12]

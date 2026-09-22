@@ -66,6 +66,7 @@ class SpatialEvidence(BaseModel):
     clusters: Optional[List[Dict[str, Any]]] = Field(None, description="Marked spatial clusters/places with centroids and descriptions")
     layers: Optional[List[Dict[str, Any]]] = Field(None, description="Multiple spatial layers from compound/multi-tool execution")
     vqa_grounding: Optional[VQAGrounding] = Field(None, description="Grounded VQA visual overlay and telemetry")
+    chart_data: Optional[Dict[str, Any]] = Field(None, description="Dynamic telemetry chart payload (land cover, quadrants, spectral histogram)")
     extra: Dict[str, Any] = Field(default_factory=dict, description="Additional evidence metadata")
 
 
@@ -85,6 +86,7 @@ class SatQueryResult(BaseModel):
     evidence_timeline: Optional[List[Dict[str, Any]]] = Field(None, description="Chronological acquisition and observed change timeline")
     tool_execution_plan: Optional[List[Dict[str, Any]]] = Field(None, description="Execution DAG showing specialist models invoked and dependencies")
     vqa_grounding: Optional[VQAGrounding] = Field(None, description="Structured VQA visual overlay, method, confidence, and note")
+    chart_data: Optional[Dict[str, Any]] = Field(None, description="Structured dynamic chart data for visual telemetry")
 
 
 class ImageUploadResponse(BaseModel):

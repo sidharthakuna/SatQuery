@@ -277,10 +277,10 @@ export const ChatInput: React.FC = () => {
               type="button"
               onClick={() => setIsSamplePickerOpen(true)}
               className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium text-[var(--text-muted)] hover:text-[var(--text-main)] hover:bg-[var(--bg-surface)] transition-colors cursor-pointer"
-              title="Load ISRO Cartosat / RISAT sample rasters"
+              title="Load sample satellite rasters"
             >
               <Satellite className="w-4 h-4 text-[var(--text-dim)]" />
-              <span className="hidden sm:inline">ISRO Samples</span>
+              <span className="hidden sm:inline">Samples</span>
             </button>
           </div>
 

@@ -14,12 +14,12 @@ import {
 import { SatQueryLogo } from '../ui/SatQueryLogo';
 import { SatQueryAPI } from '../../services/api';
 
-const resolvePreview = (url?: string, fallback: string = 'fusion_optical.tif'): string => {
+const resolvePreview = (url?: string, fallback: string = 'fusion_optical_clean.tif'): string => {
   if (!url) return SatQueryAPI.getRasterPreviewUrl(fallback);
   return SatQueryAPI.getRasterPreviewUrl(url);
 };
 
-const handleImgError = (e: React.SyntheticEvent<HTMLImageElement>, fallback: string = 'fusion_optical.tif') => {
+const handleImgError = (e: React.SyntheticEvent<HTMLImageElement>, fallback: string = 'fusion_optical_clean.tif') => {
   const target = e.currentTarget;
   if (!target.dataset.fallbackApplied) {
     target.dataset.fallbackApplied = 'true';
@@ -68,9 +68,10 @@ export const OpticalSarFusionCard: React.FC<OpticalSarFusionCardProps> = ({
   onOpenPdf,
 }) => {
   const [lightboxImg, setLightboxImg] = useState<{ url: string; title: string } | null>(null);
+  const [insetMode, setInsetMode] = useState<'benchmark' | 'assets'>('benchmark');
 
   return (
-    <div className="w-full my-4 rounded-xl overflow-hidden border border-[var(--border-subtle)] bg-[var(--bg-surface)] shadow-xl animate-fadeIn text-[var(--text-main)] font-sans">
+    <div className="w-full my-4 pb-4 rounded-xl overflow-hidden border border-[var(--border-subtle)] bg-[var(--bg-surface)] shadow-xl animate-fadeIn text-[var(--text-main)] font-sans">
       {/* ── HEADER BANNER ── */}
       <div className="bg-[#0b192c] text-white px-5 py-4 border-b border-blue-900/40 flex flex-wrap items-center justify-between gap-3">
         <div className="flex items-center gap-3">
@@ -81,15 +82,15 @@ export const OpticalSarFusionCard: React.FC<OpticalSarFusionCardProps> = ({
             <div className="flex items-center gap-2">
               <span className="font-bold text-base tracking-tight text-white">SatQuery AI</span>
               <span className="bg-sky-500/20 text-sky-300 text-[10px] font-mono px-2 py-0.5 rounded border border-sky-400/30 uppercase tracking-wider font-semibold">
-                Optical + SAR Fusion
+                SAR-Optical Fusion
               </span>
               <span className="bg-emerald-500/20 text-emerald-300 text-[10px] font-mono px-2 py-0.5 rounded border border-emerald-400/30 font-semibold flex items-center gap-1">
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                Multi-Sensor Validated
+                SAR-Guided Reconstruction
               </span>
             </div>
             <p className="text-blue-200/90 text-xs font-medium">
-              Cross-Modal Synthesis — Cloud-Resilient Microwave Radar + VHR Optical Fusion
+              SAR-Optical Fusion — Dual-Branch Guided Reconstruction of Cloud-Obscured Surface
             </p>
           </div>
         </div>
@@ -211,15 +212,15 @@ export const OpticalSarFusionCard: React.FC<OpticalSarFusionCardProps> = ({
                 { id: 2, title: 'Speckle Noise Filtering', desc: 'Enhanced Lee-Sigma filter applied to SAR amplitude radar backscatter' },
                 { id: 3, title: 'Cloud & Shadow Masking', desc: 'Extract cloud confidence layer and cast shadow geometries' },
                 { id: 4, title: 'Radiometric Normalization', desc: 'Surface reflectance conversion & radar Sigma-0 calibration in dB' },
-                { id: 5, title: 'Cross-Modal Feature Fusion', desc: 'Coupled attention network combining NDWI with double-bounce radar return' },
+                { id: 5, title: 'Cross-Modal Optical Synthesis', desc: 'Dual-branch attention neural network reconstructing true-color clear optical surface' },
               ]).map((st) => (
-                <div key={st.id} className="p-2.5 flex items-start gap-2.5 hover:bg-[var(--bg-surface)]/80 transition-colors">
+                <div key={st.id} className="p-2 flex items-start gap-2.5 hover:bg-[var(--bg-surface)]/80 transition-colors">
                   <span className="w-4 h-4 rounded-full bg-sky-600/20 text-sky-500 font-bold text-[10px] flex items-center justify-center shrink-0 mt-0.5">
                     {st.id}
                   </span>
-                  <div>
-                    <div className="font-semibold text-xs text-[var(--text-main)]">{st.title}</div>
-                    <div className="text-[11px] text-[var(--text-muted)]">{st.desc}</div>
+                  <div className="min-w-0 flex-1">
+                    <div className="font-semibold text-xs text-[var(--text-main)] leading-tight truncate">{st.title}</div>
+                    <div className="text-[10.5px] text-[var(--text-muted)] leading-tight mt-0.5">{st.desc}</div>
                   </div>
                 </div>
               ))}
@@ -286,26 +287,31 @@ export const OpticalSarFusionCard: React.FC<OpticalSarFusionCardProps> = ({
             <div className="flex items-center justify-between">
               <h3 className="text-xs font-bold uppercase tracking-wider text-[var(--text-muted)] flex items-center gap-2">
                 <span className="w-4 h-4 rounded bg-sky-600/20 text-sky-500 flex items-center justify-center text-[10px] font-bold">4</span>
-                Reconstructed Cloud-Free Optical Satellite Image (Clear Sky)
+                SAR-Guided Optical Reconstruction (Estimated Cloud-Free Surface)
               </h3>
-              <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-600 border border-emerald-500/20 font-bold">
-                100% Clouds Removed
-              </span>
+              <div className="flex items-center gap-1.5">
+                <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-sky-500/10 text-sky-400 border border-sky-500/20 font-bold">
+                  SAR-Guided Estimate
+                </span>
+                <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-600 border border-emerald-500/20 font-bold">
+                  GLF-CR / FENet
+                </span>
+              </div>
             </div>
 
             <div
-              onClick={() => setLightboxImg({ url: resolvePreview(data.fused_result_url, 'fusion_optical.tif'), title: 'Reconstructed Optical Satellite Image — 100% Cloud-Free Ground Terrain' })}
+              onClick={() => setLightboxImg({ url: resolvePreview(data.fused_result_url, 'fusion_optical_clean.tif'), title: 'Estimated Cloud-Free Optical Surface — SAR-Guided Reconstruction' })}
               className="group relative cursor-pointer rounded-lg overflow-hidden border border-emerald-700/60 bg-slate-950 aspect-[16/9] shadow-lg"
             >
               <img
-                src={resolvePreview(data.fused_result_url, 'fusion_optical.tif')}
-                alt="Reconstructed Cloud-Free Optical Satellite Image"
+                src={resolvePreview(data.fused_result_url, 'fusion_optical_clean.tif')}
+                alt="Estimated Cloud-Free Optical Satellite Image"
                 className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-[1.01]"
-                onError={(e) => handleImgError(e, 'fusion_optical.tif')}
+                onError={(e) => handleImgError(e, 'fusion_optical_clean.tif')}
               />
               <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white text-xs font-medium gap-1.5">
                 <Maximize2 className="w-4 h-4" />
-                <span>Click to Expand Full-Resolution Clear Optical Map</span>
+                <span>Click to Expand Full-Resolution Estimated Map</span>
               </div>
             </div>
 
@@ -313,11 +319,11 @@ export const OpticalSarFusionCard: React.FC<OpticalSarFusionCardProps> = ({
             <div className="p-2.5 rounded-lg border border-[var(--border-subtle)] bg-[var(--bg-app)]/50 flex flex-wrap items-center gap-x-4 gap-y-1.5 text-[11px] font-mono">
               <div className="flex items-center gap-1.5">
                 <span className="w-2.5 h-2.5 rounded-xs bg-[#22C55E]" />
-                <span className="text-[var(--text-main)]">Reconstructed Ground</span>
+                <span className="text-[var(--text-main)]">Vegetation Canopy</span>
               </div>
               <div className="flex items-center gap-1.5">
                 <span className="w-2.5 h-2.5 rounded-xs bg-[#F59E0B]" />
-                <span className="text-[var(--text-main)]">Roadways & Highways</span>
+                <span className="text-[var(--text-main)]">Roadways & Arterials</span>
               </div>
               <div className="flex items-center gap-1.5">
                 <span className="w-2.5 h-2.5 rounded-xs bg-[#EF4444]" />
@@ -325,7 +331,7 @@ export const OpticalSarFusionCard: React.FC<OpticalSarFusionCardProps> = ({
               </div>
               <div className="flex items-center gap-1.5">
                 <span className="w-2.5 h-2.5 rounded-xs bg-[#A855F7]" />
-                <span className="text-[var(--text-main)]">Concrete Wharves</span>
+                <span className="text-[var(--text-main)]">Concrete Wharves & Piers</span>
               </div>
               <div className="flex items-center gap-1.5">
                 <span className="w-2.5 h-2.5 rounded-xs bg-[#0284C7]" />
@@ -333,7 +339,7 @@ export const OpticalSarFusionCard: React.FC<OpticalSarFusionCardProps> = ({
               </div>
               <div className="flex items-center gap-1.5">
                 <span className="w-2.5 h-2.5 border border-sky-400 border-dashed" />
-                <span className="text-[var(--text-main)]">Penetrated Clouds</span>
+                <span className="text-[var(--text-main)]">Penetrated Cloud Deck</span>
               </div>
             </div>
           </div>
@@ -341,78 +347,174 @@ export const OpticalSarFusionCard: React.FC<OpticalSarFusionCardProps> = ({
 
         {/* ROW 3: Section 5 (Zoomed Detail), Section 6 (Quantitative Telemetry), Section 7 (Actionable Insights) */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
-          {/* Section 5: Zoomed Insets */}
+          {/* Section 5: Multi-Sensor Benchmark Insets & Revealed Assets */}
           <div className="lg:col-span-5 space-y-2.5">
-            <h3 className="text-xs font-bold uppercase tracking-wider text-[var(--text-muted)] flex items-center gap-2">
-              <span className="w-4 h-4 rounded bg-sky-600/20 text-sky-500 flex items-center justify-center text-[10px] font-bold">5</span>
-              Sub-Kilometer High-Resolution Insets
-            </h3>
-
-            <div className="grid grid-cols-4 gap-2">
-              <div className="space-y-1">
-                <div
-                  onClick={() => setLightboxImg({ url: resolvePreview(data.zoomed_views?.optical_url, 'fusion_optical.tif'), title: 'Optical Zoomed Inset' })}
-                  className="group relative cursor-pointer rounded border border-slate-700 bg-slate-950 aspect-square overflow-hidden"
+            <div className="flex items-center justify-between">
+              <h3 className="text-xs font-bold uppercase tracking-wider text-[var(--text-muted)] flex items-center gap-2">
+                <span className="w-4 h-4 rounded bg-sky-600/20 text-sky-500 flex items-center justify-center text-[10px] font-bold">5</span>
+                Sub-Kilometer Insets
+              </h3>
+              <div className="flex items-center p-0.5 bg-[var(--bg-app)] rounded-md border border-[var(--border-subtle)] text-[9.5px] font-mono">
+                <button
+                  type="button"
+                  onClick={() => setInsetMode('benchmark')}
+                  className={`px-2 py-0.5 rounded transition-colors cursor-pointer ${
+                    insetMode === 'benchmark'
+                      ? 'bg-sky-500/20 text-sky-400 font-semibold shadow-xs'
+                      : 'text-[var(--text-muted)] hover:text-[var(--text-main)]'
+                  }`}
                 >
-                  <img
-                    src={resolvePreview(data.zoomed_views?.optical_url, 'fusion_optical.tif')}
-                    alt="Optical Zoom"
-                    className="w-full h-full object-cover"
-                    onError={(e) => handleImgError(e, 'fusion_optical.tif')}
-                  />
-                </div>
-                <div className="text-[10px] font-semibold text-[var(--text-main)]">Optical</div>
-                <div className="text-[9px] text-[var(--text-muted)]">Cloud obscured</div>
-              </div>
-
-              <div className="space-y-1">
-                <div
-                  onClick={() => setLightboxImg({ url: resolvePreview(data.zoomed_views?.sar_url, 'risat_sar.tif'), title: 'SAR Zoomed Inset' })}
-                  className="group relative cursor-pointer rounded border border-slate-700 bg-slate-950 aspect-square overflow-hidden"
+                  Sensors
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setInsetMode('assets')}
+                  className={`px-2 py-0.5 rounded transition-colors cursor-pointer ${
+                    insetMode === 'assets'
+                      ? 'bg-emerald-500/20 text-emerald-400 font-semibold shadow-xs'
+                      : 'text-[var(--text-muted)] hover:text-[var(--text-main)]'
+                  }`}
                 >
-                  <img
-                    src={resolvePreview(data.zoomed_views?.sar_url, 'risat_sar.tif')}
-                    alt="SAR Zoom"
-                    className="w-full h-full object-cover"
-                    onError={(e) => handleImgError(e, 'risat_sar.tif')}
-                  />
-                </div>
-                <div className="text-[10px] font-semibold text-[var(--text-main)]">SAR C-Band</div>
-                <div className="text-[9px] text-[var(--text-muted)]">Radar penetrates 100%</div>
-              </div>
-
-              <div className="space-y-1">
-                <div
-                  onClick={() => setLightboxImg({ url: resolvePreview(data.zoomed_views?.fused_url, 'fusion_optical.tif'), title: 'Clear Optical Reconstructed Inset' })}
-                  className="group relative cursor-pointer rounded border border-emerald-500/50 bg-slate-950 aspect-square overflow-hidden"
-                >
-                  <img
-                    src={resolvePreview(data.zoomed_views?.fused_url, 'fusion_optical.tif')}
-                    alt="Fused Zoom"
-                    className="w-full h-full object-cover"
-                    onError={(e) => handleImgError(e, 'fusion_optical.tif')}
-                  />
-                </div>
-                <div className="text-[10px] font-semibold text-emerald-400">Clear Optical</div>
-                <div className="text-[9px] text-emerald-500 font-medium">100% No Cloud</div>
-              </div>
-
-              <div className="space-y-1">
-                <div
-                  onClick={() => setLightboxImg({ url: resolvePreview(data.zoomed_views?.reference_url, 'fusion_optical.tif'), title: 'Revealed Ground Infrastructure' })}
-                  className="group relative cursor-pointer rounded border border-slate-700 bg-slate-950 aspect-square overflow-hidden"
-                >
-                  <img
-                    src={resolvePreview(data.zoomed_views?.reference_url, 'fusion_optical.tif')}
-                    alt="Reference"
-                    className="w-full h-full object-cover"
-                    onError={(e) => handleImgError(e, 'fusion_optical.tif')}
-                  />
-                </div>
-                <div className="text-[10px] font-semibold text-sky-400">Ground Features</div>
-                <div className="text-[9px] text-sky-500 font-medium">Wharves & Vessels</div>
+                  Assets
+                </button>
               </div>
             </div>
+
+            {insetMode === 'benchmark' ? (
+              /* Sensor Benchmark Insets (Cloudy -> SAR -> Recon -> Ground Truth) */
+              <div className="grid grid-cols-4 gap-2.5 pb-1">
+                <div className="flex flex-col items-center text-center space-y-1 min-w-0">
+                  <div
+                    onClick={() => setLightboxImg({ url: resolvePreview(data.zoomed_views?.optical_url, 'fusion_zoom_opt.png'), title: 'Cloudy Optical Pass (Sentinel-2 Input)' })}
+                    className="group relative cursor-pointer rounded-lg border border-slate-700 bg-slate-950 aspect-square w-full overflow-hidden shadow-sm"
+                  >
+                    <img
+                      src={resolvePreview(data.zoomed_views?.optical_url, 'fusion_zoom_opt.png')}
+                      alt="Cloudy Optical Inset"
+                      className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                      onError={(e) => handleImgError(e, 'fusion_zoom_opt.png')}
+                    />
+                  </div>
+                  <div className="text-[10px] font-bold text-[var(--text-main)] leading-tight">Cloud Pass</div>
+                  <div className="text-[9px] text-[var(--text-muted)] leading-tight">Optical Input</div>
+                </div>
+
+                <div className="flex flex-col items-center text-center space-y-1 min-w-0">
+                  <div
+                    onClick={() => setLightboxImg({ url: resolvePreview(data.zoomed_views?.sar_url, 'fusion_zoom_sar.png'), title: 'Sentinel-1 C-Band SAR (Microwave Radar Guide)' })}
+                    className="group relative cursor-pointer rounded-lg border border-slate-700 bg-slate-950 aspect-square w-full overflow-hidden shadow-sm"
+                  >
+                    <img
+                      src={resolvePreview(data.zoomed_views?.sar_url, 'fusion_zoom_sar.png')}
+                      alt="SAR Radar Inset"
+                      className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                      onError={(e) => handleImgError(e, 'fusion_zoom_sar.png')}
+                    />
+                  </div>
+                  <div className="text-[10px] font-bold text-[var(--text-main)] leading-tight">SAR Radar</div>
+                  <div className="text-[9px] text-[var(--text-muted)] leading-tight">C-Band Guide</div>
+                </div>
+
+                <div className="flex flex-col items-center text-center space-y-1 min-w-0">
+                  <div
+                    onClick={() => setLightboxImg({ url: resolvePreview(data.zoomed_views?.fused_url, 'fusion_zoom_recon.png'), title: 'SAR-Guided Reconstruction (Estimated Cloud-Free Surface)' })}
+                    className="group relative cursor-pointer rounded-lg border border-emerald-500/60 bg-slate-950 aspect-square w-full overflow-hidden shadow-sm"
+                  >
+                    <img
+                      src={resolvePreview(data.zoomed_views?.fused_url, 'fusion_zoom_recon.png')}
+                      alt="SAR-Guided Recon Inset"
+                      className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                      onError={(e) => handleImgError(e, 'fusion_zoom_recon.png')}
+                    />
+                  </div>
+                  <div className="text-[10px] font-bold text-emerald-400 leading-tight">Recon Est.</div>
+                  <div className="text-[9px] text-emerald-500/90 font-medium leading-tight">SAR-Guided</div>
+                </div>
+
+                <div className="flex flex-col items-center text-center space-y-1 min-w-0">
+                  <div
+                    onClick={() => setLightboxImg({ url: resolvePreview(data.zoomed_views?.reference_url, 'fusion_zoom_ref.png'), title: 'Ground Truth Reference (Prior Clear Pass)' })}
+                    className="group relative cursor-pointer rounded-lg border border-sky-500/60 bg-slate-950 aspect-square w-full overflow-hidden shadow-sm"
+                  >
+                    <img
+                      src={resolvePreview(data.zoomed_views?.reference_url, 'fusion_zoom_ref.png')}
+                      alt="Ground Truth Reference Inset"
+                      className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                      onError={(e) => handleImgError(e, 'fusion_zoom_ref.png')}
+                    />
+                  </div>
+                  <div className="text-[10px] font-bold text-sky-400 leading-tight">Reference</div>
+                  <div className="text-[9px] text-sky-500/90 font-medium leading-tight">Ground Truth</div>
+                </div>
+              </div>
+            ) : (
+              /* Revealed Infrastructure Targets Insets */
+              <div className="grid grid-cols-4 gap-2.5 pb-1">
+                <div className="flex flex-col items-center text-center space-y-1 min-w-0">
+                  <div
+                    onClick={() => setLightboxImg({ url: resolvePreview(undefined, 'fusion_asset_docks.png'), title: 'Port Facility: Concrete Cargo Berths & Wharves' })}
+                    className="group relative cursor-pointer rounded-lg border border-purple-500/60 bg-slate-950 aspect-square w-full overflow-hidden shadow-sm"
+                  >
+                    <img
+                      src={resolvePreview(undefined, 'fusion_asset_docks.png')}
+                      alt="Cargo Berths"
+                      className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                      onError={(e) => handleImgError(e, 'fusion_asset_docks.png')}
+                    />
+                  </div>
+                  <div className="text-[10px] font-bold text-purple-400 leading-tight">Cargo Docks</div>
+                  <div className="text-[9px] text-[var(--text-muted)] leading-tight">Berths & Piers</div>
+                </div>
+
+                <div className="flex flex-col items-center text-center space-y-1 min-w-0">
+                  <div
+                    onClick={() => setLightboxImg({ url: resolvePreview(undefined, 'fusion_asset_ships.png'), title: 'Maritime Transport: Moored Cargo Vessels' })}
+                    className="group relative cursor-pointer rounded-lg border border-rose-500/60 bg-slate-950 aspect-square w-full overflow-hidden shadow-sm"
+                  >
+                    <img
+                      src={resolvePreview(undefined, 'fusion_asset_ships.png')}
+                      alt="Moored Vessels"
+                      className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                      onError={(e) => handleImgError(e, 'fusion_asset_ships.png')}
+                    />
+                  </div>
+                  <div className="text-[10px] font-bold text-rose-400 leading-tight">Moored Ships</div>
+                  <div className="text-[9px] text-[var(--text-muted)] leading-tight">Cargo Vessels</div>
+                </div>
+
+                <div className="flex flex-col items-center text-center space-y-1 min-w-0">
+                  <div
+                    onClick={() => setLightboxImg({ url: resolvePreview(undefined, 'fusion_asset_highway.png'), title: 'Ground Transportation: Highway & Rail Arterials' })}
+                    className="group relative cursor-pointer rounded-lg border border-amber-500/60 bg-slate-950 aspect-square w-full overflow-hidden shadow-sm"
+                  >
+                    <img
+                      src={resolvePreview(undefined, 'fusion_asset_highway.png')}
+                      alt="Port Highway"
+                      className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                      onError={(e) => handleImgError(e, 'fusion_asset_highway.png')}
+                    />
+                  </div>
+                  <div className="text-[10px] font-bold text-amber-400 leading-tight">Port Highway</div>
+                  <div className="text-[9px] text-[var(--text-muted)] leading-tight">Road Arterial</div>
+                </div>
+
+                <div className="flex flex-col items-center text-center space-y-1 min-w-0">
+                  <div
+                    onClick={() => setLightboxImg({ url: resolvePreview(undefined, 'fusion_asset_channel.png'), title: 'Coastal Navigation: Deepwater Approach Channel' })}
+                    className="group relative cursor-pointer rounded-lg border border-sky-500/60 bg-slate-950 aspect-square w-full overflow-hidden shadow-sm"
+                  >
+                    <img
+                      src={resolvePreview(undefined, 'fusion_asset_channel.png')}
+                      alt="Nav Channel"
+                      className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                      onError={(e) => handleImgError(e, 'fusion_asset_channel.png')}
+                    />
+                  </div>
+                  <div className="text-[10px] font-bold text-sky-400 leading-tight">Nav Channel</div>
+                  <div className="text-[9px] text-[var(--text-muted)] leading-tight">Harbor Entry</div>
+                </div>
+              </div>
+            )}
           </div>
 
           {/* Section 6: Quantitative Telemetry */}
@@ -425,11 +527,13 @@ export const OpticalSarFusionCard: React.FC<OpticalSarFusionCardProps> = ({
             <div className="rounded-lg border border-[var(--border-subtle)] bg-[var(--bg-app)]/50 divide-y divide-[var(--border-subtle)] text-[11px] font-mono">
               {(data.quantitative || [
                 { metric: 'Total Monitored AOI', value: '312.5 km²' },
-                { metric: 'Optical Cloud Obscuration', value: '38.2%', color: '#F59E0B' },
-                { metric: 'Radar Penetration Depth', value: '100% (All-Weather)', bold: true, color: '#10B981' },
-                { metric: 'Restored Ground Surface', value: '100.0%', bold: true, color: '#10B981' },
-                { metric: 'Reconstructed Assets', value: '4 Ships, 3 Piers, 3 Highways', bold: true },
-                { metric: 'Cross-Modal Confidence', value: '94.8%', bold: true, color: '#2563EB' },
+                { metric: 'Cloud Obstruction', value: '68.2% (Penetrated)', color: '#F59E0B' },
+                { metric: 'Radar Penetration Depth', value: '100% (All-Weather C-Band)', bold: true, color: '#10B981' },
+                { metric: 'Reconstruction Mode', value: 'SAR-Guided Estimate', bold: true, color: '#10B981' },
+                { metric: 'Empirical SSIM (Ground Truth)', value: '0.863', bold: true, color: '#2563EB' },
+                { metric: 'Peak SNR (PSNR)', value: '19.7 dB', bold: true, color: '#2563EB' },
+                { metric: 'Spectral Angle (SAM)', value: '2.9°', bold: true },
+                { metric: 'Downstream Usability', value: 'Calibrated (VQA & Grounding Ready)', bold: true, color: '#10B981' },
               ]).map((q, idx) => (
                 <div key={idx} className="p-2 flex items-center justify-between">
                   <span className="text-[var(--text-muted)]">{q.metric}</span>
@@ -499,10 +603,10 @@ export const OpticalSarFusionCard: React.FC<OpticalSarFusionCardProps> = ({
             </div>
             <div className="p-2 flex items-center justify-center">
               <img
-                src={resolvePreview(lightboxImg.url, 'fusion_optical.tif')}
+                src={resolvePreview(lightboxImg.url, 'fusion_optical_clean.tif')}
                 alt={lightboxImg.title}
                 className="max-h-[75vh] w-auto rounded-lg object-contain"
-                onError={(e) => handleImgError(e, 'fusion_optical.tif')}
+                onError={(e) => handleImgError(e, 'fusion_optical_clean.tif')}
               />
             </div>
           </div>

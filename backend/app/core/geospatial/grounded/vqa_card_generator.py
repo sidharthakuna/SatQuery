@@ -89,8 +89,7 @@ def generate_vqa_visual_overlay(
 
         elif is_water or is_flood:
             # Water mask overlay (Blue)
-            ndwi = (g_band - r_band) / (g_band + r_band + 1e-5)
-            w_bin = (ndwi > 0.05) & (r_band < 0.28) & (g_band < 0.38)
+            w_bin = ((b_band > r_band * 0.95) | ((b_band + g_band) > 2.0 * r_band + 0.10) | (g_band < 0.18)) & (r_band < 0.25) & (g_band < 0.28) & (b_band < 0.28) & ~((g_band > r_band * 1.05) & (g_band > b_band * 1.05))
             pil_w = Image.fromarray((w_bin * 255).astype(np.uint8)).resize((w, h), Image.Resampling.NEAREST)
             w_arr = np.array(pil_w) > 100
             draw_arr[w_arr] = [59, 130, 246, 170]  # Blue overlay
@@ -115,7 +114,7 @@ def generate_vqa_visual_overlay(
 
         elif is_veg:
             # Vegetation mask overlay (Green)
-            v_bin = (g_band > (r_band + 0.04)) & (g_band > (b_band + 0.04))
+            v_bin = (g_band > (r_band * 1.05)) & (g_band > (b_band * 1.05)) & (g_band > 0.14)
             pil_v = Image.fromarray((v_bin * 255).astype(np.uint8)).resize((w, h), Image.Resampling.NEAREST)
             v_arr = np.array(pil_v) > 100
             draw_arr[v_arr] = [34, 197, 94, 160]  # Green overlay

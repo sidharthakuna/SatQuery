@@ -38,29 +38,67 @@ const NorthArrow: React.FC<{ isCyan?: boolean }> = ({ isCyan }) => (
   </div>
 );
 
-const ScaleBar: React.FC<{ isCyan?: boolean }> = ({ isCyan }) => (
-  <div className="absolute bottom-2 left-2 z-20 pointer-events-none">
-    <div
-      className={`bg-[#181614]/95 border rounded px-1.5 py-0.5 shadow-md ${
-        isCyan ? 'border-[#0EA5E9]/70' : 'border-white/40'
-      }`}
-    >
-      <div className="flex items-center text-[7px] font-mono text-white mb-0.5 tracking-tighter">
-        <span className="w-4 text-left">0</span>
-        <span className="w-6 text-center">250</span>
-        <span className="w-7 text-right">500 m</span>
-      </div>
+interface ScaleBarProps {
+  isCyan?: boolean;
+  gsd_m?: number | null;
+  bounds?: GeoBoundsLatLon | null;
+}
+
+const ScaleBar: React.FC<ScaleBarProps> = ({ isCyan, gsd_m, bounds }) => {
+  // Compute authentic metric distance based on true raster Ground Sampling Distance or WGS84 bounding box
+  let distanceM = 500;
+  if (gsd_m && gsd_m > 0) {
+    distanceM = gsd_m * 68;
+  } else if (bounds && bounds.min_lon != null && bounds.max_lon != null) {
+    const dLon = Math.abs(bounds.max_lon - bounds.min_lon);
+    const midLat = ((bounds.min_lat || 0) + (bounds.max_lat || 0)) / 2.0;
+    const totalSpanM = dLon * 111320 * Math.cos((midLat * Math.PI) / 180);
+    distanceM = (totalSpanM / 512) * 68;
+  }
+
+  let unit = 'm';
+  let halfVal = '250';
+  let fullVal = '500';
+
+  if (distanceM >= 1000) {
+    unit = 'km';
+    const distKm = distanceM / 1000;
+    const roundedKm = distKm >= 10 ? Math.round(distKm / 5) * 5 : Math.max(1, Math.round(distKm * 2) / 2);
+    fullVal = `${roundedKm}`;
+    halfVal = `${Math.round((roundedKm / 2) * 10) / 10}`;
+  } else {
+    let roundedM = 500;
+    if (distanceM > 300) roundedM = Math.round(distanceM / 100) * 100;
+    else if (distanceM > 100) roundedM = Math.round(distanceM / 50) * 50;
+    else roundedM = Math.max(20, Math.round(distanceM / 10) * 10);
+    fullVal = `${roundedM}`;
+    halfVal = `${Math.round(roundedM / 2)}`;
+  }
+
+  return (
+    <div className="absolute bottom-2 left-2 z-20 pointer-events-none">
       <div
-        className={`flex h-1 w-17 border ${
-          isCyan ? 'border-[#0EA5E9]' : 'border-white'
+        className={`bg-[#181614]/95 border rounded px-1.5 py-0.5 shadow-md ${
+          isCyan ? 'border-[#0EA5E9]/70' : 'border-white/40'
         }`}
       >
-        <div className={`w-1/2 ${isCyan ? 'bg-[#0EA5E9]' : 'bg-white'}`} />
-        <div className="w-1/2 bg-[#181614]" />
+        <div className="flex items-center justify-between text-[7px] font-mono text-white mb-0.5 tracking-tighter w-17">
+          <span>0</span>
+          <span>{halfVal}</span>
+          <span>{fullVal} {unit}</span>
+        </div>
+        <div
+          className={`flex h-1 w-17 border ${
+            isCyan ? 'border-[#0EA5E9]' : 'border-white'
+          }`}
+        >
+          <div className={`w-1/2 ${isCyan ? 'bg-[#0EA5E9]' : 'bg-white'}`} />
+          <div className="w-1/2 bg-[#181614]" />
+        </div>
       </div>
     </div>
-  </div>
-);
+  );
+};
 
 export interface CartographicIntelligenceViewerProps {
   image1Url: string;
@@ -78,6 +116,7 @@ export interface CartographicIntelligenceViewerProps {
   confidence?: number;
   descriptionNode?: React.ReactNode;
   bounds?: GeoBoundsLatLon | null;
+  gsd_m?: number | null;
   fileId?: string | null;
   className?: string;
   onOpenPdf?: () => void;
@@ -101,6 +140,7 @@ export const CartographicIntelligenceViewer: React.FC<CartographicIntelligenceVi
   confidence,
   descriptionNode,
   bounds,
+  gsd_m,
   fileId,
   className = '',
   onOpenPdf,
@@ -223,7 +263,7 @@ export const CartographicIntelligenceViewer: React.FC<CartographicIntelligenceVi
           className="w-full h-full object-cover select-none pointer-events-none"
         />
         <NorthArrow />
-        <ScaleBar />
+        <ScaleBar isCyan={false} gsd_m={gsd_m} bounds={bounds} />
       </div>
     </div>
   );
@@ -248,7 +288,7 @@ export const CartographicIntelligenceViewer: React.FC<CartographicIntelligenceVi
             className="w-full h-full object-cover select-none pointer-events-none"
           />
           <NorthArrow />
-          <ScaleBar />
+          <ScaleBar isCyan={false} gsd_m={gsd_m} bounds={bounds} />
         </div>
       </div>
     );
@@ -377,7 +417,7 @@ export const CartographicIntelligenceViewer: React.FC<CartographicIntelligenceVi
         )}
 
         <NorthArrow isCyan={true} />
-        <ScaleBar isCyan={true} />
+        <ScaleBar isCyan={true} gsd_m={gsd_m} bounds={bounds} />
       </div>
 
       {safeClusters.length > 0 && (

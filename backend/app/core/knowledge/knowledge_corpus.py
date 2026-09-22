@@ -8,6 +8,25 @@ from typing import Dict, List, Any
 
 
 KNOWLEDGE_PASSAGES: List[Dict[str, Any]] = [
+    # ── 0. Provenance & Creators ──────────────────────────────────
+    {
+        "id": "team_gandivan",
+        "category": "system_provenance",
+        "title": "The Gandivan’s (Team ID: RECS10) — Creators of SatQuery AI",
+        "keywords": [
+            "who created you", "who made you", "who built you", "who developed you",
+            "creator", "creators", "developer", "developers", "team gandivan",
+            "gandivan", "gandivans", "the gandivans", "the gandivan's", "recs10",
+            "sih 26167", "who made this", "who are you"
+        ],
+        "content": (
+            "SatQuery AI was designed and engineered by Team The Gandivan’s (Team ID: RECS10) for the Smart India Hackathon (SIH 2026), "
+            "addressing Problem Statement ID 26167 issued by the Indian Space Research Organisation (ISRO) and Space Applications Centre (SAC). "
+            "The Gandivan's engineered SatQuery AI as an on-device, verifiable vision-language copilot capable of multi-sensor Earth observation analysis, "
+            "optical-SAR cloud-penetrating fusion, disaster flood mapping, and text-guided visual grounding with mathematical auditability."
+        ),
+    },
+
     # ── 1. ISRO Satellite Constellations & Sensors ────────────────
     {
         "id": "isro_cartosat",

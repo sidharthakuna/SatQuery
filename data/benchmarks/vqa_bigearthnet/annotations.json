@@ -1,0 +1,436 @@
+[
+  {
+    "image_id": "scene_000.tif",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "What land cover types and facilities are present in this satellite scene?"
+      },
+      {
+        "from": "gpt",
+        "value": "Agricultural cropland parcels with irrigated field boundaries and estimated NDVI of 0.65."
+      }
+    ],
+    "bands": [
+      "B02_Blue",
+      "B03_Green",
+      "B04_Red",
+      "B08_NIR"
+    ],
+    "land_cover": "agricultural"
+  },
+  {
+    "image_id": "scene_001.tif",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "What land cover types and facilities are present in this satellite scene?"
+      },
+      {
+        "from": "gpt",
+        "value": "Urban settlement with residential buildings, road highway infrastructure, and low vegetation cover."
+      }
+    ],
+    "bands": [
+      "B02_Blue",
+      "B03_Green",
+      "B04_Red",
+      "B08_NIR"
+    ],
+    "land_cover": "urban"
+  },
+  {
+    "image_id": "scene_002.tif",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "What land cover types and facilities are present in this satellite scene?"
+      },
+      {
+        "from": "gpt",
+        "value": "Dense deciduous forest canopy with healthy vegetative biomass and strong NIR chlorophyll reflectance."
+      }
+    ],
+    "bands": [
+      "B02_Blue",
+      "B03_Green",
+      "B04_Red",
+      "B08_NIR"
+    ],
+    "land_cover": "vegetation"
+  },
+  {
+    "image_id": "scene_003.tif",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "What land cover types and facilities are present in this satellite scene?"
+      },
+      {
+        "from": "gpt",
+        "value": "Open freshwater lake reservoir and riverine channel with low NIR reflectance."
+      }
+    ],
+    "bands": [
+      "B02_Blue",
+      "B03_Green",
+      "B04_Red",
+      "B08_NIR"
+    ],
+    "land_cover": "water"
+  },
+  {
+    "image_id": "scene_004.tif",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "What land cover types and facilities are present in this satellite scene?"
+      },
+      {
+        "from": "gpt",
+        "value": "Industrial storage tanks, logistics facilities, and concrete paved loading docks."
+      }
+    ],
+    "bands": [
+      "B02_Blue",
+      "B03_Green",
+      "B04_Red",
+      "B08_NIR"
+    ],
+    "land_cover": "industrial"
+  },
+  {
+    "image_id": "scene_005.tif",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "What land cover types and facilities are present in this satellite scene?"
+      },
+      {
+        "from": "gpt",
+        "value": "Coastal wetland interface with tidal mudflats, estuarine waters, and mangrove vegetation."
+      }
+    ],
+    "bands": [
+      "B02_Blue",
+      "B03_Green",
+      "B04_Red",
+      "B08_NIR"
+    ],
+    "land_cover": "coastal"
+  },
+  {
+    "image_id": "scene_006.tif",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "What land cover types and facilities are present in this satellite scene?"
+      },
+      {
+        "from": "gpt",
+        "value": "Arid desert terrain with aeolian sand dunes, bare soil, and sparse scrubland."
+      }
+    ],
+    "bands": [
+      "B02_Blue",
+      "B03_Green",
+      "B04_Red",
+      "B08_NIR"
+    ],
+    "land_cover": "desert"
+  },
+  {
+    "image_id": "scene_007.tif",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "What land cover types and facilities are present in this satellite scene?"
+      },
+      {
+        "from": "gpt",
+        "value": "High-altitude mountainous terrain with snow capped peaks and shadowed valley topography."
+      }
+    ],
+    "bands": [
+      "B02_Blue",
+      "B03_Green",
+      "B04_Red",
+      "B08_NIR"
+    ],
+    "land_cover": "mountain"
+  },
+  {
+    "image_id": "scene_008.tif",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "What land cover types and facilities are present in this satellite scene?"
+      },
+      {
+        "from": "gpt",
+        "value": "Agricultural cropland parcels with irrigated field boundaries and estimated NDVI of 0.65."
+      }
+    ],
+    "bands": [
+      "B02_Blue",
+      "B03_Green",
+      "B04_Red",
+      "B08_NIR"
+    ],
+    "land_cover": "agricultural"
+  },
+  {
+    "image_id": "scene_009.tif",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "What land cover types and facilities are present in this satellite scene?"
+      },
+      {
+        "from": "gpt",
+        "value": "Urban settlement with residential buildings, road highway infrastructure, and low vegetation cover."
+      }
+    ],
+    "bands": [
+      "B02_Blue",
+      "B03_Green",
+      "B04_Red",
+      "B08_NIR"
+    ],
+    "land_cover": "urban"
+  },
+  {
+    "image_id": "scene_010.tif",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "What land cover types and facilities are present in this satellite scene?"
+      },
+      {
+        "from": "gpt",
+        "value": "Dense deciduous forest canopy with healthy vegetative biomass and strong NIR chlorophyll reflectance."
+      }
+    ],
+    "bands": [
+      "B02_Blue",
+      "B03_Green",
+      "B04_Red",
+      "B08_NIR"
+    ],
+    "land_cover": "vegetation"
+  },
+  {
+    "image_id": "scene_011.tif",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "What land cover types and facilities are present in this satellite scene?"
+      },
+      {
+        "from": "gpt",
+        "value": "Open freshwater lake reservoir and riverine channel with low NIR reflectance."
+      }
+    ],
+    "bands": [
+      "B02_Blue",
+      "B03_Green",
+      "B04_Red",
+      "B08_NIR"
+    ],
+    "land_cover": "water"
+  },
+  {
+    "image_id": "scene_012.tif",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "What land cover types and facilities are present in this satellite scene?"
+      },
+      {
+        "from": "gpt",
+        "value": "Industrial storage tanks, logistics facilities, and concrete paved loading docks."
+      }
+    ],
+    "bands": [
+      "B02_Blue",
+      "B03_Green",
+      "B04_Red",
+      "B08_NIR"
+    ],
+    "land_cover": "industrial"
+  },
+  {
+    "image_id": "scene_013.tif",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "What land cover types and facilities are present in this satellite scene?"
+      },
+      {
+        "from": "gpt",
+        "value": "Coastal wetland interface with tidal mudflats, estuarine waters, and mangrove vegetation."
+      }
+    ],
+    "bands": [
+      "B02_Blue",
+      "B03_Green",
+      "B04_Red",
+      "B08_NIR"
+    ],
+    "land_cover": "coastal"
+  },
+  {
+    "image_id": "scene_014.tif",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "What land cover types and facilities are present in this satellite scene?"
+      },
+      {
+        "from": "gpt",
+        "value": "Arid desert terrain with aeolian sand dunes, bare soil, and sparse scrubland."
+      }
+    ],
+    "bands": [
+      "B02_Blue",
+      "B03_Green",
+      "B04_Red",
+      "B08_NIR"
+    ],
+    "land_cover": "desert"
+  },
+  {
+    "image_id": "scene_015.tif",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "What land cover types and facilities are present in this satellite scene?"
+      },
+      {
+        "from": "gpt",
+        "value": "High-altitude mountainous terrain with snow capped peaks and shadowed valley topography."
+      }
+    ],
+    "bands": [
+      "B02_Blue",
+      "B03_Green",
+      "B04_Red",
+      "B08_NIR"
+    ],
+    "land_cover": "mountain"
+  },
+  {
+    "image_id": "nasa_landsat_sriharikota.tif",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "What coastal features, barrier island geography, and facilities are visible at Sriharikota?"
+      },
+      {
+        "from": "gpt",
+        "value": "Barrier island coastal complex with ISRO launchpads, technical assembly buildings, shoreline roads, and Pulicat lagoon."
+      }
+    ],
+    "bands": [
+      "B02_Blue",
+      "B03_Green",
+      "B04_Red"
+    ],
+    "land_cover": "spaceport_coastal"
+  },
+  {
+    "image_id": "isro_ahmedabad_sac.tif",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "What urban infrastructure and institutional campus features are detected in this scene?"
+      },
+      {
+        "from": "gpt",
+        "value": "Urban institutional research campus with scientific buildings, road grids, and surrounding municipal built-up areas."
+      }
+    ],
+    "bands": [
+      "B02_Blue",
+      "B03_Green",
+      "B04_Red"
+    ],
+    "land_cover": "institutional_urban"
+  },
+  {
+    "image_id": "sentinel2_coastal.tif",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Describe the port maritime infrastructure, breakwater boundaries, and harbor waters."
+      },
+      {
+        "from": "gpt",
+        "value": "Deepwater port harbor with maritime berths, breakwater arm, navigational channels, and docked cargo vessels."
+      }
+    ],
+    "bands": [
+      "B02_Blue",
+      "B03_Green",
+      "B04_Red"
+    ],
+    "land_cover": "maritime_port"
+  },
+  {
+    "image_id": "forest_vqa.tif",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "What is the vegetative canopy density and ecological terrain condition in this region?"
+      },
+      {
+        "from": "gpt",
+        "value": "Dense montane forest canopy with high chlorophyll NDVI reflectance, rugged terrain, and rich biosphere biodiversity."
+      }
+    ],
+    "bands": [
+      "B02_Blue",
+      "B03_Green",
+      "B04_Red"
+    ],
+    "land_cover": "montane_forest"
+  },
+  {
+    "image_id": "flood_t2.tif",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "What land cover types and flood conditions are present in this satellite scene?"
+      },
+      {
+        "from": "gpt",
+        "value": "Severe riverine flood inundation with submerged alluvial plains, high NDWI surface water, and displaced sediment."
+      }
+    ],
+    "bands": [
+      "B02_Blue",
+      "B03_Green",
+      "B04_Red"
+    ],
+    "land_cover": "flood_inundation"
+  },
+  {
+    "image_id": "urban_t2.tif",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "What urban infrastructure and high-density settlements are visible in this scene?"
+      },
+      {
+        "from": "gpt",
+        "value": "High-density urban technology corridor with multi-lane highways, commercial office complexes, and residential zones."
+      }
+    ],
+    "bands": [
+      "B02_Blue",
+      "B03_Green",
+      "B04_Red"
+    ],
+    "land_cover": "urban_tech_corridor"
+  }
+]

@@ -68,7 +68,7 @@ def find_uploaded_file(file_id: str) -> Optional[str]:
                 return str(cand.resolve())
 
         # Search directory entries
-        for fp in d.iterdir():
+        for fp in sorted(d.iterdir()):
             if not fp.is_file():
                 continue
             ext = fp.suffix.lower()

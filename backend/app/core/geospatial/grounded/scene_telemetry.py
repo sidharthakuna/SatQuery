@@ -136,4 +136,5 @@ class SceneTelemetry:
             "built_status": built_status,
             "quadrant_breakdown": quad_summary,
             "quadrants": quads,
+            "chart_data": base_metrics.get("chart_data"),
         }
