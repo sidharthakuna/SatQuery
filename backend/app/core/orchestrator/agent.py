@@ -157,7 +157,7 @@ class SatQueryAgent:
             # ═══════════════════════════════════════════════════
             #  Stage 3: Query Understanding & Task Decomposition
             # ═══════════════════════════════════════════════════
-            task_type, tool_ids, params = self.classifier.classify(query, image_metas)
+            task_type, tool_ids, params = self.classifier.classify(query, image_metas, history=history)
             tracer.set_task_type(task_type)
             tracer.set_selected_tools(tool_ids)
             tracer.set_parameters(params)
@@ -429,6 +429,8 @@ class SatQueryAgent:
                     deps.append("tool_change_detection")
                 elif "tool_optical_sar_fusion" in tool_ids:
                     deps.append("tool_optical_sar_fusion")
+            elif tid == "tool_grounding" and "tool_optical_sar_fusion" in tool_ids:
+                deps.append("tool_optical_sar_fusion")
             plan.append({
                 "tool_id": tid,
                 "dependencies": deps,

@@ -65,9 +65,9 @@ class InputIntelligenceGate:
         image_metas = normalized_metas
 
         # 1. Image count validation
-        if len(image_metas) > 2:
-            errors.append(f"Too many images supplied ({len(image_metas)}). The system accepts up to 2 concurrent images for bi-temporal or optical-SAR analysis.")
-            remediations.append("Select a maximum of 2 complementary or multi-temporal rasters.")
+        if len(image_metas) > 10:
+            errors.append(f"Too many images supplied ({len(image_metas)}). The system accepts up to 10 concurrent images.")
+            remediations.append("Select a maximum of 10 complementary or multi-temporal rasters.")
 
         modalities = [m.modality.upper() if m.modality else "OPTICAL" for m in image_metas]
         crs_list = [m.crs for m in image_metas]
@@ -103,6 +103,13 @@ class InputIntelligenceGate:
                 remediations.append(f"SatQuery automated co-registration will reproject Image B to `{crs_a}` reference grid before bi-temporal inference.")
                 crs_compatible = False
 
+            # Dimension compatibility check for paired rasters
+            w1, h1 = image_metas[0].width, image_metas[0].height
+            w2, h2 = image_metas[1].width, image_metas[1].height
+            if (w1, h1) != (w2, h2):
+                warnings.append(f"Dimension mismatch detected: Image A is {w1}×{h1}, Image B is {w2}×{h2}.")
+                remediations.append("SatQuery automated spatial coregistration will resample rasters to matching dimensions.")
+
         # 5. Radiometric Quality & Cloud Obscuration Scoring
         quality_score = 1.0
 
@@ -124,9 +131,12 @@ class InputIntelligenceGate:
 
                     # Optical Cloud Contamination Check
                     if idx < len(modalities) and modalities[idx] == "OPTICAL" and arr.ndim >= 2:
-                        # Normalize to 0..1 if raw 8-bit or 16-bit
-                        max_v = float(arr.max()) if arr.size > 0 and arr.max() > 1.0 else 1.0
-                        norm_arr = arr / max(max_v, 255.0)
+                        # Normalize to 0..1 range accurately
+                        if arr.size > 0:
+                            max_v = float(np.nanmax(arr))
+                            norm_arr = (arr / max_v) if max_v > 1.0 else arr.copy()
+                        else:
+                            norm_arr = arr
                         if norm_arr.ndim == 3 and norm_arr.shape[0] >= 3:
                             r, g, b = norm_arr[0], norm_arr[1], norm_arr[2]
                             lum = 0.299 * r + 0.587 * g + 0.114 * b

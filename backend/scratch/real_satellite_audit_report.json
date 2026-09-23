@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-09-21 05:18:04 UTC",
+  "timestamp": "2026-09-23 09:22:42 UTC",
   "devices": "Local PyTorch CPU/CUDA",
   "datasets": [
     "NASA Landsat-8 Level-2 (LC08_L2SP_142051)",
@@ -21,7 +21,7 @@
           13.76
         ],
         "query": "What coastal features, barrier island geography, and facilities are visible at Sriharikota?",
-        "answer": "urban settlement with road with and and and"
+        "answer": "barrier launch island coastal isro complexes assembly barrier island trenches launchpads coast"
       },
       {
         "dataset": "Copernicus Sentinel-2 L2A (ISRO SAC Ahmedabad)",
@@ -33,7 +33,7 @@
           23.08
         ],
         "query": "What urban infrastructure and institutional campus features are detected in this scene?",
-        "answer": "urban settlement with road with and and and"
+        "answer": "urban institutional research campus with scientific buildings road grids and built-up areas"
       },
       {
         "dataset": "Copernicus Sentinel-2 L2A (Western Ghats Nilgiris Biosphere)",
@@ -45,7 +45,7 @@
           11.48
         ],
         "query": "What forest canopy density and vegetative biomass features are present in this scene?",
-        "answer": "urban settlement with road with and and and"
+        "answer": "dense forest canopy with high chlorophyll ndvi vegetative biomass and reflectance"
       },
       {
         "dataset": "Copernicus Sentinel-2 L2A (Visakhapatnam Deepwater Sea Port)",
@@ -57,7 +57,7 @@
           17.74
         ],
         "query": "Describe the port maritime infrastructure, breakwater boundaries, and harbor waters.",
-        "answer": "urban settlement with road with and and and"
+        "answer": "deepwater port harbor with maritime arm navigational channels and cargo"
       }
     ],
     "grounding_dino": [
@@ -68,66 +68,66 @@
         "detections": [
           {
             "rank": 1,
-            "confidence": 1.0,
+            "confidence": 0.999,
             "pixel_box": [
-              0.619,
-              0.201,
-              0.059,
-              0.013
+              0.539,
+              0.462,
+              0.482,
+              0.535
             ],
             "geo_coords": [
-              83.2413,
-              17.6905,
-              83.2601,
-              17.7353
+              83.2854,
+              17.7086,
+              83.2911,
+              17.713
             ]
           },
           {
             "rank": 2,
-            "confidence": 1.0,
+            "confidence": 0.751,
             "pixel_box": [
-              0.534,
-              0.432,
-              0.038,
-              0.049
+              0.463,
+              0.491,
+              0.347,
+              0.254
             ],
             "geo_coords": [
-              83.2449,
-              17.6972,
-              83.2832,
-              17.7369
+              83.2695,
+              17.7145,
+              83.2877,
+              17.7234
             ]
           },
           {
             "rank": 3,
-            "confidence": 0.014,
+            "confidence": 0.325,
             "pixel_box": [
-              0.387,
-              0.361,
-              0.005,
-              0.03
+              0.395,
+              0.658,
+              0.21,
+              0.283
             ],
             "geo_coords": [
-              83.243,
-              17.709,
-              83.2761,
-              17.7396
+              83.2718,
+              17.7197,
+              83.3006,
+              17.7339
             ]
           },
           {
             "rank": 4,
-            "confidence": 0.001,
+            "confidence": 0.079,
             "pixel_box": [
-              0.2,
-              0.299,
-              0.017,
-              0.055
+              0.624,
+              0.408,
+              0.313,
+              0.378
             ],
             "geo_coords": [
-              83.2455,
-              17.724,
-              83.2699,
-              17.7387
+              83.279,
+              17.7021,
+              83.2813,
+              17.726
             ]
           }
         ]
@@ -139,66 +139,66 @@
         "detections": [
           {
             "rank": 1,
-            "confidence": 0.951,
+            "confidence": 0.993,
             "pixel_box": [
-              0.603,
-              0.447,
-              0.119,
-              0.154
+              0.091,
+              0.47,
+              0.971,
+              0.98
             ],
             "geo_coords": [
-              80.1954,
-              13.7117,
-              80.2247,
-              13.7505
+              80.2271,
+              13.6823,
+              80.278,
+              13.7527
             ]
           },
           {
             "rank": 2,
-            "confidence": 0.86,
+            "confidence": 0.796,
             "pixel_box": [
-              0.702,
-              0.286,
-              0.106,
-              0.052
+              0.772,
+              0.608,
+              0.972,
+              0.998
             ],
             "geo_coords": [
-              80.1852,
-              13.7039,
-              80.2086,
-              13.7515
+              80.2408,
+              13.6823,
+              80.2798,
+              13.6982
             ]
           },
           {
             "rank": 3,
-            "confidence": 0.281,
+            "confidence": 0.785,
             "pixel_box": [
-              0.817,
-              0.766,
-              0.397,
-              0.273
+              0.213,
+              0.094,
+              0.93,
+              0.975
             ],
             "geo_coords": [
-              80.2073,
-              13.6946,
-              80.2566,
-              13.7283
+              80.1894,
+              13.6856,
+              80.2775,
+              13.743
             ]
           },
           {
             "rank": 4,
-            "confidence": 0.113,
+            "confidence": 0.167,
             "pixel_box": [
-              0.748,
-              0.331,
-              0.416,
-              0.242
+              0.569,
+              0.995,
+              0.939,
+              0.856
             ],
             "geo_coords": [
-              80.2042,
-              13.7002,
-              80.2131,
-              13.7267
+              80.2656,
+              13.6848,
+              80.2795,
+              13.7145
             ]
           }
         ]
@@ -211,14 +211,14 @@
         "t1": "flood_t1.tif",
         "t2": "flood_t2.tif",
         "bounds": [
-          92.95,
-          26.55,
-          93.05,
-          26.63
+          85.75,
+          20.15,
+          85.95,
+          20.35
         ],
-        "change_pct": 84.7,
-        "area_sq_km": 74.66,
-        "area_hectares": 7465.6
+        "change_pct": 83.22,
+        "area_sq_km": 384.8,
+        "area_hectares": 38479.8
       },
       {
         "scenario": "Bengaluru Tech Corridor (Multi-temporal Urban Expansion)",
@@ -231,55 +231,55 @@
           77.7,
           12.98
         ],
-        "change_pct": 46.5,
-        "area_sq_km": 44.67,
-        "area_hectares": 4467.3
+        "change_pct": 53.47,
+        "area_sq_km": 51.36,
+        "area_hectares": 5136.3
       }
     ],
     "optical_sar_fusion": {
       "aoi": "Visakhapatnam Port",
       "cloudy_raster": "fusion_optical.tif",
       "sar_raster": "fusion_sar.tif",
-      "confidence_pct": 54.5,
-      "cloudy_psnr_db": 8.630000114440918,
-      "reconstructed_psnr_db": 11.109999656677246,
-      "psnr_gain_db": 2.4800000190734863
+      "confidence_pct": 88.7,
+      "cloudy_psnr_db": 15.720000267028809,
+      "reconstructed_psnr_db": 16.739999771118164,
+      "psnr_gain_db": 1.0199999809265137
     },
     "agent_intent_router": [
       {
         "query": "What is the vegetation density and NDVI index across the Nilgiris biosphere reserve?",
         "predicted": "SINGLE_VQA",
-        "confidence": 93.9,
+        "confidence": 89.4,
         "status": "PASSED"
       },
       {
         "query": "Detect and localize all cargo vessels and dry docks inside Visakhapatnam port.",
         "predicted": "SINGLE_GROUNDING",
-        "confidence": 93.9,
+        "confidence": 82.4,
         "status": "PASSED"
       },
       {
         "query": "Measure the flood inundation surface change between April and October in Brahmaputra.",
         "predicted": "BITEMPORAL_CHANGE",
-        "confidence": 92.3,
+        "confidence": 87.9,
         "status": "PASSED"
       },
       {
         "query": "Pierce through cloud obscuration over the harbor using Sentinel-1 C-band SAR radar.",
         "predicted": "CROSS_MODAL_FUSION",
-        "confidence": 94.2,
+        "confidence": 94.4,
         "status": "PASSED"
       },
       {
         "query": "Explain Cartosat-3 spatial resolution and technical payload specifications.",
-        "predicted": "AGENT_ASSISTANT",
-        "confidence": 84.5,
-        "status": "PASSED"
+        "predicted": "SINGLE_GROUNDING",
+        "confidence": 53.1,
+        "status": "FAILED"
       },
       {
         "query": "Identify flooded villages in Assam and draw bounding boxes around inundated structures.",
         "predicted": "MULTI_MODEL",
-        "confidence": 91.0,
+        "confidence": 91.4,
         "status": "PASSED"
       }
     ],
@@ -287,34 +287,34 @@
       {
         "query": "What are the payload details, swath, and spatial resolution of ISRO Cartosat-3?",
         "title": "ISRO Cartosat Satellite Constellation",
-        "score": 0.785,
+        "score": 0.811,
         "snippet": "ISRO's Cartosat series represents India's dedicated high-resolution optical Earth observation constellation. Cartosat-1 provided 2.5m stereo"
       },
       {
         "query": "Explain how ISRO RISAT-1A / EOS-04 C-band radar penetrates tropical monsoon clouds.",
         "title": "ISRO RISAT Series & Microwave Radar (EOS-04)",
-        "score": 0.937,
+        "score": 0.933,
         "snippet": "RISAT (Radar Imaging Satellite) and EOS-04 are ISRO's active microwave Synthetic Aperture Radar (SAR) spacecraft. Operating at C-band freque"
       },
       {
         "query": "What are the specifications of the NASA-ISRO NISAR dual-frequency L-band and S-band SAR?",
         "title": "NASA-ISRO SAR (NISAR) Dual-Frequency Radar Mission",
-        "score": 0.875,
+        "score": 0.835,
         "snippet": "NISAR is a groundbreaking joint mission between NASA and ISRO featuring dual-frequency SweepSAR radar. NASA provides the L-band SAR (1.25 GH"
       },
       {
         "query": "What are the spectral bands and revisit period of NASA Landsat-8 and Landsat-9 OLI?",
         "title": "NASA / USGS Landsat Constellation (Landsat-8 & Landsat-9)",
-        "score": 0.928,
+        "score": 0.822,
         "snippet": "NASA and USGS operate Landsat-8 and Landsat-9 in sun-synchronous polar orbits at 705km altitude. Both carry the Operational Land Imager (OLI"
       },
       {
         "query": "What are NDMA national flood inundation and reservoir buffer safety regulations?",
         "title": "NDMA & CWC Flood Inundation Assessment Protocols",
-        "score": 0.821,
+        "score": 0.844,
         "snippet": "Under National Disaster Management Authority (NDMA) and Central Water Commission (CWC) guidelines, satellite-derived flood maps support rapi"
       }
     ]
   },
-  "execution_time_seconds": 1.35
+  "execution_time_seconds": 1.45
 }

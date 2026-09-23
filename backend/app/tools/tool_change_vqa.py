@@ -65,22 +65,44 @@ class ChangeVQATool(BaseTool):
         from app.core.geospatial.grounded_analyzer import GroundedRSAnalyzer
 
         latency_ms = random.randint(200, 500)
-        time.sleep(latency_ms / 1000.0)
 
+        prior_cd = tool_input.prior_outputs.get("tool_change_detection", {})
         prior_fusion = tool_input.prior_outputs.get("tool_optical_sar_fusion", {})
-        prior_extra = prior_fusion.get("extra", {})
-        if prior_extra.get("flooded_hectares") is not None:
-            f_ha = prior_extra["flooded_hectares"]
-            f_pct = prior_extra.get("flooded_percent", 0.0)
-            f_clusters = prior_extra.get("flood_clusters", [])
+        prior_cd_extra = prior_cd.get("extra", {})
+        prior_fusion_extra = prior_fusion.get("extra", {})
+
+        if prior_cd_extra.get("change_hectares") is not None or prior_cd.get("mask") is not None:
+            c_ha = prior_cd_extra.get("change_hectares", 0.0)
+            c_pct = prior_cd_extra.get("change_percent", 0.0)
+            c_clusters = prior_cd_extra.get("clusters", [])
+            dom_cat = prior_cd_extra.get("dominant_category", "Land Cover Change")
+            tot_ha = float(prior_cd_extra.get("total_aoi_ha") or 262.1)
+            analytics = {
+                "change_hectares": c_ha,
+                "change_percent": c_pct,
+                "clusters": c_clusters,
+                "dominant_category": dom_cat,
+                "stable_percent": round(max(100.0 - c_pct, 0.0), 1),
+                "stable_hectares": round(max(tot_ha - c_ha, 0.0), 1),
+                "total_aoi_ha": tot_ha,
+                "mask": prior_cd.get("mask"),
+            }
+        elif prior_fusion_extra.get("flooded_hectares") is not None:
+            f_ha = prior_fusion_extra["flooded_hectares"]
+            f_pct = prior_fusion_extra.get("flooded_percent", 0.0)
+            f_clusters = prior_fusion_extra.get("flood_clusters", [])
+            from app.schemas.geospatial import compute_aoi_hectares
+            meta0 = tool_input.image_metas[0] if tool_input.image_metas else None
+            tot_ha = float(prior_fusion_extra.get("total_aoi_ha") or compute_aoi_hectares(meta0))
             analytics = {
                 "change_hectares": f_ha,
                 "change_percent": f_pct,
                 "clusters": f_clusters,
                 "dominant_category": "Sub-Cloud Flood Inundation",
                 "stable_percent": round(max(100.0 - f_pct, 0.0), 1),
-                "stable_hectares": round(max(2365.4 - f_ha, 0.0), 1),
-                "total_aoi_ha": 2365.4,
+                "stable_hectares": round(max(tot_ha - f_ha, 0.0), 1),
+                "total_aoi_ha": tot_ha,
+                "mask": prior_fusion.get("mask"),
             }
         else:
             analytics = GroundedRSAnalyzer.analyze_bitemporal(
@@ -95,6 +117,7 @@ class ChangeVQATool(BaseTool):
             tool_id=self.tool_id,
             text_response=answer,
             confidence=0.93,
+            mask=analytics.get("mask"),
             extra={
                 "mock": False,
                 "grounded": True,
@@ -110,20 +133,43 @@ class ChangeVQATool(BaseTool):
         from app.core.geospatial.grounded_analyzer import GroundedRSAnalyzer
 
         start_time = time.time()
+        prior_cd = tool_input.prior_outputs.get("tool_change_detection", {})
         prior_fusion = tool_input.prior_outputs.get("tool_optical_sar_fusion", {})
-        prior_extra = prior_fusion.get("extra", {})
-        if prior_extra.get("flooded_hectares") is not None:
-            f_ha = prior_extra["flooded_hectares"]
-            f_pct = prior_extra.get("flooded_percent", 0.0)
-            f_clusters = prior_extra.get("flood_clusters", [])
+        prior_cd_extra = prior_cd.get("extra", {})
+        prior_fusion_extra = prior_fusion.get("extra", {})
+
+        if prior_cd_extra.get("change_hectares") is not None or prior_cd.get("mask") is not None:
+            c_ha = prior_cd_extra.get("change_hectares", 0.0)
+            c_pct = prior_cd_extra.get("change_percent", 0.0)
+            c_clusters = prior_cd_extra.get("clusters", [])
+            dom_cat = prior_cd_extra.get("dominant_category", "Land Cover Change")
+            tot_ha = float(prior_cd_extra.get("total_aoi_ha") or 262.1)
+            analytics = {
+                "change_hectares": c_ha,
+                "change_percent": c_pct,
+                "clusters": c_clusters,
+                "dominant_category": dom_cat,
+                "stable_percent": round(max(100.0 - c_pct, 0.0), 1),
+                "stable_hectares": round(max(tot_ha - c_ha, 0.0), 1),
+                "total_aoi_ha": tot_ha,
+                "mask": prior_cd.get("mask"),
+            }
+        elif prior_fusion_extra.get("flooded_hectares") is not None:
+            f_ha = prior_fusion_extra["flooded_hectares"]
+            f_pct = prior_fusion_extra.get("flooded_percent", 0.0)
+            f_clusters = prior_fusion_extra.get("flood_clusters", [])
+            from app.schemas.geospatial import compute_aoi_hectares
+            meta0 = tool_input.image_metas[0] if tool_input.image_metas else None
+            tot_ha = float(prior_fusion_extra.get("total_aoi_ha") or compute_aoi_hectares(meta0))
             analytics = {
                 "change_hectares": f_ha,
                 "change_percent": f_pct,
                 "clusters": f_clusters,
                 "dominant_category": "Sub-Cloud Flood Inundation",
                 "stable_percent": round(max(100.0 - f_pct, 0.0), 1),
-                "stable_hectares": round(max(2365.4 - f_ha, 0.0), 1),
-                "total_aoi_ha": 2365.4,
+                "stable_hectares": round(max(tot_ha - f_ha, 0.0), 1),
+                "total_aoi_ha": tot_ha,
+                "mask": prior_fusion.get("mask"),
             }
         else:
             analytics = GroundedRSAnalyzer.analyze_bitemporal(

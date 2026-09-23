@@ -72,7 +72,7 @@ class CrossModelEvidenceValidator:
         cross_modal_agreement = 0.85
 
         if task_type == TaskType.BITEMPORAL_CHANGE:
-            change_ha = spatial_extra.get("change_hectares", 0.0)
+            change_ha = float(spatial_extra.get("change_hectares") or 0.0)
             clusters = spatial_extra.get("clusters", [])
 
             if change_ha > 0:
@@ -135,9 +135,9 @@ class CrossModelEvidenceValidator:
             executed_tools = [o.tool_id for o in tool_outputs]
             if "tool_optical_sar_fusion" in executed_tools or "cloud_coverage_percent" in spatial_extra:
                 supporting.append("Optical-SAR Cross-Attention Fusion penetrated cloud deck and restored surface reflectance.")
-            ch_ha = spatial_extra.get("flooded_hectares") or spatial_extra.get("change_hectares", 0.0)
+            ch_ha = float(spatial_extra.get("flooded_hectares") or spatial_extra.get("change_hectares") or 0.0)
             if "tool_change_detection" in executed_tools or ch_ha > 0:
-                supporting.append(f"Bi-temporal delta and hydrological analysis confirmed {ch_ha:.1f} ha transformed surface.")
+                supporting.append(f"Bi-temporal delta and surface transformation analysis confirmed {ch_ha:.1f} ha altered ground.")
             boxes = next((o.bounding_boxes for o in tool_outputs if o.bounding_boxes), [])
             if "tool_grounding" in executed_tools or boxes:
                 supporting.append(f"Grounding DINO + SAM-RS verified spatial target localization ({len(boxes)} bounding regions).")

@@ -271,17 +271,16 @@ export const ChatProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const attachImage = (img: ImageUploadResponse) => {
     const currentActiveId = activeSessionIdRef.current;
     setActiveImages((prev) => {
-      // Limit to 2 images max as enforced by backend.
-      // Keep the first image (slot 0) and replace slot 1 with the new one.
+      // Support multi-image satellite analysis (up to 10 concurrent rasters)
       const existing = prev.filter((item) => item.file_id !== img.file_id);
-      return existing.length >= 2 ? [existing[0], img] : [...existing, img];
+      return existing.length >= 10 ? [...existing.slice(1), img] : [...existing, img];
     });
 
     setSessions((sPrev) =>
       sPrev.map((s) => {
         if (s.id === currentActiveId) {
           const existing = (s.images || []).filter((item) => item.file_id !== img.file_id);
-          const updated = existing.length >= 2 ? [existing[0], img] : [...existing, img];
+          const updated = existing.length >= 10 ? [...existing.slice(1), img] : [...existing, img];
           return { ...s, images: updated };
         }
         return s;

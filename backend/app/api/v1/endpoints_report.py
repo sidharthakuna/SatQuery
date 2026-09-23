@@ -124,7 +124,13 @@ async def generate_report(request: ReportRequest, background_tasks: BackgroundTa
 )
 async def download_report(report_id: str, view: bool = False):
     """Serve a generated PDF report for download or browser viewing."""
-    pdf_path = settings.report_dir / f"briefing_{report_id}.pdf"
+    import re
+    if not re.match(r"^[a-zA-Z0-9_\-]+$", report_id):
+        raise HTTPException(status_code=400, detail="Invalid report ID format.")
+
+    pdf_path = (settings.report_dir / f"briefing_{report_id}.pdf").resolve()
+    if not str(pdf_path).startswith(str(settings.report_dir.resolve())):
+        raise HTTPException(status_code=403, detail="Access denied.")
 
     if not pdf_path.exists():
         raise HTTPException(
@@ -148,7 +154,13 @@ async def download_report(report_id: str, view: bool = False):
 )
 async def download_report_docx(report_id: str):
     """Serve a generated Word (.docx) report for download."""
-    docx_path = settings.report_dir / f"briefing_{report_id}.docx"
+    import re
+    if not re.match(r"^[a-zA-Z0-9_\-]+$", report_id):
+        raise HTTPException(status_code=400, detail="Invalid report ID format.")
+
+    docx_path = (settings.report_dir / f"briefing_{report_id}.docx").resolve()
+    if not str(docx_path).startswith(str(settings.report_dir.resolve())):
+        raise HTTPException(status_code=403, detail="Access denied.")
 
     if not docx_path.exists():
         raise HTTPException(
@@ -162,3 +174,4 @@ async def download_report_docx(report_id: str):
         content_disposition_type="attachment",
         filename=f"SatQuery_Briefing_{report_id}.docx",
     )
+

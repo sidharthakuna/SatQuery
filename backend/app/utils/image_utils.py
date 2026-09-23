@@ -200,3 +200,83 @@ def create_comparison_image(
     canvas.save(output_path, format="TIFF")
     logger.debug(f"Created comparison image: {output_path}")
     return output_path
+
+
+def compute_ssim_psnr(
+    img1: np.ndarray,
+    img2: np.ndarray,
+    max_val: float = 1.0,
+) -> Tuple[float, float]:
+    """
+    Computes authentic Structural Similarity Index (SSIM) and Peak Signal-to-Noise Ratio (PSNR)
+    between two rasters/images in pure NumPy / SciPy without external skimage dependency.
+
+    Args:
+        img1: First image array (H, W, C) or (H, W) or (C, H, W) in [0, max_val]
+        img2: Second image array of matching shape
+        max_val: Maximum dynamic range (typically 1.0 for float32 or 255.0 for uint8)
+
+    Returns:
+        (ssim_score, psnr_db)
+    """
+    from scipy.ndimage import uniform_filter
+
+    arr1 = np.asarray(img1, dtype=np.float64)
+    arr2 = np.asarray(img2, dtype=np.float64)
+
+    # Convert CHW to HWC if needed
+    if arr1.ndim == 3 and arr1.shape[0] in [1, 2, 3, 4] and arr1.shape[0] < arr1.shape[1]:
+        arr1 = np.transpose(arr1, (1, 2, 0))
+    if arr2.ndim == 3 and arr2.shape[0] in [1, 2, 3, 4] and arr2.shape[0] < arr2.shape[1]:
+        arr2 = np.transpose(arr2, (1, 2, 0))
+
+    # Match shapes if slight crop discrepancy
+    min_h = min(arr1.shape[0], arr2.shape[0])
+    min_w = min(arr1.shape[1], arr2.shape[1])
+    arr1 = arr1[:min_h, :min_w]
+    arr2 = arr2[:min_h, :min_w]
+
+    mse = float(np.mean((arr1 - arr2) ** 2))
+    if mse < 1e-10:
+        psnr = 50.0
+    else:
+        psnr = round(float(10.0 * np.log10((max_val ** 2) / mse)), 2)
+
+    c1 = (0.01 * max_val) ** 2
+    c2 = (0.03 * max_val) ** 2
+
+    if arr1.ndim == 3:
+        ssims = []
+        channels = min(arr1.shape[2], arr2.shape[2])
+        for ch in range(channels):
+            x = arr1[:, :, ch]
+            y = arr2[:, :, ch]
+            ux = uniform_filter(x, size=11)
+            uy = uniform_filter(y, size=11)
+            uxx = uniform_filter(x * x, size=11)
+            uyy = uniform_filter(y * y, size=11)
+            uxy = uniform_filter(x * y, size=11)
+
+            vx = uxx - ux * ux
+            vy = uyy - uy * uy
+            vxy = uxy - ux * uy
+
+            ssim_map = ((2 * ux * uy + c1) * (2 * vxy + c2)) / ((ux * ux + uy * uy + c1) * (vx + vy + c2) + 1e-12)
+            ssims.append(float(np.mean(ssim_map)))
+        ssim = round(float(np.mean(ssims)), 4)
+    else:
+        ux = uniform_filter(arr1, size=11)
+        uy = uniform_filter(arr2, size=11)
+        uxx = uniform_filter(arr1 * arr1, size=11)
+        uyy = uniform_filter(arr2 * arr2, size=11)
+        uxy = uniform_filter(arr1 * arr2, size=11)
+
+        vx = uxx - ux * ux
+        vy = uyy - uy * uy
+        vxy = uxy - ux * uy
+
+        ssim_map = ((2 * ux * uy + c1) * (2 * vxy + c2)) / ((ux * ux + uy * uy + c1) * (vx + vy + c2) + 1e-12)
+        ssim = round(float(np.mean(ssim_map)), 4)
+
+    return float(np.clip(ssim, -1.0, 1.0)), float(psnr)
+

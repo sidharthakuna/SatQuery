@@ -54,7 +54,6 @@ class GroundingTool(BaseTool):
         from app.core.geospatial.grounded_analyzer import GroundedRSAnalyzer
 
         latency_ms = random.randint(200, 500)
-        time.sleep(latency_ms / 1000.0)
 
         img = tool_input.images[0] if tool_input.images else None
         meta = tool_input.image_metas[0] if tool_input.image_metas else None
@@ -74,10 +73,12 @@ class GroundingTool(BaseTool):
             boxes=boxes,
         )
 
+        mock_conf = round(min(0.96, max(0.70, 0.82 + 0.02 * min(count, 5))), 2) if count > 0 else 0.65
+
         return ToolOutput(
             tool_id=self.tool_id,
             text_response=text,
-            confidence=0.91,
+            confidence=mock_conf,
             bounding_boxes=boxes,
             extra={
                 "mock": False,
@@ -133,7 +134,11 @@ class GroundingTool(BaseTool):
             else:
                 model = RSGroundingNet(in_channels=3, text_embed_dim=64, num_queries=5).to(device)
 
-            model.load_state_dict(model_weights, strict=False)
+            incompatible = model.load_state_dict(model_weights, strict=False)
+            if incompatible.missing_keys:
+                logger.info(f"Grounding model loaded with {len(incompatible.missing_keys)} missing keys: {incompatible.missing_keys[:5]}")
+            if incompatible.unexpected_keys:
+                logger.debug(f"Grounding model loaded with {len(incompatible.unexpected_keys)} unexpected keys")
             model.eval()
             if hasattr(provider, "register_model"):
                 provider.register_model("grounding_dino", (model, text_dim))
@@ -149,8 +154,21 @@ class GroundingTool(BaseTool):
                 img_w = getattr(meta, "width", 512)
                 img_h = getattr(meta, "height", 512)
 
+        # Check if prior tool was Optical-SAR fusion (Cloud Penetration)
+        prior_recon = None
+        if tool_input.prior_outputs and "tool_optical_sar_fusion" in tool_input.prior_outputs:
+            fusion_extra = tool_input.prior_outputs["tool_optical_sar_fusion"].get("extra", {})
+            prior_recon = fusion_extra.get("reconstructed_optical_array")
+
         # Build image tensor (ensuring (3, H, W))
-        if tool_input.images:
+        if prior_recon is not None:
+            arr = np.array(prior_recon, dtype=np.float32)
+            if arr.ndim == 3 and arr.shape[0] >= 3:
+                arr = arr[:3, ...]
+            elif arr.ndim == 3 and arr.shape[-1] >= 3:
+                arr = np.transpose(arr[..., :3], (2, 0, 1))
+            logger.info("Grounding DINO operating on cloud-free reconstructed optical terrain from Optical-SAR fusion pass.")
+        elif tool_input.images:
             arr = np.array(tool_input.images[0], dtype=np.float32)
             if arr.max() > 1.0:
                 arr = arr / 255.0
@@ -172,12 +190,20 @@ class GroundingTool(BaseTool):
         if img_t.shape[2] != 256 or img_t.shape[3] != 256:
             img_t = torch.nn.functional.interpolate(img_t, size=(256, 256), mode="bilinear", align_corners=False)
 
-        # Encode text query into text_dim vector using deterministic hash
+        # Encode text query into text_dim vector using semantic canonicalization + deterministic hash
+        # Canonicalize common remote sensing synonyms so semantically equivalent prompts project to aligned subspaces
+        SYNONYM_MAP = {
+            "vessels": "ship", "vessel": "ship", "boats": "ship", "boat": "ship", "tanker": "ship", "cargo": "ship",
+            "buildings": "building", "structures": "building", "structure": "building", "warehouses": "building",
+            "roads": "road", "highways": "road", "streets": "road",
+            "airplanes": "aircraft", "planes": "aircraft", "plane": "aircraft",
+            "waterways": "water", "waterbody": "water", "waterbodies": "water",
+        }
         import hashlib
-        words = tool_input.query.lower().split()
+        raw_words = tool_input.query.lower().split()
+        words = [SYNONYM_MAP.get(w.strip("?.,!;:\"'()[]{}!/"), w.strip("?.,!;:\"'()[]{}!/")) for w in raw_words]
         text_vec = np.zeros(text_dim, dtype=np.float32)
-        for i, w in enumerate(words):
-            w_clean = w.strip("?.,!;:\"'()[]{}!/")
+        for i, w_clean in enumerate(words):
             if not w_clean:
                 continue
             h_val = int(hashlib.md5(w_clean.encode("utf-8")).hexdigest()[:8], 16)
@@ -261,17 +287,28 @@ class GroundingTool(BaseTool):
         text = GroundedRSAnalyzer.format_grounding_narrative(tool_input.query, boxes, img_w, img_h, meta)
         clusters = GroundedRSAnalyzer.build_grounding_clusters(tool_input.query, boxes, meta)
 
+        card_img = arr if prior_recon is not None else (tool_input.images[0] if tool_input.images else None)
         grounding_card = GroundedRSAnalyzer.generate_grounding_card_assets(
-            image=tool_input.images[0] if tool_input.images else None,
+            image=card_img,
             image_meta=meta,
             query=tool_input.query,
             boxes=boxes,
         )
 
+        # Compute real confidence from Grounding DINO detection scores
+        matching_scores = [float(s) for s in scores if float(s) >= box_thresh]
+        if matching_scores:
+            avg_score = float(np.mean(matching_scores))
+        elif len(scores) > 0:
+            avg_score = float(np.max(scores))
+        else:
+            avg_score = 0.78
+        computed_conf = round(float(np.clip(avg_score, 0.40, 0.98)), 2)
+
         return ToolOutput(
             tool_id=self.tool_id,
             text_response=text,
-            confidence=0.91,
+            confidence=computed_conf,
             bounding_boxes=boxes,
             mask=sam_mask,
             extra={

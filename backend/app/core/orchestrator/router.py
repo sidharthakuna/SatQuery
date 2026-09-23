@@ -32,9 +32,9 @@ _GROUNDING_OBJECT_TOKENS = frozenset([
 
 _GROUNDING_ACTION_TOKENS = frozenset([
     "locate", "find", "detect", "detection", "highlight", "outline", "box", "boxes", "bounding", "pinpoint",
-    "segment", "segmentation", "point out", "spot", "show", "show me", "identify", "mark", "circle",
-    "where is", "where are", "how many", "count", "is there", "are there", "tell me where", "can you find",
-    "delineate", "isolate", "what are the", "any", "look for", "grounding", "dino", "grounding dino", "catalog",
+    "segment", "segmentation", "point out", "spot", "show me", "show me the", "identify", "mark", "circle",
+    "where is", "where are", "how many", "count", "tell me where", "can you find",
+    "delineate", "isolate", "look for", "grounding", "dino", "grounding dino", "catalog",
 ])
 
 _CHANGE_KEYWORDS = frozenset([
@@ -78,9 +78,9 @@ _COMPOUND_INDICATORS = [
     r"\b(both\s+(detect\s+changes?|compare)\s+and\s+(highlight|locate|find|detect|outline|box))\b",
     r"\b((describe|analyze|what\s+is|classify)\s+(.+?)\s+and\s+(highlight|locate|find|detect|outline|box))\b",
     r"\b((highlight|locate|find|detect|outline|box)\s+(.+?)\s+and\s+(describe|analyze|explain|classify))\b",
-    r"\b((remove|pierce|penetrate|fuse|de-cloud|eliminate|filter\s+out)\s+(.+?)\s*clouds?\s+(.+?)\s+and\s+(tell|detect|locate|measure|calculate|assess|find|map))\b",
-    r"\b((remove|pierce|penetrate|fuse|de-cloud|eliminate)\s+clouds?\s+and\s+(tell|detect|locate|measure|calculate|assess|find|map))\b",
-    r"\b(clouds?\s+(obstruct|cover|block)\s+(.+?)\s+and\s+(detect|tell|measure|locate|map|find))\b",
+    r"\b((remove|pierce|penetrate|fuse|de-cloud|eliminate|filter\s+out)\s+(.+?)\s*clouds?\s+(.+?)\s+and\s+(tell|detect|locate|measure|calculate|assess|find|map|explain|describe|analyze))\b",
+    r"\b((remove|pierce|penetrate|fuse|de-cloud|eliminate)\s+(the\s+)?clouds?\s+and\s+(tell|detect|locate|measure|calculate|assess|find|map|explain|describe|analyze))\b",
+    r"\b(clouds?\s+(obstruct|cover|block)\s+(.+?)\s+and\s+(detect|tell|measure|locate|map|find|explain|describe|analyze))\b",
     r"\b(safe\s+zones?|fallback\s+zones?|evacuation\s+zones?)\b",
     r"\b(where\s+are\s+(the\s+)?safe\s+zones?|mark\s+them|next\s+safe\s+zone)\b",
 ]
@@ -253,15 +253,19 @@ class QueryIntentClassifier:
         # ═══════════════════════════════════════════════════════
         #  Two-image scenarios
         # ═══════════════════════════════════════════════════════
-        if num_images == 2:
+        if num_images >= 2:
             sorted_mods = sorted([str(m) for m in modalities if m is not None])
+            has_optical = "OPTICAL" in modalities
+            has_sar = "SAR" in modalities or any("sar" in (getattr(m, "filename", "") or "").lower() for m in image_metas)
+            optical_count = sum(1 for m in modalities if str(m).upper() == "OPTICAL")
 
-            # Multi-model compound request with 2 images
+            # Multi-model compound request with multiple images
             explicit_box_or_localize = any(k in q_lower for k in ["box", "bounding", "outline", "pinpoint", "highlight", "show the affected", "show affected", "locate the affected"])
             has_multiple_objectives = sum([
                 any(k in q_lower for k in ["flood", "flooded", "change", "expansion", "growth", "damage"]),
                 any(k in q_lower for k in ["building", "buildings", "structures", "how many"]),
                 any(k in q_lower for k in ["road", "roads", "infrastructure", "bridges", "routes"]),
+                any(k in q_lower for k in ["cloud", "clouds", "decloud", "de-cloud", "penetrate", "remove cloud", "remove clouds"]),
             ]) >= 2
             has_compound_connectors = any(re.search(p, q_lower) for p in _COMPOUND_INDICATORS)
             is_compound_multi = (
@@ -270,17 +274,37 @@ class QueryIntentClassifier:
                 or has_compound_connectors
                 or (has_change and explicit_box_or_localize and neural_task != "BITEMPORAL_CHANGE")
                 or any(k in q_lower for k in ["and highlight", "and box", "and outline", "and pinpoint", "and show", "show the affected"])
-                or ((has_fusion or "sar" in q_lower) and (explicit_box_or_localize or has_change))
+                or ((has_fusion or "sar" in q_lower or "cloud" in q_lower) and (explicit_box_or_localize or has_change))
                 or (neural_task == "MULTI_MODEL" and neural_conf > 0.60 and (explicit_box_or_localize or has_change or has_grounding))
             )
             if is_compound_multi:
                 tools = []
-                if sorted_mods == ["OPTICAL", "SAR"] or any(k in q_lower for k in ["sar", "cloud", "radar", "penetrat"]):
+                has_sar_input = has_sar or any(str(m).upper() == "SAR" for m in modalities) or any("sar" in (getattr(m, "filename", "") or "").lower() for m in image_metas)
+                
+                # 1. Cloud removal / Optical-SAR Fusion
+                has_cloud_or_fusion_query = (
+                    has_sar_input
+                    or any(k in q_lower for k in ["cloud", "clouds", "decloud", "de-cloud", "penetrat", "pierce", "under cloud", "through cloud", "sar", "radar", "microwave", "fuse", "fusion", "overcast", "haze"])
+                )
+                if has_cloud_or_fusion_query:
                     tools.append("tool_optical_sar_fusion")
-                if sorted_mods == ["OPTICAL", "OPTICAL"] or has_change:
+
+                # 2. Change Detection / Urban Expansion
+                has_change_query = (
+                    has_change
+                    or any(k in q_lower for k in ["change", "changes", "expansion", "growth", "transform", "difference", "compare", "loss", "deforestation", "damage", "before and after", "t1 and t2", "flood extent"])
+                )
+                if has_change_query and optical_count >= 2:
                     tools.extend(["tool_change_detection", "tool_change_vqa"])
-                if has_grounding or any(k in q_lower for k in ["box", "locate", "highlight", "boundaries", "pinpoint"]):
+
+                # 3. Target Grounding / Object Spotting
+                has_grounding_query = (
+                    has_grounding
+                    or any(k in q_lower for k in ["box", "locate", "highlight", "boundaries", "pinpoint", "spot", "find", "detect", "identify", "where are", "count", "building", "buildings", "ship", "ships", "vehicle", "vehicles", "plane", "planes", "runway", "structure", "structures", "house", "houses", "settlement", "settlements"])
+                )
+                if has_grounding_query:
                     tools.append("tool_grounding")
+
                 if is_explicit_multi_model:
                     tools.extend(["tool_optical_sar_fusion", "tool_change_detection", "tool_change_vqa", "tool_grounding"])
                 tools = list(dict.fromkeys(tools))
@@ -306,7 +330,7 @@ class QueryIntentClassifier:
                             params,
                         )
 
-                logger.info("Classified as MULTI_MODEL (Compound multi-model / pipeline request with 2 images)")
+                logger.info(f"Classified as MULTI_MODEL (Compound multi-model request with {num_images} images: {tools})")
                 params = {
                     "threshold": 0.5,
                     "backbone": "ChangeFormer-V6",
@@ -331,7 +355,7 @@ class QueryIntentClassifier:
                     "de-cloud", "under cloud", "microwave", "radar penetration", "overcast",
                 ])
             )
-            if sorted_mods == ["OPTICAL", "SAR"] or is_cloud_or_fusion_query:
+            if (has_sar and has_optical) or (is_cloud_or_fusion_query and (has_sar or any(k in q_lower for k in ["sar", "radar", "microwave"]) or optical_count < 2)):
                 logger.info("Classified as CROSS_MODAL_FUSION (OPTICAL+SAR pair or cloud/fusion intent)")
                 params = {"fusion_mode": "cross_attention", "cloud_threshold": 0.3}
                 params.update(intent_extra)
@@ -341,8 +365,7 @@ class QueryIntentClassifier:
                     params,
                 )
 
-            # Two optical images (or same modality): Temporal comparison / Change detection / Flood Assessment
-            # All disaster, flood, inundation, urban change, and displacement queries are standard BITEMPORAL_CHANGE
+            # Multiple optical images (or same modality): Temporal comparison / Change detection / Flood Assessment
             logger.info(f"Classified as BITEMPORAL_CHANGE ({modalities} temporal comparison)")
             params = {"threshold": 0.5, "backbone": "ChangeFormer-V6"}
             params.update(intent_extra)
@@ -398,23 +421,40 @@ class QueryIntentClassifier:
                 re.search(r"\b" + re.escape(k) + r"\b", q_lower) for k in _GROUNDING_OBJECT_TOKENS
             )
 
-            has_pure_descriptive_vqa = any(
+            has_descriptive_vqa_intent = any(
                 re.search(r"\b" + re.escape(w) + r"\b", q_lower) for w in [
-                    "describe the scene", "describe the overall", "overview of the area",
-                    "land cover classification", "spectral reflectance", "explain the land cover",
-                    "vegetation condition", "ndvi analysis", "spectral signature",
+                    "describe", "explain", "analyze", "overview", "what is", "what are",
+                    "what does", "condition of", "appearance", "tell me about", "inspect",
+                    "evaluate", "assess", "spectral", "reflectance", "ndvi", "albedo",
+                    "turbidity", "quality", "land cover", "classification",
                 ]
-            ) and not (has_grounding_action or has_grounding_object)
-
-            # Grounding intent: queries asking to detect/locate/find objects or follow-up in grounding session
-            is_grounding = (
-                has_grounding_action
-                or has_grounding_object
-                or (neural_task == "SINGLE_GROUNDING" and neural_conf > 0.40)
-                or (history_was_grounding and not has_pure_descriptive_vqa)
-                or (is_port_grounding_sample and not has_pure_descriptive_vqa)
             )
-            if is_grounding and not has_pure_descriptive_vqa:
+
+            # Explicit grounding action keywords
+            has_explicit_grounding_action = any(
+                re.search(r"\b" + re.escape(k) + r"\b", q_lower) for k in [
+                    "detect", "detection", "locate", "find", "highlight", "box", "boxes",
+                    "bounding", "pinpoint", "segment", "segmentation", "point out", "spot",
+                    "mark", "circle", "delineate", "isolate", "where is", "where are",
+                    "show me", "can you find", "how many", "count",
+                ]
+            )
+
+            # Grounding intent requires:
+            # 1. Action + Object (e.g. "locate ships") OR
+            # 2. Strong explicit action ("detect", "find", "locate") even if object is generic OR
+            # 3. Follow-up query in a grounding session mentioning an object ("what about buildings?") OR
+            # 4. Neural intent classification has high confidence (> 0.60) without descriptive VQA intent OR
+            # 5. Port grounding sample with explicit grounding action
+            # BUT: If query is explicitly asking to describe/explain/analyze and has NO explicit grounding action, route to VQA!
+            is_grounding = (
+                (has_explicit_grounding_action and (has_grounding_object or not has_descriptive_vqa_intent))
+                or (has_grounding_action and has_grounding_object and not has_descriptive_vqa_intent)
+                or (neural_task == "SINGLE_GROUNDING" and neural_conf > 0.60 and not has_descriptive_vqa_intent)
+                or (history_was_grounding and has_grounding_object and not has_descriptive_vqa_intent)
+                or (is_port_grounding_sample and has_explicit_grounding_action)
+            )
+            if is_grounding and not (has_descriptive_vqa_intent and not has_explicit_grounding_action):
                 logger.info(f"Classified as SINGLE_GROUNDING (grounding query: {query})")
                 params = {"box_threshold": 0.35, "text_threshold": 0.25}
                 params.update(intent_extra)

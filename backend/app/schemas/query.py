@@ -20,7 +20,7 @@ class QueryRequest(BaseModel):
     query: str = Field(..., min_length=1, max_length=2000, description="Natural-language question")
     image_ids: List[str] = Field(
         default_factory=list,
-        description="0, 1, or 2 uploaded image file IDs",
+        description="Uploaded image file IDs (supports up to 10 concurrent satellite rasters)",
     )
     history: Optional[List[Dict[str, Any]]] = Field(
         default_factory=list,
@@ -30,10 +30,10 @@ class QueryRequest(BaseModel):
     @field_validator("image_ids")
     @classmethod
     def validate_image_count(cls, v: List[str]) -> List[str]:
-        """Enforce the 0-2 image limit at the schema level."""
-        if len(v) > 2:
+        """Validate multi-image count (up to 10 concurrent satellite images supported)."""
+        if len(v) > 10:
             raise ValueError(
-                f"Too many image IDs supplied ({len(v)}). Maximum is 2."
+                f"Too many image IDs supplied ({len(v)}). Maximum is 10 concurrent satellite images."
             )
         return v
 

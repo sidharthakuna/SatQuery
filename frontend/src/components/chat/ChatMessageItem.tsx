@@ -41,6 +41,7 @@ export const ChatMessageItem: React.FC<ChatMessageItemProps> = ({ message }) => 
   const [copied, setCopied] = useState(false);
   const [isEvidenceGraphOpen, setIsEvidenceGraphOpen] = useState(false);
   const [vqaZoomOpen, setVqaZoomOpen] = useState(false);
+  const [showDetailedDossier, setShowDetailedDossier] = useState(false);
 
   const isUser = message.role === 'user';
   const result = message.result;
@@ -324,28 +325,21 @@ export const ChatMessageItem: React.FC<ChatMessageItemProps> = ({ message }) => 
           />
         )}
 
-        {!isConversational && !message.isStreaming && !disasterCard && bitemporalCard && (
-          <BitemporalChangeCard
-            data={bitemporalCard}
-            onOpenPdf={result ? () => handleOpenPdf() : undefined}
-          />
-        )}
-
-        {!isConversational && !message.isStreaming && !disasterCard && !bitemporalCard && opticalSarCard && (
-          <OpticalSarFusionCard
-            data={opticalSarCard}
-            onOpenPdf={result ? () => handleOpenPdf() : undefined}
-          />
-        )}
-
-        {!isConversational && !message.isStreaming && !disasterCard && !bitemporalCard && !opticalSarCard && groundingCard && (
+        {!isConversational && !message.isStreaming && groundingCard && (
           <GroundingDinoCard
             data={groundingCard}
             onOpenPdf={result ? () => handleOpenPdf() : undefined}
           />
         )}
 
-        {!isConversational && !message.isStreaming && !disasterCard && !bitemporalCard && !opticalSarCard && !groundingCard && multiModelCard && (
+        {!isConversational && !message.isStreaming && bitemporalCard && (
+          <BitemporalChangeCard
+            data={bitemporalCard}
+            onOpenPdf={result ? () => handleOpenPdf() : undefined}
+          />
+        )}
+
+        {!isConversational && !message.isStreaming && !groundingCard && !bitemporalCard && multiModelCard && (
           <MultiModelAnalysisCard
             data={multiModelCard}
             onOpenPdf={result ? () => handleOpenPdf() : undefined}
@@ -353,7 +347,7 @@ export const ChatMessageItem: React.FC<ChatMessageItemProps> = ({ message }) => 
           />
         )}
 
-        {!isConversational && !message.isStreaming && !multiModelCard && !opticalSarCard && !groundingCard && !bitemporalCard && !disasterCard && (primaryThumb || spatial?.mask_url || vqaGrounding?.overlay_url || boxes.length > 0) && (
+        {!isConversational && !message.isStreaming && !multiModelCard && !groundingCard && !bitemporalCard && !disasterCard && (primaryThumb || spatial?.mask_url || vqaGrounding?.overlay_url || boxes.length > 0) && (
           <CartographicIntelligenceViewer
             image1Url={primaryThumb || spatial?.mask_url || ''}
             image2Url={secondaryThumb || undefined}
@@ -373,6 +367,27 @@ export const ChatMessageItem: React.FC<ChatMessageItemProps> = ({ message }) => 
             fileId={primaryImage?.file_id || null}
             onOpenPdf={result ? () => handleOpenPdf() : undefined}
           />
+        )}
+
+        {!isConversational && !message.isStreaming && opticalSarCard && (
+          <div className="pt-1">
+            <button
+              type="button"
+              onClick={() => setShowDetailedDossier(!showDetailedDossier)}
+              className="text-xs font-mono text-sky-400 hover:text-sky-300 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-sky-950/40 border border-sky-800/40 hover:bg-sky-900/40 transition-colors cursor-pointer"
+            >
+              <Layers className="w-3.5 h-3.5" />
+              <span>{showDetailedDossier ? 'Hide Detailed Sensor Insets & Decomposition Dossier' : 'Inspect Detailed SAR-Optical Physical Insets & Decomposition Dossier'}</span>
+            </button>
+            {showDetailedDossier && (
+              <div className="mt-3">
+                <OpticalSarFusionCard
+                  data={opticalSarCard}
+                  onOpenPdf={result ? () => handleOpenPdf() : undefined}
+                />
+              </div>
+            )}
+          </div>
         )}
 
         {/* Dynamic Geospatial Telemetry Chart */}

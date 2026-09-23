@@ -40,6 +40,12 @@ def generate_geojson(
         lat = round(max_lat - (y / max(img_h, 1)) * (max_lat - min_lat), 6)
         return lon, lat
 
+    import math
+    mid_lat = (min_lat + max_lat) / 2.0
+    cos_lat = math.cos(math.radians(mid_lat))
+    lat_m_per_deg = 111320.0
+    lon_m_per_deg = 111320.0 * max(cos_lat, 0.01)
+
     if boxes:
         for idx, b in enumerate(boxes, 1):
             x1, y1, x2, y2 = b
@@ -49,6 +55,12 @@ def generate_geojson(
             p4 = px_to_geo(x1, y2)
             cx, cy = (x1 + x2) / 2.0, (y1 + y2) / 2.0
             clon, clat = px_to_geo(cx, cy)
+            
+            # CRS-aware metric dimensions with latitude cosine correction
+            bw_m = (abs(x2 - x1) / max(img_w, 1)) * abs(max_lon - min_lon) * lon_m_per_deg
+            bh_m = (abs(y2 - y1) / max(img_h, 1)) * abs(max_lat - min_lat) * lat_m_per_deg
+            bbox_area_ha = round((bw_m * bh_m) / 10000.0, 3)
+
             features.append({
                 "type": "Feature",
                 "id": f"target_{idx}",
@@ -63,6 +75,9 @@ def generate_geojson(
                     "centroid_geo": [clon, clat],
                     "width_px": round(x2 - x1, 1),
                     "height_px": round(y2 - y1, 1),
+                    "ground_width_m": round(bw_m, 1),
+                    "ground_height_m": round(bh_m, 1),
+                    "area_hectares": bbox_area_ha,
                 },
             })
 

@@ -81,8 +81,9 @@ export const ChatInput: React.FC = () => {
       showError('Only GeoTIFF satellite rasters (.tif, .tiff, .geotiff) are supported. PNG images are not permitted.');
       return;
     }
-    if (activeImages.length >= 2) {
-      showError('Maximum 2 images can be attached simultaneously. Replacing second image slot.');
+    if (activeImages.length >= 10) {
+      showError('Maximum 10 satellite images can be attached simultaneously.');
+      return;
     }
     setIsUploadingInline(true);
     try {
@@ -98,12 +99,13 @@ export const ChatInput: React.FC = () => {
   const handleInlineFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (isUploadingInline) return;
     if (e.target.files && e.target.files.length > 0) {
-      const files = Array.from(e.target.files).slice(0, 2);
+      const remainingSlots = Math.max(0, 10 - activeImages.length);
+      const files = Array.from(e.target.files).slice(0, remainingSlots);
       for (const file of files) {
         await uploadFile(file);
       }
-      if (e.target.files.length > 2) {
-        showError('Attached first 2 files (maximum 2 images allowed).');
+      if (e.target.files.length > remainingSlots) {
+        showError(`Attached up to 10 satellite images maximum.`);
       }
       e.target.value = '';
     }
@@ -126,12 +128,13 @@ export const ChatInput: React.FC = () => {
     setIsDraggingOver(false);
     if (isUploadingInline) return;
     if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
-      const files = Array.from(e.dataTransfer.files).slice(0, 2);
+      const remainingSlots = Math.max(0, 10 - activeImages.length);
+      const files = Array.from(e.dataTransfer.files).slice(0, remainingSlots);
       for (const file of files) {
         await uploadFile(file);
       }
-      if (e.dataTransfer.files.length > 2) {
-        showError('Attached first 2 files (maximum 2 images allowed).');
+      if (e.dataTransfer.files.length > remainingSlots) {
+        showError(`Attached up to 10 satellite images maximum.`);
       }
     }
   };
@@ -202,9 +205,9 @@ export const ChatInput: React.FC = () => {
             </div>
           ))}
 
-          {activeImages.length === 2 && (
+          {activeImages.length >= 2 && (
             <span className="text-[11px] font-mono text-[#0EA5E9] bg-[#0EA5E9]/10 px-2 py-1 rounded-lg border border-[#0EA5E9]/20 flex items-center gap-1.5">
-              <Layers className="w-3 h-3" /> Pair Ready for Fusion / Change Analysis
+              <Layers className="w-3 h-3" /> {activeImages.length === 2 ? 'Pair Ready for Fusion / Change Analysis' : `${activeImages.length} Scenes Loaded for Multi-Sensor Analysis`}
             </span>
           )}
         </div>
@@ -241,7 +244,9 @@ export const ChatInput: React.FC = () => {
                 ? 'Reply to SatQuery AI or attach a GeoTIFF...'
                 : activeImages.length === 1
                 ? 'Ask a question about this satellite scene...'
-                : 'Ask to compare or fuse these two scenes...'
+                : activeImages.length === 2
+                ? 'Ask to compare or fuse these two scenes...'
+                : `Ask to compare, fuse, or analyze these ${activeImages.length} satellite scenes...`
             }
             className="w-full bg-transparent text-[14.5px] text-[var(--text-main)] placeholder-[var(--text-dim)] resize-none outline-none leading-relaxed min-h-[46px] max-h-[160px] font-normal"
           />
@@ -254,9 +259,9 @@ export const ChatInput: React.FC = () => {
             <button
               type="button"
               onClick={() => hiddenFileInputRef.current?.click()}
-              disabled={isUploadingInline || activeImages.length >= 2}
+              disabled={isUploadingInline || activeImages.length >= 10}
               className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium text-[var(--text-muted)] hover:text-[var(--text-main)] hover:bg-[var(--bg-surface)] disabled:opacity-40 transition-colors cursor-pointer"
-              title="Upload satellite raster as GeoTIFF or TIFF (.tif, .tiff)."
+              title="Upload satellite rasters as GeoTIFF (.tif, .tiff)."
             >
               <Paperclip className="w-4 h-4 text-[var(--text-dim)]" />
               <span className="hidden sm:inline">
@@ -267,6 +272,7 @@ export const ChatInput: React.FC = () => {
             <input
               ref={hiddenFileInputRef}
               type="file"
+              multiple
               accept=".tif,.tiff,.geotiff"
               onChange={handleInlineFileSelect}
               className="hidden"

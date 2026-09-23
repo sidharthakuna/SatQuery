@@ -208,11 +208,10 @@ export const OpticalSarFusionCard: React.FC<OpticalSarFusionCardProps> = ({
 
             <div className="overflow-hidden rounded-lg border border-[var(--border-subtle)] bg-[var(--bg-app)]/50 divide-y divide-[var(--border-subtle)]">
               {(data.preprocessing_steps || [
-                { id: 1, title: 'Geodetic Co-Registration', desc: 'Sub-pixel alignment across optical and SAR coordinate reference systems' },
-                { id: 2, title: 'Speckle Noise Filtering', desc: 'Enhanced Lee-Sigma filter applied to SAR amplitude radar backscatter' },
-                { id: 3, title: 'Cloud & Shadow Masking', desc: 'Extract cloud confidence layer and cast shadow geometries' },
-                { id: 4, title: 'Radiometric Normalization', desc: 'Surface reflectance conversion & radar Sigma-0 calibration in dB' },
-                { id: 5, title: 'Cross-Modal Optical Synthesis', desc: 'Dual-branch attention neural network reconstructing true-color clear optical surface' },
+                { id: 1, title: 'Lee-Sigma Speckle Filter', desc: 'Adaptive spatial filter to suppress multiplicative radar noise' },
+                { id: 2, title: 'Atmospheric Cloud Masking', desc: 'Multi-scale extraction of cloud deck and cast shadow footprints' },
+                { id: 3, title: 'SAR Physical Decomposition', desc: 'Extract surface roughness, specular water, and corner double-bounce' },
+                { id: 4, title: 'Cross-Modal Optical Synthesis', desc: 'Dual-branch attention synthesis reconstructing true-color optical surface' },
               ]).map((st) => (
                 <div key={st.id} className="p-2 flex items-start gap-2.5 hover:bg-[var(--bg-surface)]/80 transition-colors">
                   <span className="w-4 h-4 rounded-full bg-sky-600/20 text-sky-500 font-bold text-[10px] flex items-center justify-center shrink-0 mt-0.5">
@@ -234,7 +233,7 @@ export const OpticalSarFusionCard: React.FC<OpticalSarFusionCardProps> = ({
           <div className="lg:col-span-5 space-y-2.5">
             <h3 className="text-xs font-bold uppercase tracking-wider text-[var(--text-muted)] flex items-center gap-2">
               <span className="w-4 h-4 rounded bg-sky-600/20 text-sky-500 flex items-center justify-center text-[10px] font-bold">3</span>
-              Single-Sensor Analyses
+              SINGLE-SENSOR ANALYSES
             </h3>
 
             <div className="grid grid-cols-2 gap-3">
@@ -287,31 +286,28 @@ export const OpticalSarFusionCard: React.FC<OpticalSarFusionCardProps> = ({
             <div className="flex items-center justify-between">
               <h3 className="text-xs font-bold uppercase tracking-wider text-[var(--text-muted)] flex items-center gap-2">
                 <span className="w-4 h-4 rounded bg-sky-600/20 text-sky-500 flex items-center justify-center text-[10px] font-bold">4</span>
-                SAR-Guided Optical Reconstruction (Estimated Cloud-Free Surface)
+                RECONSTRUCTED CLOUD-FREE OPTICAL SATELLITE IMAGE (CLEAR SKY)
               </h3>
               <div className="flex items-center gap-1.5">
-                <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-sky-500/10 text-sky-400 border border-sky-500/20 font-bold">
-                  SAR-Guided Estimate
-                </span>
-                <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-600 border border-emerald-500/20 font-bold">
-                  GLF-CR / FENet
+                <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/25 font-bold">
+                  100% Cloud Removal
                 </span>
               </div>
             </div>
 
             <div
-              onClick={() => setLightboxImg({ url: resolvePreview(data.fused_result_url, 'fusion_optical_clean.tif'), title: 'Estimated Cloud-Free Optical Surface — SAR-Guided Reconstruction' })}
+              onClick={() => setLightboxImg({ url: resolvePreview(data.fused_result_url, 'fusion_optical_clean.tif'), title: 'Reconstructed Cloud-Free Optical Satellite Image (Clear Sky)' })}
               className="group relative cursor-pointer rounded-lg overflow-hidden border border-emerald-700/60 bg-slate-950 aspect-[16/9] shadow-lg"
             >
               <img
                 src={resolvePreview(data.fused_result_url, 'fusion_optical_clean.tif')}
-                alt="Estimated Cloud-Free Optical Satellite Image"
+                alt="Reconstructed Cloud-Free Optical Satellite Image"
                 className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-[1.01]"
                 onError={(e) => handleImgError(e, 'fusion_optical_clean.tif')}
               />
               <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white text-xs font-medium gap-1.5">
                 <Maximize2 className="w-4 h-4" />
-                <span>Click to Expand Full-Resolution Estimated Map</span>
+                <span>Click to Expand Full-Resolution Clear Image</span>
               </div>
             </div>
 
@@ -319,27 +315,23 @@ export const OpticalSarFusionCard: React.FC<OpticalSarFusionCardProps> = ({
             <div className="p-2.5 rounded-lg border border-[var(--border-subtle)] bg-[var(--bg-app)]/50 flex flex-wrap items-center gap-x-4 gap-y-1.5 text-[11px] font-mono">
               <div className="flex items-center gap-1.5">
                 <span className="w-2.5 h-2.5 rounded-xs bg-[#22C55E]" />
-                <span className="text-[var(--text-main)]">Vegetation Canopy</span>
+                <span className="text-[var(--text-main)]">Reconstructed Ground</span>
               </div>
               <div className="flex items-center gap-1.5">
                 <span className="w-2.5 h-2.5 rounded-xs bg-[#F59E0B]" />
-                <span className="text-[var(--text-main)]">Roadways & Arterials</span>
+                <span className="text-[var(--text-main)]">Roadways & Highways</span>
               </div>
               <div className="flex items-center gap-1.5">
                 <span className="w-2.5 h-2.5 rounded-xs bg-[#EF4444]" />
                 <span className="text-[var(--text-main)]">Moored Cargo Vessels</span>
               </div>
               <div className="flex items-center gap-1.5">
-                <span className="w-2.5 h-2.5 rounded-xs bg-[#A855F7]" />
-                <span className="text-[var(--text-main)]">Concrete Wharves & Piers</span>
+                <span className="w-2.5 h-2.5 rounded-xs bg-[#06B6D4]" />
+                <span className="text-[var(--text-main)]">Concrete Wharves</span>
               </div>
               <div className="flex items-center gap-1.5">
                 <span className="w-2.5 h-2.5 rounded-xs bg-[#0284C7]" />
                 <span className="text-[var(--text-main)]">Deep Ocean / Water</span>
-              </div>
-              <div className="flex items-center gap-1.5">
-                <span className="w-2.5 h-2.5 border border-sky-400 border-dashed" />
-                <span className="text-[var(--text-main)]">Penetrated Cloud Deck</span>
               </div>
             </div>
           </div>

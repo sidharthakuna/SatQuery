@@ -17,12 +17,28 @@ logger = logging.getLogger(__name__)
 router = APIRouter()
 
 
+def _sanitize_for_json(obj):
+    import numpy as np
+    if isinstance(obj, np.ndarray):
+        return obj.tolist() if obj.size < 500 else None
+    elif isinstance(obj, (np.integer, np.int64, np.int32, np.int16, np.int8, np.uint8)):
+        return int(obj)
+    elif isinstance(obj, (np.floating, np.float32, np.float64, np.float16)):
+        return float(obj)
+    elif isinstance(obj, dict):
+        return {k: _sanitize_for_json(v) for k, v in obj.items() if not (isinstance(v, np.ndarray) and v.size > 500)}
+    elif isinstance(obj, (list, tuple)):
+        return [_sanitize_for_json(x) for x in obj]
+    return obj
+
+
 def _get_agent() -> SatQueryAgent:
     return get_orchestrator_agent()
 
 
 @router.websocket("/ws/query")
 async def websocket_query(websocket: WebSocket):
+
     """
     WebSocket endpoint for real-time query execution with streaming trace.
 
@@ -115,9 +131,10 @@ async def websocket_query(websocket: WebSocket):
 
         # ── Send final result ────────────────────────────────
         if is_client_connected:
+            sanitized_data = _sanitize_for_json(result.model_dump())
             await websocket.send_json({
                 "type": "result",
-                "data": result.model_dump(),
+                "data": sanitized_data,
             })
 
         logger.info(

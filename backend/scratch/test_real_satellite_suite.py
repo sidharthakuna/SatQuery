@@ -292,13 +292,16 @@ def test_real_optical_sar_fusion():
     print(" AOI: Visakhapatnam Deepwater Port & Eastern Naval Command Coastline")
     print("=" * 75)
     
-    from training.train_optical_sar_fusion import OpticalSARCrossAttentionNet
+    from app.models.fusion_net import OpticalSARCrossAttentionNet, OpticalSARCrossAttentionNetV2
     
     ckpt_path = CHECKPOINTS_DIR / "optical_sar_fusion.pt"
     ckpt = torch.load(ckpt_path, map_location="cpu", weights_only=False)
-    
-    model = OpticalSARCrossAttentionNet()
-    model.load_state_dict(ckpt["model_state_dict"])
+    weights = ckpt.get("model_state_dict", ckpt)
+    if "opt_enc1.0.weight" in weights:
+        model = OpticalSARCrossAttentionNetV2()
+    else:
+        model = OpticalSARCrossAttentionNet()
+    model.load_state_dict(weights)
     model.eval()
 
     opt_cloudy_path = SAMPLES_DIR / "fusion_optical.tif"

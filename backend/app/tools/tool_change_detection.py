@@ -58,7 +58,6 @@ class ChangeDetectionTool(BaseTool):
         from app.core.geospatial.grounded_analyzer import GroundedRSAnalyzer
 
         latency_ms = random.randint(300, 700)
-        time.sleep(latency_ms / 1000.0)
 
         analytics = GroundedRSAnalyzer.analyze_bitemporal(
             images=tool_input.images,
@@ -71,12 +70,12 @@ class ChangeDetectionTool(BaseTool):
         total_pixels = analytics["total_pixels"]
         change_pct = analytics["change_percent"]
         change_hectares = analytics["change_hectares"]
-        narrative = analytics["narrative"]
+        mock_conf = round(min(0.96, max(0.75, 0.86 + 0.01 * min(len(analytics.get("clusters", [])), 6))), 2)
 
         return ToolOutput(
             tool_id=self.tool_id,
             text_response=narrative,
-            confidence=0.92,
+            confidence=mock_conf,
             mask=mask,
             extra={
                 "mock": False,
@@ -127,7 +126,11 @@ class ChangeDetectionTool(BaseTool):
             else:
                 model = SiameseChangeNet(in_channels=3, num_classes=1).to(device)
 
-            model.load_state_dict(model_weights, strict=False)
+            incompatible = model.load_state_dict(model_weights, strict=False)
+            if incompatible.missing_keys:
+                logger.info(f"ChangeDetection model loaded with {len(incompatible.missing_keys)} missing keys: {incompatible.missing_keys[:5]}")
+            if incompatible.unexpected_keys:
+                logger.debug(f"ChangeDetection model loaded with {len(incompatible.unexpected_keys)} unexpected keys")
             model.eval()
             if hasattr(provider, "register_model"):
                 provider.register_model("change_net", model)
@@ -191,15 +194,28 @@ class ChangeDetectionTool(BaseTool):
 
         final_changed = int(np.sum(final_mask > 0))
         final_pct = round((final_changed / max(total_pixels, 1)) * 100, 2)
-        total_aoi_ha = float(tool_input.image_metas[0].get("area_ha", 2365.4) if isinstance(tool_input.image_metas[0], dict) else getattr(tool_input.image_metas[0], "area_ha", 2365.4) or 2365.4) if tool_input.image_metas else 2365.4
+        from app.schemas.geospatial import compute_aoi_hectares
+        meta0 = tool_input.image_metas[0] if tool_input.image_metas else None
+        total_aoi_ha = compute_aoi_hectares(meta0)
         change_hectares = round((final_changed / max(total_pixels, 1)) * total_aoi_ha, 1)
         elapsed_ms = int((time.time() - start_time) * 1000)
         narrative = analytics["narrative"]
 
+        # Compute authentic confidence from ChangeFormer output probabilities
+        prob_arr = pred_mask.squeeze().cpu().numpy()
+        if prob_arr.max() > 1.0 or prob_arr.min() < 0.0:
+            prob_arr = 1.0 / (1.0 + np.exp(-np.clip(prob_arr, -15.0, 15.0)))
+        if final_changed > 0:
+            conf_scores = prob_arr[final_mask > 0]
+            mean_conf = float(np.mean(conf_scores)) if conf_scores.size > 0 else 0.88
+        else:
+            mean_conf = float(np.mean(1.0 - prob_arr))
+        real_cd_conf = round(float(np.clip(mean_conf, 0.65, 0.98)), 2)
+
         return ToolOutput(
             tool_id=self.tool_id,
             text_response=narrative,
-            confidence=0.94,
+            confidence=real_cd_conf,
             mask=final_mask,
             extra={
                 "real_inference": True,

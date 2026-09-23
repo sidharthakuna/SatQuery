@@ -76,7 +76,6 @@ class RSVQATool(BaseTool):
         from app.core.geospatial.grounded_analyzer import GroundedRSAnalyzer
 
         latency_ms = random.randint(200, 500)
-        time.sleep(latency_ms / 1000.0)
 
         img = tool_input.images[0] if tool_input.images else None
         meta = tool_input.image_metas[0] if tool_input.image_metas else None

@@ -54,8 +54,8 @@ const MISSION_PAIRS: MissionPairInfo[] = [
     description: 'Combines dense cloud-obscured Sentinel-2 optical scene with all-weather Sentinel-1 C-Band microwave radar backscatter.',
     query: 'Execute cross-modal optical and microwave SAR fusion to penetrate dense cloud cover and reconstruct ground terrain.',
     files: [
-      { url: '/samples/fusion_optical.tif', name: 'cloudy_optical_pass.tif', thumb: '/api/v1/preview/fusion_optical.tif', modality: 'OPTICAL' },
-      { url: '/samples/fusion_sar.tif', name: 'sentinel1_sar_radar.tif', thumb: '/api/v1/preview/fusion_sar.tif', modality: 'SAR' },
+      { url: '/samples/fusion_optical.tif', name: 'sentinel2_optical_cloudy.tif', thumb: '/api/v1/preview/fusion_optical.tif', modality: 'OPTICAL' },
+      { url: '/samples/fusion_sar.tif', name: 'sentinel1_sar_backscatter.tif', thumb: '/api/v1/preview/fusion_sar.tif', modality: 'SAR' },
     ],
   },
   {
